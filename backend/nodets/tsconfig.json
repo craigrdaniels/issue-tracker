@@ -8,7 +8,9 @@
     "strictNullChecks": true,
     "strict": true,
     "moduleSuffixes": [""],
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "ts-node": { "files": true, "esm": true },
   "include": ["src/**/*"],

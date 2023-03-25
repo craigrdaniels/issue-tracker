@@ -20,4 +20,8 @@ const startConnection = async (): Promise<void> => {
     })
 }
 
-export default startConnection
+const closeConnection = async (): Promise<void> => {
+  await mongoose.connection.close()
+}
+
+export { startConnection, closeConnection }
