@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv'
 import express from 'express'
+import { fileURLToPath } from 'url'
 import { type Request, type Response, type NextFunction } from 'express'
 import cors from 'cors'
 import path from 'path'
@@ -11,6 +12,9 @@ interface Error {
   status?: number
   message?: string
 }
+
+// eslint-disable-next-line no-underscore-dangle
+const _dirname = path.dirname(fileURLToPath(import.meta.url))
 
 dotenv.config()
 
@@ -28,7 +32,7 @@ app.use(
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(_dirname, 'public')))
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Origin', '*')
