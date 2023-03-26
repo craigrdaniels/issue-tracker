@@ -1,34 +1,15 @@
 import { Schema, model } from 'mongoose'
 
 const issueSchema = new Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  created_at: {
-    type: Date,
-    required: true
-  },
-  created_by: {
-    type: Number,
-    required: true
-  },
-  project: {
-    type: Number,
-    required: true
-  },
-  assigned_users: {
-    type: Array,
-    required: false
-  },
-  is_open: {
-    type: Boolean,
-    required: true
-  },
-  severity: {
-    type: Number,
-    required: false
-  }
+  _id: Schema.Types.ObjectId,
+  title: String,
+  created_at: Date,
+  created_by: { type: Schema.Types.ObjectId, refPath: 'User' },
+  project: { type: Number, refPath: 'Project' },
+  assigned_users: { type: [Schema.Types.ObjectId], refPath: 'User' },
+  is_open: Boolean,
+  tags: { type: [String] },
+  severity: { type: String, enum: ['Low', 'Medium', 'High'] }
 })
 
 export default model('Issue', issueSchema, 'issues')
