@@ -1,30 +1,13 @@
 import { Schema, model } from 'mongoose'
 
 const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  roles: {
-    type: Array,
-    required: true
-  },
-  profile_pic: {
-    type: String,
-    required: false
-  },
-  projects: {
-    type: Array,
-    required: false
-  }
+  _id: Schema.Types.ObjectId,
+  username: String,
+  password: String,
+  email: String,
+  role: { type: Schema.Types.ObjectId, refPath: 'Role' },
+  profile_pic: String,
+  projects: { type: [Schema.Types.ObjectId], refPath: 'Project' }
 })
 
 export default model('User', userSchema, 'users')
