@@ -1,6 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import express from 'express'
 import Issue from '../models/issue.js'
+import message from 'models/message.js'
 
 const issuesRouter = express.Router()
 
@@ -20,10 +21,35 @@ issuesRouter.get(
   }
 )
 
-issuesRouter.post('/issues', (req: Request, res: Response): void => {
-  // code to add a new issue
-  res.json(req.body)
-})
+issuesRouter.post(
+  '/issues',
+  (req: Request, res: Response, next: NextFunction): void => {
+    void (async (): Promise<void> => {
+      // code to add a new issue
+      console.log(req.body)
+      if (req.body?.user === undefined || req.body?.user.trim().length < 1) {
+        next({ status: 400, message: 'User is undefined' })
+        return
+      }
+      if (req.body?.title === undefined || req.body?.title.trim().length < 1) {
+        next({ status: 400, message: 'Title is undefined' })
+        return
+      }
+      const issue = new Issue({
+        _id: req.body.id,
+        title: req.body.title,
+        created_at: Date.now(),
+        created_by: req.body.user,
+        project: req.body.project,
+        is_open: true,
+        tags: req.body.tags,
+        severity: req.body.severity
+      })
+      await issue.save()
+      res.status(200).json({ success: true, message: 'Issue created' })
+    })()
+  }
+)
 
 issuesRouter.put('/issues/:id', (req: Request, res: Response): void => {
   // code to update an issue
