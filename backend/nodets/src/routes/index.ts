@@ -1,19 +1,24 @@
-import { type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import express from 'express'
 import Issue from '../models/issue.js'
 
-const router = express.Router()
+const indexRouter = express.Router()
 
-// Get all messages
-router.get('/', (req: Request, res: Response): void => {
-  void (async (): Promise<void> => {
-    try {
-      const issues = await Issue.find().sort({ added: -1 }).limit(150)
-      res.json(issues)
-    } catch (error) {
-      console.log(error)
-    }
-  })()
-})
-
-export default router
+indexRouter.get(
+  '/',
+  (req: Request, res: Response, next: NextFunction): void => {
+    void (async (): Promise<void> => {
+      try {
+        // get stats
+        console.log('Counting')
+        const issuesCount = await Issue.countDocuments({})
+        console.log('Issues: ', issuesCount)
+        res.json({ issues: issuesCount })
+      } catch (error) {
+        console.log(error)
+        next(error)
+      }
+    })()
+  }
+)
+export default indexRouter
