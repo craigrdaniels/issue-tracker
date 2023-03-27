@@ -21,7 +21,8 @@ const userSchema = new Schema({
   }
 })
 
-userSchema.methods.comparePassword = (password: string): boolean =>
-  bcrypt.compareSync(password, this.password)
+userSchema.methods.comparePassword = function (password: string): boolean {
+  return bcrypt.compareSync(password, this.password)
+}
 
 export default model('User', userSchema, 'users')

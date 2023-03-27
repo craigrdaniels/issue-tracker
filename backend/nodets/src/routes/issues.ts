@@ -1,7 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import express from 'express'
 import Issue from '../models/issue.js'
-import message from 'models/message.js'
 
 const issuesRouter = express.Router()
 
@@ -36,6 +35,7 @@ issuesRouter.post(
         return
       }
       const issue = new Issue({
+        // BUG: #4 Issue validation failed
         _id: req.body.id,
         title: req.body.title,
         created_at: Date.now(),

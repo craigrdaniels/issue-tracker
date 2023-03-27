@@ -8,6 +8,7 @@ import logger from 'morgan'
 import { startConnection } from './db/mongodb.js'
 import issuesRouter from './routes/issues.js'
 import indexRouter from './routes/index.js'
+import usersRouter from './routes/users.js'
 
 interface Error {
   status?: number
@@ -44,6 +45,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(indexRouter)
 app.use(issuesRouter)
+app.use(usersRouter)
 
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
