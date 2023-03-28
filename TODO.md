@@ -29,3 +29,6 @@ ISSUE -> message -> action ->
 node.js set up done with 
 https://www.youtube.com/watch?v=H91aqUHn8sE
 
+jwt auth done with this guide
+https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
+
