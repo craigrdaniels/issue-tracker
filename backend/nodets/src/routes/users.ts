@@ -20,7 +20,6 @@ usersRouter.post('/users/signup', (async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body.email) // BUG: #2 Returns undefined
     if (req.body?.email === undefined || req.body?.email.trim().length < 1) {
       // TODO: #1 need to validate it is a real email address?
       next({ status: 400, message: 'Email is required' })
@@ -44,7 +43,7 @@ usersRouter.post('/users/signup', (async (
     await user.save().then((data) => {
       const token = jsonwebtoken.sign(
         { id: data._id, email: data.email },
-        process.env.JWT_SECRET_KEY ?? ''
+        process.env.JWT_SECRET_KEY ?? '' // TODO: #5 assert var is defined - may be sec flaw if undefined and '' is used as key
       )
       res.status(200).json({ success: true, message: 'User created', token })
     })
@@ -65,7 +64,7 @@ usersRouter.post('/users/login', (async (
       return
     }
 
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email.lowercase() })
       .then((user) => {
         if (user == null) {
           next({ status: 400, message: 'User does not exist' })
