@@ -6,7 +6,7 @@ import {
 } from 'express'
 import express from 'express'
 import bcrypt from 'bcrypt'
-import * as jwt from 'jsonwebtoken'
+import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import User from '../models/user.js'
 
@@ -34,17 +34,20 @@ usersRouter.post('/users/signup', (async (
       return
     }
 
+    await User.init()
+
     const user = new User({
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 10),
       username: req.body.username.trim() ?? req.body.email.split('@')[0]
     })
-    await user.save()
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET_KEY ?? ''
-    )
-    res.status(200).json({ success: true, message: 'User created', token })
+    await user.save().then((data) => {
+      const token = jsonwebtoken.sign(
+        { id: data._id, email: data.email },
+        process.env.JWT_SECRET_KEY ?? ''
+      )
+      res.status(200).json({ success: true, message: 'User created', token })
+    })
   } catch (error) {
     console.log(error)
     next(error)
