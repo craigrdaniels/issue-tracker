@@ -54,4 +54,38 @@ usersRouter.post('/users/signup', (async (
   }
 }) as RequestHandler)
 
+usersRouter.post('/users/login', (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (!req.body.email || !req.body.password) {
+      next({ status: 400, message: 'Params missing' })
+      return
+    }
+
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (user == null) {
+          next({ status: 400, message: 'User does not exist' })
+        } else if (!bcrypt.compareSync(req.body.password, user.password)) {
+          next({ status: 400, message: 'Wrong password' })
+        } else {
+          const token = jsonwebtoken.sign(
+            { id: user._id, email: user.email },
+            process.env.JWT_SECRET_KEY ?? ''
+          )
+          res.status(200).json({ success: true, token })
+        }
+      })
+      .catch((err) => {
+        next({ status: 400, error: err })
+      })
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}) as RequestHandler)
+
 export default usersRouter
