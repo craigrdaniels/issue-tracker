@@ -44,7 +44,10 @@ usersRouter.post('/users/signup', (async (
       const token = jsonwebtoken.sign(
         // eslint-disable-next-line no-underscore-dangle
         { id: data._id, email: data.email },
-        process.env.JWT_SECRET_KEY ?? '' // TODO: #5 assert var is defined - may be sec flaw if undefined and '' is used as key
+        process.env.JWT_SECRET_KEY ?? '', // TODO: #5 assert var is defined - may be sec flaw if undefined and '' is used as key
+        {
+          expiresIn: '1h'
+        }
       )
       res.status(200).json({ success: true, message: 'User created', token })
     })
@@ -75,7 +78,10 @@ usersRouter.post('/users/login', (async (
           const token = jsonwebtoken.sign(
             // eslint-disable-next-line no-underscore-dangle
             { id: user._id, email: user.email },
-            process.env.JWT_SECRET_KEY ?? ''
+            process.env.JWT_SECRET_KEY ?? '',
+            {
+              expiresIn: '1h'
+            }
           )
           res.status(200).json({ success: true, token })
         }
