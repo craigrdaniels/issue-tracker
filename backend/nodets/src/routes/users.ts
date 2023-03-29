@@ -42,6 +42,7 @@ usersRouter.post('/users/signup', (async (
     })
     await user.save().then((data) => {
       const token = jsonwebtoken.sign(
+        // eslint-disable-next-line no-underscore-dangle
         { id: data._id, email: data.email },
         process.env.JWT_SECRET_KEY ?? '' // TODO: #5 assert var is defined - may be sec flaw if undefined and '' is used as key
       )
@@ -59,7 +60,7 @@ usersRouter.post('/users/login', (async (
   next: NextFunction
 ) => {
   try {
-    if (!req.body.email || !req.body.password) {
+    if (req.body.email === undefined || req.body.password === undefined) {
       next({ status: 400, message: 'Params missing' })
       return
     }
@@ -72,6 +73,7 @@ usersRouter.post('/users/login', (async (
           next({ status: 400, message: 'Wrong password' })
         } else {
           const token = jsonwebtoken.sign(
+            // eslint-disable-next-line no-underscore-dangle
             { id: user._id, email: user.email },
             process.env.JWT_SECRET_KEY ?? ''
           )
