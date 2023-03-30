@@ -5,16 +5,17 @@ import {
   type Response
 } from 'express'
 import express from 'express'
+import isAuthenticated from '../helpers/auth.js'
 import Issue from '../models/issue.js'
 
 const issuesRouter = express.Router()
 
 // Get all issues
-issuesRouter.get('/issues', (async (
+issuesRouter.get('/issues', isAuthenticated, (async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const issues = await Issue.find().sort({ added: -1 }).limit(150)
     res.json(issues)
