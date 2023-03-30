@@ -21,10 +21,20 @@ usersRouter.post('/users/signup', (async (
 ) => {
   try {
     if (req.body?.email === undefined || req.body?.email.trim().length < 1) {
-      // TODO: #1 need to validate it is a real email address?
       next({ status: 400, message: 'Email is required' })
       return
     }
+
+    // check the user has entered a valid email address
+    if (
+      req.body?.email.match(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]{2,}$/i
+      ) === null
+    ) {
+      next({ status: 400, message: 'Not a valid email addrress' })
+      return
+    }
+
     if (
       req.body?.password === undefined ||
       req.body?.password.trim().length < 1
@@ -38,13 +48,14 @@ usersRouter.post('/users/signup', (async (
     const user = new User({
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 10),
-      username: req.body.username.trim() ?? req.body.email.split('@')[0]
+      username: req.body.username ?? req.body.email.split('@')[0]
     })
     await user.save().then((data) => {
       const token = jsonwebtoken.sign(
         // eslint-disable-next-line no-underscore-dangle
         { id: data._id, email: data.email },
-        process.env.JWT_SECRET_KEY ?? '', // TODO: #5 assert var is defined - may be sec flaw if undefined and '' is used as key
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        process.env.JWT_SECRET_KEY!,
         {
           expiresIn: '1h'
         }
@@ -78,7 +89,8 @@ usersRouter.post('/users/login', (async (
           const token = jsonwebtoken.sign(
             // eslint-disable-next-line no-underscore-dangle
             { id: user._id, email: user.email },
-            process.env.JWT_SECRET_KEY ?? '',
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            process.env.JWT_SECRET_KEY!,
             {
               expiresIn: '1h'
             }
