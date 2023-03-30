@@ -20,6 +20,7 @@ usersRouter.post('/users/signup', (async (
   next: NextFunction
 ) => {
   try {
+    // check an email address is entered
     if (req.body?.email === undefined || req.body?.email.trim().length < 1) {
       next({ status: 400, message: 'Email is required' })
       return
@@ -35,6 +36,7 @@ usersRouter.post('/users/signup', (async (
       return
     }
 
+    // check a password is entered
     if (
       req.body?.password === undefined ||
       req.body?.password.trim().length < 1
@@ -43,13 +45,15 @@ usersRouter.post('/users/signup', (async (
       return
     }
 
+    // create the user
     await User.init()
-
     const user = new User({
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 10),
       username: req.body.username ?? req.body.email.split('@')[0]
     })
+
+    // save the user and issue a jwt token
     await user.save().then((data) => {
       const token = jsonwebtoken.sign(
         // eslint-disable-next-line no-underscore-dangle
@@ -74,11 +78,13 @@ usersRouter.post('/users/login', (async (
   next: NextFunction
 ) => {
   try {
+    // check an email and password is entered
     if (req.body.email === undefined || req.body.password === undefined) {
       next({ status: 400, message: 'Params missing' })
       return
     }
 
+    // make sure the user exists, password is correct and issue a token
     User.findOne({ email: req.body.email.lowercase() })
       .then((user) => {
         if (user == null) {
