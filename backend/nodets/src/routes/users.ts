@@ -61,10 +61,21 @@ usersRouter.post('/users/signup', (async (
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         process.env.JWT_SECRET_KEY!,
         {
+          expiresIn: '5m'
+        }
+      )
+      const refreshToken = jsonwebtoken.sign(
+        // eslint-disable-next-line no-underscore-dangle
+        { id: data._id, email: data.email },
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        process.env.JWT_REFRESH_KEY!,
+        {
           expiresIn: '1h'
         }
       )
-      res.status(200).json({ success: true, message: 'User created', token })
+      res
+        .status(200)
+        .json({ success: true, message: 'User created', token, refreshToken })
     })
   } catch (error) {
     console.log(error)
@@ -85,7 +96,7 @@ usersRouter.post('/users/login', (async (
     }
 
     // make sure the user exists, password is correct and issue a token
-    User.findOne({ email: req.body.email.lowercase() })
+    User.findOne({ email: req.body.email.toLowerCase() })
       .then((user) => {
         if (user == null) {
           next({ status: 400, message: 'User does not exist' })
@@ -98,10 +109,19 @@ usersRouter.post('/users/login', (async (
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             process.env.JWT_SECRET_KEY!,
             {
+              expiresIn: '5m'
+            }
+          )
+          const refreshToken = jsonwebtoken.sign(
+            // eslint-disable-next-line no-underscore-dangle
+            { id: user._id, email: user.email },
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            process.env.JWT_REFRESH_KEY!,
+            {
               expiresIn: '1h'
             }
           )
-          res.status(200).json({ success: true, token })
+          res.status(200).json({ success: true, token, refreshToken })
         }
       })
       .catch((err) => {
