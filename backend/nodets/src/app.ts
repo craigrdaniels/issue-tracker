@@ -18,7 +18,12 @@ interface Error {
 // eslint-disable-next-line no-underscore-dangle
 const _dirname = path.dirname(fileURLToPath(import.meta.url))
 
-dotenv.config()
+// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+dotenv.config({
+  path: path.resolve(_dirname, `../.env.${process.env.NODE_ENV}`)
+})
+
+console.log(process.env)
 
 const PORT = process.env.PORT ?? '3000'
 
