@@ -29,6 +29,7 @@ const PORT = process.env.PORT ?? '3000'
 
 const app = express()
 
+console.log('Starting connection.. ', process.env.MONGO_PATH)
 void startConnection()
 
 app.use(

@@ -73,6 +73,8 @@ usersRouter.post('/users/signup', (async (
       username: req.body.username ?? req.body.email.split('@')[0]
     })
 
+    console.log('created')
+
     // save the user and issue a jwt token
     await user.save().then(async (data) => {
       const token: string = generateToken(data._id, data.email)

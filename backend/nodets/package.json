@@ -7,6 +7,7 @@
   "scripts": {
     "start": "NODE_ENV=production nodemon",
     "dev": "NODE_ENV=development nodemon",
+    "debug": "NODE_ENV=development nodemon --debug ./srv/app.ts",
     "test": "jest --watch",
     "build": "tsc"
   },

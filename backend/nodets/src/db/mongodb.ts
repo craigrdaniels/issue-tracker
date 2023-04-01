@@ -1,7 +1,15 @@
 import * as dotenv from 'dotenv'
+import { fileURLToPath } from 'url'
+import path from 'path'
 import mongoose from 'mongoose'
 
-dotenv.config()
+// dotenv.config()// eslint-disable-next-line no-underscore-dangle
+const _dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+dotenv.config({
+  path: path.resolve(_dirname, `../../.env.${process.env.NODE_ENV}`)
+})
 
 const MONGO_PATH: string = process.env.MONGO_PATH ?? ''
 
