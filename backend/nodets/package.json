@@ -5,7 +5,8 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon",
+    "start": "NODE_ENV=production nodemon",
+    "dev": "NODE_ENV=development nodemon",
     "test": "jest --watch",
     "build": "tsc"
   },
