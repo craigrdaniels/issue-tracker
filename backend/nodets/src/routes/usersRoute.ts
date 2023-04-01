@@ -10,9 +10,8 @@ import bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import { type Types } from 'mongoose'
-import User from '../models/user.js'
-import RefreshToken from '../models/refreshToken.js'
-import { json } from 'stream/consumers'
+import User from '../models/userModel.js'
+import RefreshToken from '../models/refreshTokenModel.js'
 
 dotenv.config()
 
@@ -277,4 +276,4 @@ usersRouter.delete('/users/refresh-token', (async (
 
 export default usersRouter
 
-// TODO: add logout function
+// TODO: #6 Refactor to remove repeated code

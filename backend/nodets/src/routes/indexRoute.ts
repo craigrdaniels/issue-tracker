@@ -5,7 +5,7 @@ import {
   type RequestHandler
 } from 'express'
 import express from 'express'
-import Issue from '../models/issue.js'
+import Issue from '../models/issueModel.js'
 
 // Display a welcome message and show open issues count
 

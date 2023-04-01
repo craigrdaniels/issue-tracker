@@ -6,9 +6,9 @@ import cors from 'cors'
 import path from 'path'
 import logger from 'morgan'
 import { startConnection } from './db/mongodb.js'
-import issuesRouter from './routes/issues.js'
-import indexRouter from './routes/index.js'
-import usersRouter from './routes/users.js'
+import issuesRouter from './routes/issuesRoute.js'
+import indexRouter from './routes/indexRoute.js'
+import usersRouter from './routes/usersRoute.js'
 
 interface Error {
   status?: number

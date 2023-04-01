@@ -5,8 +5,8 @@ import {
   type Response
 } from 'express'
 import express from 'express'
-import isAuthenticated from '../helpers/auth.js'
-import Issue from '../models/issue.js'
+import isAuthenticated from '../helpers/authHelper.js'
+import Issue from '../models/issueModel.js'
 
 const issuesRouter = express.Router()
 
