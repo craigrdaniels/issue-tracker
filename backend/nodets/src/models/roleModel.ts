@@ -1,8 +1,11 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, type Document } from 'mongoose'
+
+export interface IRole extends Document {
+  title: string
+}
 
 const roleSchema = new Schema({
-  _id: Schema.Types.ObjectId,
   title: String
 })
 
-export default model('Role', roleSchema, 'roles')
+export default model<IRole>('Role', roleSchema, 'roles')

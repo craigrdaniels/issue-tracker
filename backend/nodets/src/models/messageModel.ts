@@ -1,4 +1,14 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, type Document } from 'mongoose'
+import { type IUser } from './userModel.js'
+import { type IIssue } from './issueModel.js'
+
+export interface IMessage extends Document {
+  created_by: IUser['_id']
+  issue: IIssue['_id']
+  created_at: Date
+  last_edit: Date
+  content: string
+}
 
 const messageSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -6,8 +16,7 @@ const messageSchema = new Schema({
   issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },
   created_at: Date,
   last_edit: Date,
-  content: String,
-  attachments: [String]
+  content: String
 })
 
-export default model('Message', messageSchema, 'messages')
+export default model<IMessage>('Message', messageSchema, 'messages')
