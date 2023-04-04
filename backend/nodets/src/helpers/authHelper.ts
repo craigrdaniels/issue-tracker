@@ -5,7 +5,6 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 interface IDecode {
-  _id: string
   email: string
 }
 

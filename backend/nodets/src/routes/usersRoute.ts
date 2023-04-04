@@ -9,26 +9,27 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
-import { type Types } from 'mongoose'
+import type * as mongoose from 'mongoose'
 import User from '../models/userModel.js'
-import RefreshToken from '../models/refreshTokenModel.js'
+import RefreshToken, {
+  type IRefreshToken
+} from '../models/refreshTokenModel.js'
 
 dotenv.config()
 
 interface RTDecode {
-  user: string
   email: string
 }
 
-const generateToken = (uid: Types.ObjectId, email: string): string =>
+const generateToken = (email: string): string =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  jsonwebtoken.sign({ id: uid, email }, process.env.JWT_SECRET_KEY!, {
+  jsonwebtoken.sign({ email }, process.env.JWT_SECRET_KEY!, {
     expiresIn: '5m'
   })
 
-const generateRefreshToken = (uid: Types.ObjectId, email: string): string =>
+const generateRefreshToken = (email: string): string =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  jsonwebtoken.sign({ id: uid, email }, process.env.JWT_REFRESH_KEY!, {
+  jsonwebtoken.sign({ email }, process.env.JWT_REFRESH_KEY!, {
     expiresIn: '1d'
   })
 
@@ -75,14 +76,23 @@ usersRouter.post('/users/signup', (async (
 
     console.log('created')
 
+    const exists: { _id: mongoose.Types.ObjectId | undefined } | null =
+      await User.exists({
+        email: req.body.email
+      })
+
+    if (exists !== null) {
+      next({ status: 400, messages: 'User already exists' })
+      return
+    }
+
     // save the user and issue a jwt token
     await user.save().then(async (data) => {
-      const token: string = generateToken(data._id, data.email)
+      const token: string = generateToken(data.email)
 
       const newRefreshToken = new RefreshToken({
-        user: data._id,
         email: data.email,
-        token: generateRefreshToken(data._id, data.email)
+        token: generateRefreshToken(data.email)
       })
 
       await newRefreshToken.save()
@@ -120,19 +130,18 @@ usersRouter.post('/users/login', (async (
         } else if (!bcrypt.compareSync(req.body.password, user.password)) {
           next({ status: 400, message: 'Wrong password' })
         } else {
-          const token: string = generateToken(user._id, user.email)
+          const token: string = generateToken(user.email)
 
           const newRefreshToken = new RefreshToken({
             user: user._id,
             email: user.email,
-            token: generateRefreshToken(user._id, user.email)
+            token: generateRefreshToken(user.email)
           })
 
           await RefreshToken.findOneAndUpdate(
             { email: user.email },
             {
               $set: {
-                user: newRefreshToken.user,
                 email: newRefreshToken.email,
                 token: newRefreshToken.token,
                 created: Date.now()
@@ -158,64 +167,52 @@ usersRouter.post('/users/login', (async (
   }
 }) as RequestHandler)
 
+const isValidRefreshToken = (
+  doc: IRefreshToken | null,
+  token: string,
+  res: Response
+): boolean => {
+  if (doc === null) {
+    res.status(401).json({ success: false, message: 'Token not found in DB' })
+    return false
+  }
+  if (doc.token !== undefined && doc.token !== token) {
+    res.status(401).json({ success: false, message: 'Tokens do not match' })
+    return false
+  }
+  return true
+}
+
 usersRouter.post('/users/refresh-token', (async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    if (req.body.token === undefined || req.body.email === undefined) {
-      next({ status: 400, message: 'Params missing' })
-      return
-    }
-
-    const decoded = jsonwebtoken.verify(
-      req.body.token,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      process.env.JWT_REFRESH_KEY!
-    ) as RTDecode
-
-    if (req.body.email !== decoded.email) {
-      next({ status: 400, message: 'Incorrect token for that ID' })
-      return
-    }
-
     await RefreshToken.findOne({ email: req.body.email }).then(async (data) => {
       if (data === null) {
-        next({ status: 400, message: 'Token not found' })
+        next({ status: 401, message: 'Token not found in DB' })
         return
       }
-      if (data.token !== req.body.token) {
-        next({ status: 400, message: 'Tokens do not match' })
-        return
+      if (isValidRefreshToken(data, req.body.token, res)) {
+        const newToken: string = generateToken(data.email)
+
+        const newRefreshToken = new RefreshToken({
+          email: data.email,
+          token: generateRefreshToken(data.email)
+        })
+
+        // eslint-disable-next-line no-param-reassign
+        data.token = newRefreshToken.token
+        await data.save()
+
+        res.status(199).json({
+          success: true,
+          message: 'Token Updated',
+          token: newToken,
+          refreshToken: newRefreshToken.token
+        })
       }
-      if (data.user === undefined) {
-        next({ status: 400, message: 'User ID not in document' })
-        return
-      }
-      if (data.email === undefined) {
-        next({ status: 400, messaage: 'Email not in document' })
-        return
-      }
-
-      const newToken: string = generateToken(data.user, data.email)
-
-      const newRefreshToken = new RefreshToken({
-        user: data.user,
-        email: data.email,
-        token: generateRefreshToken(data.user, data.email)
-      })
-
-      // eslint-disable-next-line no-param-reassign
-      data.token = newRefreshToken.token
-      await data.save()
-
-      res.status(200).json({
-        success: true,
-        message: 'Token Updated',
-        token: newToken,
-        refreshToken: newRefreshToken.token
-      })
     })
   } catch (error) {
     console.log(error)
@@ -247,28 +244,18 @@ usersRouter.delete('/users/refresh-token', (async (
 
     await RefreshToken.findOne({ email: req.body.email }).then(async (data) => {
       if (data === null) {
-        next({ status: 400, message: 'Token not found' })
-        return
-      }
-      if (data.token !== req.body.token) {
-        next({ status: 400, message: 'Tokens do not match' })
-        return
-      }
-      if (data.user === undefined) {
-        next({ status: 400, message: 'User ID not in document' })
-        return
-      }
-      if (data.email === undefined) {
-        next({ status: 400, messaage: 'Email not in document' })
+        next({ status: 401, message: 'Token not found in DB' })
         return
       }
 
-      await data.deleteOne()
+      if (isValidRefreshToken(data, req.body.email, res)) {
+        await data.deleteOne()
 
-      res.status(200).json({
-        success: true,
-        message: 'Token Deleted'
-      })
+        res.status(200).json({
+          success: true,
+          message: 'Token Deleted'
+        })
+      }
     })
   } catch (error) {
     console.log(error)
@@ -279,3 +266,4 @@ usersRouter.delete('/users/refresh-token', (async (
 export default usersRouter
 
 // TODO: #6 Refactor to remove repeated code
+// TODO: #7 Update user details

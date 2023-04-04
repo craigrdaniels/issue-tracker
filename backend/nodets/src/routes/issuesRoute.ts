@@ -25,7 +25,7 @@ issuesRouter.get('/issues', isAuthenticated, (async (
   }
 }) as RequestHandler)
 
-issuesRouter.post('/issues', (async (
+issuesRouter.post('/issues', isAuthenticated, (async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -42,14 +42,10 @@ issuesRouter.post('/issues', (async (
   }
   const issue = new Issue({
     // BUG: #4 Issue validation failed
-    _id: req.body.id,
     title: req.body.title,
-    created_at: Date.now(),
     created_by: req.body.user,
     project: req.body.project,
-    is_open: true,
-    tags: req.body.tags,
-    severity: req.body.severity
+    tags: req.body.tags
   })
   await issue.save()
   res.status(200).json({ success: true, message: 'Issue created' })
