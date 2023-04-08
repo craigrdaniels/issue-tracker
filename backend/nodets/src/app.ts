@@ -18,8 +18,8 @@ interface Error {
 // eslint-disable-next-line no-underscore-dangle
 const _dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 dotenv.config({
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   path: path.resolve(_dirname, `../.env.${process.env.NODE_ENV}`)
 })
 
@@ -52,7 +52,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(indexRouter)
 app.use(issuesRouter)
 app.use(usersRouter)
-
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const errorStatus = err.status ?? 500

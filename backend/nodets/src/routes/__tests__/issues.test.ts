@@ -1,4 +1,15 @@
 import request from 'supertest'
+import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
+
+beforeAll(async () => {
+  await connectDB()
+})
+afterEach(async () => {
+  await dropCollections()
+})
+afterAll(async () => {
+  await dropDB()
+})
 
 const baseUrl = 'http://localhost:3000'
 
