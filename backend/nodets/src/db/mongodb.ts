@@ -3,11 +3,11 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 import mongoose from 'mongoose'
 
-// dotenv.config()// eslint-disable-next-line no-underscore-dangle
+// eslint-disable-next-line no-underscore-dangle
 const _dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 dotenv.config({
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   path: path.resolve(_dirname, `../../.env.${process.env.NODE_ENV}`)
 })
 

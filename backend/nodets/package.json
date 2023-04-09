@@ -8,7 +8,7 @@
     "start": "NODE_ENV=production nodemon",
     "dev": "NODE_ENV=development nodemon",
     "debug": "NODE_ENV=development nodemon --debug ./srv/app.ts",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
+    "test": "NODE_ENV=development NODE_OPTIONS=--experimental-vm-modules npx jest --watch --setupFiles=dotenv/config",
     "build": "tsc"
   },
   "keywords": [],

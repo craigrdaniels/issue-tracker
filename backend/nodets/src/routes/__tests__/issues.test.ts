@@ -1,5 +1,11 @@
 import request from 'supertest'
+import jsonwebtoken from 'jsonwebtoken'
+import * as dotenv from 'dotenv'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
+import User from '../../models/userModel.js'
+import RefreshToken from '../../models/refreshTokenModel.js'
+
+dotenv.config({ path: '.env.development' })
 
 beforeAll(async () => {
   await connectDB()
@@ -14,21 +20,36 @@ afterAll(async () => {
 const baseUrl = 'http://localhost:3000'
 
 describe('GET /', () => {
-  const newIssue = {
-    id: 1,
-    title: 'Test issue'
-  }
+  console.log(process.env.JWT_SECRET_KEY)
+  const token = jsonwebtoken.sign(
+    { email: 'testuser@email.com' },
+    // eslint-disable-next-line
+    process.env.JWT_SECRET_KEY!
+  )
+  const testUser = new User({
+    email: 'testuser@email.com',
+    password: 'password',
+    username: 'testuser'
+  })
+  const testToken = new RefreshToken({
+    email: 'testuser@email.com',
+    token
+  })
 
   beforeAll(async () => {
-    await request(baseUrl).post('/issues').send(newIssue)
-  })
-  afterAll(async () => {
-    await request(baseUrl).delete(`/issues/${newIssue.id}`)
+    try {
+      await testUser.save()
+      await testToken.save()
+    } catch (err) {
+      console.log(err)
+    }
   })
   it('should return 200', async () => {
     const response = await request(baseUrl)
       .get('/issues')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+    console.log(response)
     expect(response.statusCode).toBe(200)
     // expect(response.headers['Content-Type']).toMatch(/json/)
     expect(response.error).toBe(false)
