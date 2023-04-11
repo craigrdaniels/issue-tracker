@@ -1,6 +1,8 @@
 import request from 'supertest'
+import express from 'express'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
 import * as testData from '../../db/testData.js'
+import issuesRouter from '../issuesRoute.js'
 
 beforeAll(async () => {
   await connectDB()
@@ -14,11 +16,12 @@ afterAll(async () => {
   await dropDB()
 })
 
-const baseUrl = 'http://localhost:3000'
+const app = express()
+app.use(issuesRouter)
 
 describe('GET /', () => {
   it('should return 200', async () => {
-    const response = await request(baseUrl)
+    const response = await request(app)
       .get('/issues')
       .set('Accept', 'application/json')
       .set('Authorization', `JWT ${testData.token}`)

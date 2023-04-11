@@ -1,9 +1,12 @@
 import request from 'supertest'
+import express from 'express'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
 import * as testData from '../../db/testData.js'
+import usersRouter from '../usersRoute.js'
 
 beforeAll(async () => {
   await connectDB()
+  await testData.user.save()
 })
 afterEach(async () => {
   await dropCollections()
@@ -12,19 +15,21 @@ afterAll(async () => {
   await dropDB()
 })
 
-const baseUrl = 'http://localhost:3000'
+const app = express()
+app.use(express.json())
+app.use(usersRouter)
 
 describe('User Functions', () => {
   it('create new user', async () => {
-    const response = await request(baseUrl)
+    const response = await request(app)
       .post('/users/signup')
-      .send({
-        email: testData.user.email,
-        username: testData.user.username,
-        password: testData.user.password
-      })
       .set('Accept', 'application/json')
-    // console.log(response)
+      .send({
+        email: 'user@domain.com',
+        username: 'user',
+        password: 'super-secret-password'
+      })
     expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
   })
 })
