@@ -9,16 +9,24 @@ const connectDB = async (): Promise<void> => {
   await mongoose.connect(uri)
 }
 const dropDB = async (): Promise<void> => {
-  await mongoose.connection.dropDatabase()
-  await mongoose.connection.close()
-  await mongodb.stop()
+  try {
+    await mongoose.connection.dropDatabase()
+    await mongoose.connection.close()
+    await mongodb.stop()
+  } catch (err) {
+    console.log(err)
+  }
 }
 const dropCollections = async (): Promise<void> => {
-  const collections = await mongoose.connection.db.collections()
-  // eslint-disable-next-line
-  for (const collection of collections) {
+  try {
+    const collections = await mongoose.connection.db.collections()
     // eslint-disable-next-line
-    await collection.drop()
+    for (const key in collections) {
+      // eslint-disable-next-line
+      await collections[key].deleteMany()
+    }
+  } catch (err) {
+    console.log(err)
   }
 }
 

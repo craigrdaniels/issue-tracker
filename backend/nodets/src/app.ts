@@ -9,6 +9,7 @@ import { startConnection } from './db/mongodb.js'
 import issuesRouter from './routes/issuesRoute.js'
 import indexRouter from './routes/indexRoute.js'
 import usersRouter from './routes/usersRoute.js'
+import { connectDB } from './db/testdb.js'
 
 interface Error {
   status?: number
@@ -23,14 +24,23 @@ dotenv.config({
   path: path.resolve(_dirname, `../.env.${process.env.NODE_ENV}`)
 })
 
-console.log(process.env)
-
 const PORT = process.env.PORT ?? '3000'
 
 const app = express()
 
-console.log('Starting connection.. ', process.env.MONGO_PATH)
-void startConnection()
+// Select which database to connect to
+if (process.env.NODE_ENV !== 'development') {
+  console.log('Starting connection.. ')
+  void startConnection()
+} else {
+  connectDB()
+    .then(() => {
+      console.log('Connected to development database')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
 
 app.use(
   cors({

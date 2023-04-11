@@ -8,6 +8,8 @@ const config = {
   
   extensionsToTreatAsEsm: ['.ts'],
 
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
+
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',  
   },

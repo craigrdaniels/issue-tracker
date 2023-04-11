@@ -1,6 +1,6 @@
-import 'jest/'
 import request from 'supertest'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
+import * as testData from '../../db/testData.js'
 
 beforeAll(async () => {
   await connectDB()
@@ -15,20 +15,16 @@ afterAll(async () => {
 const baseUrl = 'http://localhost:3000'
 
 describe('User Functions', () => {
-  let session = null
-  const newUser = {
-    email: 'test@user.com',
-    password: 'testpass123'
-  }
-
   it('create new user', async () => {
     const response = await request(baseUrl)
       .post('/users/signup')
-      .send(newUser)
+      .send({
+        email: testData.user.email,
+        username: testData.user.username,
+        password: testData.user.password
+      })
       .set('Accept', 'application/json')
+    // console.log(response)
     expect(response.statusCode).toBe(200)
-
-    session = response.body.token
-    console.log(session)
   })
 })
