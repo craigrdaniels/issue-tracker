@@ -4,20 +4,22 @@ import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
 import * as testData from '../../db/testData.js'
 import usersRouter from '../usersRoute.js'
 
+const app = express()
+app.use(express.json())
+app.use(usersRouter)
+
 beforeAll(async () => {
   await connectDB()
   await testData.user.save()
+  await testData.refreshToken.save()
 })
+beforeEach(async () => {})
 afterEach(async () => {
-  await dropCollections()
+  //  await dropCollections()
 })
 afterAll(async () => {
   await dropDB()
 })
-
-const app = express()
-app.use(express.json())
-app.use(usersRouter)
 
 describe('User Functions', () => {
   it('create new user', async () => {
@@ -31,5 +33,17 @@ describe('User Functions', () => {
       })
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
+  })
+
+  it('test user should be able to login', async () => {
+    const response = await request(app)
+      .post('/users/login')
+      .send({
+        email: testData.user.email,
+        password: 'password'
+      })
+      .set('Accept', 'application/json')
+    console.log(response.body)
+    expect(response.statusCode).toBe(200)
   })
 })

@@ -1,5 +1,6 @@
 import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
+import bcrypt from 'bcrypt'
 import User from '../models/userModel.js'
 import RefreshToken from '../models/refreshTokenModel.js'
 
@@ -13,7 +14,7 @@ export const token = jsonwebtoken.sign(
 
 export const user = new User({
   email: 'testuser@email.com',
-  password: 'password',
+  password: bcrypt.hashSync('password', 10),
   username: 'testuser'
 })
 

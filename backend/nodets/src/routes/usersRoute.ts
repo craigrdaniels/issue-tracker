@@ -121,19 +121,19 @@ usersRouter.post('/users/login', (async (
       next({ status: 400, message: 'Params missing' })
       return
     }
-
     // make sure the user exists, password is correct and issue a token
     User.findOne({ email: req.body.email.toLowerCase() })
       .then(async (user) => {
-        if (user == null) {
-          next({ status: 400, message: 'User does not exist' })
+        if (user === null || user === undefined) {
+          res
+            .status(401)
+            .json({ success: false, message: 'User does not exist' })
         } else if (!bcrypt.compareSync(req.body.password, user.password)) {
-          next({ status: 400, message: 'Wrong password' })
+          res.status(401).json({ success: false, message: 'Wrong password' })
         } else {
           const token: string = generateToken(user.email)
 
           const newRefreshToken = new RefreshToken({
-            user: user._id,
             email: user.email,
             token: generateRefreshToken(user.email)
           })
@@ -149,8 +149,12 @@ usersRouter.post('/users/login', (async (
             },
             { upsert: true }
           ).catch((error) => {
-            console.log(error)
+            res.status(400).json({
+              success: false,
+              message: `Error updating refresh token ${error}`
+            })
           })
+          console.log('test point c')
 
           res
             .status(200)
@@ -158,12 +162,11 @@ usersRouter.post('/users/login', (async (
         }
       })
       .catch((err) => {
-        console.log(err)
         next({ status: 400, error: err })
       })
   } catch (error) {
     console.log(error)
-    next(error)
+    next({ status: 403, error })
   }
 }) as RequestHandler)
 
