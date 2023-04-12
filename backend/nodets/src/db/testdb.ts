@@ -19,12 +19,13 @@ const dropDB = async (): Promise<void> => {
 }
 const dropCollections = async (): Promise<void> => {
   try {
-    const collections = await mongoose.connection.db.collections()
-    // eslint-disable-next-line
-    for (const key in collections) {
-      // eslint-disable-next-line
-      await collections[key].deleteMany()
-    }
+    const collections = mongoose.connection.db.collections()
+
+    await Promise.all(
+      Object.values(collections).map(async (collection) => {
+        await collection.deleteMany()
+      })
+    )
   } catch (err) {
     console.log(err)
   }

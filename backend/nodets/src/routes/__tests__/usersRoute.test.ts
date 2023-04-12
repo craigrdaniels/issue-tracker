@@ -10,12 +10,14 @@ app.use(usersRouter)
 
 beforeAll(async () => {
   await connectDB()
+})
+beforeEach(async () => {
   await testData.user.save()
   await testData.refreshToken.save()
 })
-beforeEach(async () => {})
+
 afterEach(async () => {
-  // await dropCollections()
+  await dropCollections()
 })
 afterAll(async () => {
   await dropDB()
