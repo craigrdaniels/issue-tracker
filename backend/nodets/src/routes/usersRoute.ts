@@ -154,7 +154,6 @@ usersRouter.post('/users/login', (async (
               message: `Error updating refresh token ${error}`
             })
           })
-          console.log('test point c')
 
           res
             .status(200)
@@ -193,7 +192,7 @@ usersRouter.post('/users/refresh-token', (async (
 ) => {
   try {
     await RefreshToken.findOne({ email: req.body.email }).then(async (data) => {
-      if (data === null) {
+      if (data === null || data === undefined) {
         next({ status: 401, message: 'Token not found in DB' })
         return
       }
@@ -204,17 +203,17 @@ usersRouter.post('/users/refresh-token', (async (
           email: data.email,
           token: generateRefreshToken(data.email)
         })
-
         // eslint-disable-next-line no-param-reassign
         data.token = newRefreshToken.token
         await data.save()
-
-        res.status(199).json({
+        res.status(200).json({
           success: true,
           message: 'Token Updated',
           token: newToken,
           refreshToken: newRefreshToken.token
         })
+      } else {
+        next({ status: 401, message: 'Invalid token' })
       }
     })
   } catch (error) {

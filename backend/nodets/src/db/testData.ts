@@ -11,6 +11,11 @@ export const token = jsonwebtoken.sign(
   // eslint-disable-next-line
   process.env.JWT_SECRET_KEY!
 )
+export const rToken = jsonwebtoken.sign(
+  { email: 'testuser@email.com' },
+  // eslint-disable-next-line
+  process.env.JWT_REFRESH_KEY!
+)
 
 export const user = new User({
   email: 'testuser@email.com',
@@ -20,5 +25,5 @@ export const user = new User({
 
 export const refreshToken = new RefreshToken({
   email: 'testuser@email.com',
-  token
+  token: rToken
 })

@@ -1,7 +1,6 @@
 import { type Request, type Response, type NextFunction } from 'express'
 import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
-import RefreshToken from '../models/refreshTokenModel.js'
 
 dotenv.config()
 
@@ -33,16 +32,6 @@ const isAuthenticated = async (
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       process.env.JWT_SECRET_KEY!
     ) as IDecode
-
-    // Check the user has a token in the DB and it matches the one sent
-    const data = await RefreshToken.findOne({
-      email: decoded.email
-    })
-
-    if (data?.token !== token) {
-      res.status(401).json({ success: false, message: 'Invalid token' })
-      return
-    }
 
     req.email = decoded.email
     next()
