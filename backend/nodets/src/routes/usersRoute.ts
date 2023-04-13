@@ -17,10 +17,6 @@ import RefreshToken, {
 
 dotenv.config()
 
-interface RTDecode {
-  email: string
-}
-
 const generateToken = (email: string): string =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   jsonwebtoken.sign({ email }, process.env.JWT_SECRET_KEY!, {
