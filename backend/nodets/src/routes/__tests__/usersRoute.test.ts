@@ -3,6 +3,8 @@ import express from 'express'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
 import * as testData from '../../db/testData.js'
 import usersRouter from '../usersRoute.js'
+import User from '../../models/userModel.js'
+import RefreshToken from '../../models/refreshTokenModel.js'
 
 const app = express()
 app.use(express.json())
@@ -11,9 +13,16 @@ app.use(usersRouter)
 beforeAll(async () => {
   await connectDB()
 })
+
 beforeEach(async () => {
-  await testData.user.save()
-  await testData.refreshToken.save()
+  await User.replaceOne({ email: testData.user.email }, testData.user, {
+    upsert: true
+  })
+  await RefreshToken.replaceOne(
+    { email: testData.refreshToken.email },
+    testData.refreshToken,
+    { upsert: true }
+  )
 })
 
 afterEach(async () => {
@@ -24,18 +33,6 @@ afterAll(async () => {
 })
 
 describe('User Functions', () => {
-  it('test user can refresh token', async () => {
-    const response = await request(app)
-      .post('/users/refresh-token')
-      .send({
-        email: testData.user.email,
-        token: testData.refreshToken.token
-      })
-      .set('Accept', 'application/json')
-    expect(response.statusCode).toBe(200)
-    expect(response.body.token).not.toEqual(testData.refreshToken.token)
-  })
-
   it('create new user', async () => {
     const response = await request(app)
       .post('/users/signup')
@@ -83,5 +80,27 @@ describe('User Functions', () => {
       .set('Accept', 'application/json')
     expect(response.statusCode).not.toBe(200)
     expect(response.error).not.toBe(false)
+  })
+  it('test user can refresh token', async () => {
+    const response = await request(app)
+      .post('/users/refresh-token')
+      .send({
+        email: testData.user.email,
+        token: testData.refreshToken.token
+      })
+      .set('Accept', 'application/json')
+    expect(response.statusCode).toBe(200)
+    expect(response.body.token).not.toEqual(testData.refreshToken.token)
+  })
+  it('test user can delete token', async () => {
+    const response = await request(app)
+      .delete('/users/refresh-token')
+      .send({
+        email: testData.user.email,
+        token: testData.refreshToken.token
+      })
+      .set('Accept', 'application/json')
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
   })
 })

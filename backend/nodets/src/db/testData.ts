@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt'
 import User from '../models/userModel.js'
 import RefreshToken from '../models/refreshTokenModel.js'
 
+// const testUserSchema = new User({}, { skipVersioning: true })
+
 dotenv.config({ path: '.env.development' })
 
 export const token = jsonwebtoken.sign(

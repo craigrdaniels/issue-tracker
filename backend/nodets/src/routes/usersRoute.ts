@@ -228,35 +228,20 @@ usersRouter.delete('/users/refresh-token', (async (
   next: NextFunction
 ) => {
   try {
-    if (req.body.token === undefined || req.body.email === undefined) {
-      next({ status: 400, message: 'Params missing' })
-      return
-    }
-
-    const decoded = jsonwebtoken.verify(
-      req.body.token,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      process.env.JWT_REFRESH_KEY!
-    ) as RTDecode
-
-    if (req.body.email !== decoded.email) {
-      next({ status: 400, message: 'Incorrect token for that ID' })
-      return
-    }
-
     await RefreshToken.findOne({ email: req.body.email }).then(async (data) => {
-      if (data === null) {
+      if (data === null || data === undefined) {
         next({ status: 401, message: 'Token not found in DB' })
         return
       }
-
-      if (isValidRefreshToken(data, req.body.email, res)) {
+      if (isValidRefreshToken(data, req.body.token, res)) {
         await data.deleteOne()
 
         res.status(200).json({
           success: true,
           message: 'Token Deleted'
         })
+      } else {
+        next({ status: 401, message: 'Invalid token' })
       }
     })
   } catch (error) {

@@ -19,13 +19,18 @@ const dropDB = async (): Promise<void> => {
 }
 const dropCollections = async (): Promise<void> => {
   try {
-    const collections = mongoose.connection.db.collections()
-
-    await Promise.all(
-      Object.values(collections).map(async (collection) => {
-        await collection.deleteMany()
-      })
-    )
+    await mongoose.connection.db.collections().then(async (cols) => {
+      cols.map(
+        async (
+          col: mongoose.mongo.Collection<mongoose.mongo.BSON.Document>
+        ) => {
+          // console.log('Col: ', col.collectionName)
+          await col.drop().catch((err) => {
+            console.log(err)
+          })
+        }
+      )
+    })
   } catch (err) {
     console.log(err)
   }
