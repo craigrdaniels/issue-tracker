@@ -29,6 +29,21 @@ const generateRefreshToken = (email: string): string =>
     expiresIn: '1d'
   })
 
+const isValidRefreshToken = (
+  doc: IRefreshToken | null,
+  token: string,
+  res: Response
+): boolean => {
+  if (doc === null) {
+    res.status(401).json({ success: false, message: 'Token not found in DB' })
+    return false
+  }
+  if (doc.token !== undefined && doc.token !== token) {
+    res.status(401).json({ success: false, message: 'Tokens do not match' })
+    return false
+  }
+  return true
+}
 const usersRouter = express.Router()
 
 usersRouter.post('/users/signup', (async (
@@ -112,74 +127,58 @@ usersRouter.post('/users/login', (async (
   next: NextFunction
 ) => {
   try {
-    // check an email and password is entered
     if (req.body.email === undefined || req.body.password === undefined) {
       next({ status: 400, message: 'Params missing' })
       return
     }
-    // make sure the user exists, password is correct and issue a token
-    User.findOne({ email: req.body.email.toLowerCase() })
+
+    await User.findOne({ email: req.body.email.toLowerCase() })
       .then(async (user) => {
         if (user === null || user === undefined) {
-          res
-            .status(401)
-            .json({ success: false, message: 'User does not exist' })
-        } else if (!bcrypt.compareSync(req.body.password, user.password)) {
-          res.status(401).json({ success: false, message: 'Wrong password' })
-        } else {
-          const token: string = generateToken(user.email)
-
-          const newRefreshToken = new RefreshToken({
-            email: user.email,
-            token: generateRefreshToken(user.email)
-          })
-
-          await RefreshToken.findOneAndUpdate(
-            { email: user.email },
-            {
-              $set: {
-                email: newRefreshToken.email,
-                token: newRefreshToken.token,
-                created: Date.now()
-              }
-            },
-            { upsert: true }
-          ).catch((error) => {
-            res.status(400).json({
-              success: false,
-              message: `Error updating refresh token ${error}`
-            })
-          })
-
-          res
-            .status(200)
-            .json({ success: true, token, refreshToken: newRefreshToken.token })
+          next({ status: 401, message: 'User not found' })
+          return
         }
+        if (!bcrypt.compareSync(req.body.password, user.password)) {
+          next({ status: 401, message: 'Wrong password' })
+          return
+        }
+
+        const token: string = generateToken(user.email)
+
+        const newRefreshToken = new RefreshToken({
+          email: user.email,
+          token: generateRefreshToken(user.email)
+        })
+
+        await RefreshToken.findOneAndUpdate(
+          { email: user.email },
+          {
+            $set: {
+              email: newRefreshToken.email,
+              token: newRefreshToken.token,
+              created: Date.now()
+            }
+          },
+          { upsert: true }
+        ).catch((error) => {
+          next({
+            status: 400,
+            message: `Error updating refresh token ${error}`
+          })
+        })
+
+        res
+          .status(200)
+          .json({ success: true, token, refreshToken: newRefreshToken.token })
       })
-      .catch((err) => {
-        next({ status: 400, error: err })
+      .catch((error) => {
+        next({ status: 400, message: `Error finding user ${error}` })
       })
   } catch (error) {
     console.log(error)
-    next({ status: 403, error })
+    next(error)
   }
 }) as RequestHandler)
-
-const isValidRefreshToken = (
-  doc: IRefreshToken | null,
-  token: string,
-  res: Response
-): boolean => {
-  if (doc === null) {
-    res.status(401).json({ success: false, message: 'Token not found in DB' })
-    return false
-  }
-  if (doc.token !== undefined && doc.token !== token) {
-    res.status(401).json({ success: false, message: 'Tokens do not match' })
-    return false
-  }
-  return true
-}
 
 usersRouter.post('/users/refresh-token', (async (
   req: Request,
