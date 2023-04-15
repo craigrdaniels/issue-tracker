@@ -85,8 +85,6 @@ usersRouter.post('/users/signup', (async (
       username: req.body.username ?? req.body.email.split('@')[0]
     })
 
-    console.log('created')
-
     const exists: { _id: mongoose.Types.ObjectId | undefined } | null =
       await User.exists({
         email: req.body.email
@@ -116,7 +114,6 @@ usersRouter.post('/users/signup', (async (
       })
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }) as RequestHandler)
@@ -175,7 +172,6 @@ usersRouter.post('/users/login', (async (
         next({ status: 400, message: `Error finding user ${error}` })
       })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }) as RequestHandler)
@@ -212,7 +208,6 @@ usersRouter.post('/users/refresh-token', (async (
       }
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }) as RequestHandler)
@@ -240,7 +235,6 @@ usersRouter.delete('/users/refresh-token', (async (
       }
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }) as RequestHandler)

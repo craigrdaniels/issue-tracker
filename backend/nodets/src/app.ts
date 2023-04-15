@@ -66,6 +66,7 @@ app.use(usersRouter)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const errorStatus = err.status ?? 500
   res.status(errorStatus).json(err)
+  console.log(err.message)
 })
 
 app.listen(PORT, () => {
