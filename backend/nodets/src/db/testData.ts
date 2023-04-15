@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import User from '../models/userModel.js'
 import RefreshToken from '../models/refreshTokenModel.js'
+import Issue from '../models/issueModel.js'
 
 // const testUserSchema = new User({}, { skipVersioning: true })
 
@@ -28,4 +29,9 @@ export const user = new User({
 export const refreshToken = new RefreshToken({
   email: 'testuser@email.com',
   token: rToken
+})
+
+export const issue = new Issue({
+  title: 'Test Issue',
+  created_by: user._id
 })
