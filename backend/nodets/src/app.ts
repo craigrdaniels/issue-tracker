@@ -10,6 +10,7 @@ import issuesRouter from './routes/issuesRoute.js'
 import indexRouter from './routes/indexRoute.js'
 import usersRouter from './routes/usersRoute.js'
 import { connectDB } from './db/testdb.js'
+import messagesRouter from './routes/messagesRoute.js'
 
 interface Error {
   status?: number
@@ -62,6 +63,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(indexRouter)
 app.use(issuesRouter)
 app.use(usersRouter)
+app.use(messagesRouter)
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const errorStatus = err.status ?? 500
