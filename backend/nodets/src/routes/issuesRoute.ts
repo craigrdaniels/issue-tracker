@@ -62,7 +62,17 @@ issuesRouter.get('/issues/:id', isAuthenticated, (async (
   next: NextFunction
 ) => {
   // code to update an issue
-  res.json(req.body)
+  try {
+    await Issue.findOne({ _id: req.params.id }).then((issue) => {
+      if (issue === null || issue === undefined) {
+        next({ status: 401, message: 'Issue not found in DB' })
+        return
+      }
+      res.status(200).json(issue)
+    })
+  } catch (error) {
+    next(error)
+  }
 }) as RequestHandler)
 
 issuesRouter.put('/issues/:id', isAuthenticated, (async (
@@ -71,7 +81,15 @@ issuesRouter.put('/issues/:id', isAuthenticated, (async (
   next: NextFunction
 ) => {
   // code to update an issue
-  res.json(req.body)
+  try {
+    console.log('Test Point A')
+    await Issue.replaceOne({ _id: req.params.id }, req.body).then(() => {
+      res.status(200).json({ message: 'Issue updated' })
+    })
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
 }) as RequestHandler)
 
 issuesRouter.delete('/issues/:id', (req: Request, res: Response): void => {

@@ -24,6 +24,7 @@ beforeEach(async () => {
 afterEach(async () => {
   await dropCollections()
 })
+
 afterAll(async () => {
   await dropDB()
 })
@@ -47,7 +48,25 @@ describe('GET /issues', () => {
         title: 'Test issue'
       })
     expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
+  it('should return specified issue', async () => {
+    const response = await request(app)
+      .get('/issues/' + testData.issue._id)
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `JWT ${testData.token}`)
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+    expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
+  })
+  it('should update specified issue', async () => {
+    const response = await request(app)
+      .put('/issues/' + testData.issue._id)
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `JWT ${testData.token}`)
+      .send({ title: 'New Title' })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
   })
 })
-
 // Commented out sections do not work until push functions added
