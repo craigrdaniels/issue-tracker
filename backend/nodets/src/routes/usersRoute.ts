@@ -14,6 +14,7 @@ import User from '../models/userModel.js'
 import RefreshToken, {
   type IRefreshToken
 } from '../models/refreshTokenModel.js'
+import isAuthenticated from '../helpers/authHelper.js'
 
 dotenv.config()
 
@@ -176,6 +177,20 @@ usersRouter.post('/users/login', (async (
   }
 }) as RequestHandler)
 
+usersRouter.put('/users/update', isAuthenticated, (async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    await User.replaceOne({ email: req.email }, req.body).then(() => {
+      res.status(200).json({ success: true, message: 'User details updated' })
+    })
+  } catch (error) {
+    next(error)
+  }
+}) as RequestHandler)
+
 usersRouter.post('/users/refresh-token', (async (
   req: Request,
   res: Response,
@@ -240,6 +255,3 @@ usersRouter.delete('/users/refresh-token', (async (
 }) as RequestHandler)
 
 export default usersRouter
-
-// TODO: #6 Refactor to remove repeated code
-// TODO: #7 Update user details

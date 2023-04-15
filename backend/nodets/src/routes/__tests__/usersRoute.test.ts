@@ -103,4 +103,15 @@ describe('User Functions', () => {
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
   })
+  it('User can update details', async () => {
+    const response = await request(app)
+      .put('/users/update')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `JWT ${testData.token}`)
+      .send({
+        username: 'New Username'
+      })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
 })

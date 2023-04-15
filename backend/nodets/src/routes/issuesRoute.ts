@@ -92,9 +92,4 @@ issuesRouter.put('/issues/:id', isAuthenticated, (async (
   }
 }) as RequestHandler)
 
-issuesRouter.delete('/issues/:id', (req: Request, res: Response): void => {
-  // code to delete an issue
-  res.json(req.body)
-})
-
 export default issuesRouter

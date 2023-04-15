@@ -8,9 +8,6 @@ describe('GET /', () => {
       .get('/')
       .set('Accept', 'application/json')
     expect(response.statusCode).toBe(200)
-    // expect(response.headers['Content-Type']).toMatch(/json/)
     expect(response.error).toBe(false)
   })
 })
-
-// Commented out sections do not work until push functions added
