@@ -6,7 +6,6 @@ import messagesRouter from '../messagesRoute.js'
 import User from '../../models/userModel.js'
 import Issue from '../../models/issueModel.js'
 import Message from '../../models/messageModel.js'
-import issuesRouter from 'routes/issuesRoute.js'
 
 const app = express()
 app.use(express.json())
@@ -35,7 +34,7 @@ afterAll(async () => {
 })
 
 describe('Get /messages for an issue', () => {
-  it('shoudl return 200', async () => {
+  it('get all messages', async () => {
     const response = await request(app)
       .get('/issues/' + testData.issue._id + '/messages')
       .set('Content-Type', 'applications/json')
@@ -43,5 +42,40 @@ describe('Get /messages for an issue', () => {
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
     expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
+  })
+  it('get individual message', async () => {
+    const response = await request(app)
+      .get(
+        '/issues/' + testData.issue._id + '/messages/' + testData.message._id
+      )
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `JWT ${testData.token}`)
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+    expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
+  })
+  it('create a new message', async () => {
+    const response = await request(app)
+      .post('/issues/' + testData.issue._id + '/messages')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `JWT ${testData.token}`)
+      .send({
+        content: 'Test Content'
+      })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
+  it('update a message', async () => {
+    const response = await request(app)
+      .put(
+        '/issues/' + testData.issue._id + '/messages/' + testData.message._id
+      )
+      .set('Content-Type', 'application/json')
+      .set('Authorization', `JWT ${testData.token}`)
+      .send({
+        content: 'New Test Content'
+      })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
   })
 })
