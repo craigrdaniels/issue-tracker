@@ -8,11 +8,11 @@ interface IDecode {
   email: string
 }
 
-const isAuthenticated = async (
+const isAuthenticated = (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<void> => {
+): void => {
   try {
     // First check the auth headers were defined
     if (
