@@ -47,7 +47,4 @@ describe('authHelper middleware', () => {
       }
     }
   })
-
-  // test withouth Authoriztaion headers
-  // test with Authoriztaion headers
 })
