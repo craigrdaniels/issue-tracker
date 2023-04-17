@@ -82,12 +82,10 @@ issuesRouter.put('/issues/:id', isAuthenticated, (async (
 ) => {
   // code to update an issue
   try {
-    console.log('Test Point A')
     await Issue.replaceOne({ _id: req.params.id }, req.body).then(() => {
       res.status(200).json({ message: 'Issue updated' })
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 }) as RequestHandler)
