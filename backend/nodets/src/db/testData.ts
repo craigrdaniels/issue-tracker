@@ -45,5 +45,6 @@ export const message = new Message({
 
 export const action = new Action({
   action: 'Test Action',
-  user: user._id
+  user: user._id,
+  issue: issue._id
 })
