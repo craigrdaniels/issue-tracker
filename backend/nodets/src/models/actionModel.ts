@@ -6,12 +6,14 @@ export interface IAction extends Document {
   issue: IIssue['_id']
   user: IUser['_id']
   action: string
+  created_at: Date
 }
 
 const actionSchema = new Schema({
   issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },
   user: { type: Schema.Types.ObjectId, refPath: 'User' },
-  action: String
+  action: String,
+  created_at: { type: Date, default: Date.now }
 })
 
 export default model<IAction>('Action', actionSchema, 'actions')

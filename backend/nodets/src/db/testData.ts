@@ -5,6 +5,7 @@ import User from '../models/userModel.js'
 import RefreshToken from '../models/refreshTokenModel.js'
 import Issue from '../models/issueModel.js'
 import Message from '../models/messageModel.js'
+import Action from '../models/actionModel.js'
 // const testUserSchema = new User({}, { skipVersioning: true })
 
 dotenv.config({ path: '.env.development' })
@@ -40,4 +41,9 @@ export const message = new Message({
   content: 'Test message content',
   created_by: user._id,
   issue: issue._id
+})
+
+export const action = new Action({
+  action: 'Test Action',
+  user: user._id
 })
