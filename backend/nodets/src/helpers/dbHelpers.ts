@@ -8,10 +8,14 @@ export const findIssueById = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    if (req.params === undefined || req.params.issueID === undefined) {
+      res.status(400).json({ success: false, message: 'No issue ID given' })
+      return
+    }
     await Issue.findOne({ _id: req.params.issueID })
       .then((issue) => {
         if (issue === null || issue === undefined) {
-          next({ status: 400, message: 'User not found' })
+          res.status(400).json({ success: false, message: 'Issue not found' })
           return
         }
         next()
