@@ -18,7 +18,7 @@ describe('authHelper middleware', () => {
     }
   })
 
-  it('without headers', async () => {
+  it('without headers', () => {
     const expectedResponse = {
       success: false,
       message: 'Token not found'
@@ -28,7 +28,7 @@ describe('authHelper middleware', () => {
 
     expect(mockResponse.json).toBeCalledWith(expectedResponse)
   })
-  it('without Authoriztaion headers', async () => {
+  it('without Authoriztaion headers', () => {
     const expectedResponse = {
       success: false,
       message: 'Token not found'
@@ -40,11 +40,13 @@ describe('authHelper middleware', () => {
 
     expect(mockResponse.json).toBeCalledWith(expectedResponse)
   })
-  it('with Authoriztaion headers', async () => {
+  it('with Authoriztaion headers', () => {
     mockRequest = {
       headers: {
         authorization: `JWT ${testData.token}`
       }
     }
+    authHelper(mockRequest as Request, mockResponse as Response, nextFunction)
+    expect(nextFunction).toBeCalledTimes(1) // fails
   })
 })
