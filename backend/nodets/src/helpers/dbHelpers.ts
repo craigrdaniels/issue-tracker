@@ -34,18 +34,15 @@ export const getUserIdByEmail = async (
       .then(async (user) => {
         if (user === null || user === undefined) {
           res.status(400).json({ success: false, message: 'User not found' })
-          console.log('User not found')
           return
         }
         req._id = user._id
         next()
       })
       .catch((error) => {
-        console.log(error)
         res.status(400).json({ success: false, error })
       })
   } catch (error) {
-    console.log(error)
     res.status(400).json({ success: false, error })
   }
 }
