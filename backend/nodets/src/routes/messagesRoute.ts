@@ -9,6 +9,7 @@ import isAuthenticated from '../helpers/authHelper.js'
 import Message from '../models/messageModel.js'
 import issuesRouter from './issuesRoute.js'
 import { findIssueById, getUserIdByEmail } from '../helpers/dbHelpers.js'
+import catchAsyncFunction from '../helpers/catchAsyncFunction.js'
 
 const messagesRouter = express.Router()
 
@@ -16,30 +17,26 @@ messagesRouter.get(
   '/issues/:issueID/messages',
   isAuthenticated,
   issuesRouter,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const messages = await Message.find({ issue: req.params.issueID }).sort({
         created_at: -1
       })
       res.status(200).json(messages)
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 messagesRouter.get(
   '/issues/:issueID/messages/:messageID',
   isAuthenticated,
   issuesRouter,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const message = await Message.findOne({ _id: req.params.messageID })
       res.status(200).json(message)
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 // create a new message
@@ -49,8 +46,8 @@ messagesRouter.post(
   issuesRouter,
   getUserIdByEmail,
   findIssueById,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const message = new Message({
         content: req.body.content,
         created_by: req._id,
@@ -58,10 +55,8 @@ messagesRouter.post(
       })
       await message.save()
       res.status(200).json({ success: true, message: 'Message created' })
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 // edit a message
@@ -70,17 +65,15 @@ messagesRouter.put(
   isAuthenticated,
   issuesRouter,
   findIssueById,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       await Message.replaceOne({ _id: req.params.messageID }, req.body).then(
         () => {
           res.status(200).json({ success: true, message: 'Message updated' })
         }
       )
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 export default messagesRouter

@@ -9,6 +9,7 @@ import isAuthenticated from '../helpers/authHelper.js'
 import Action from '../models/actionModel.js'
 import issuesRouter from './issuesRoute.js'
 import { findIssueById, getUserIdByEmail } from '../helpers/dbHelpers.js'
+import catchAsyncFunction from '../helpers/catchAsyncFunction.js'
 
 const actionsRouter = express.Router()
 
@@ -17,31 +18,27 @@ actionsRouter.get(
   '/issues/:issueID/actions',
   isAuthenticated,
   issuesRouter,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const actions = await Action.find({ issue: req.params.issueID }).sort({
         created_at: -1
       })
       res.status(200).json(actions)
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 // get specified action
-actionsRouter.get('/issues/:issueID/actions/:actionID', issuesRouter, (async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const action = await Action.findOne({ _id: req.params.actionID })
-    res.status(200).json(action)
-  } catch (error) {
-    next(error)
-  }
-}) as RequestHandler)
+actionsRouter.get(
+  '/issues/:issueID/actions/:actionID',
+  issuesRouter,
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      const action = await Action.findOne({ _id: req.params.actionID })
+      res.status(200).json(action)
+    }
+  ) as RequestHandler
+)
 
 // create a new action
 actionsRouter.post(
@@ -50,8 +47,8 @@ actionsRouter.post(
   issuesRouter,
   getUserIdByEmail,
   findIssueById,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const action = new Action({
         action: req.body.action,
         user: req._id,
@@ -59,10 +56,8 @@ actionsRouter.post(
       })
       await action.save()
       res.status(200).json({ success: true, message: 'Action created' })
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 // delete an action
@@ -70,8 +65,8 @@ actionsRouter.delete(
   '/issues/:issueID/actions/:actionID',
   isAuthenticated,
   issuesRouter,
-  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
+  catchAsyncFunction(
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       await Action.findOneAndRemove({ _id: req.params.actionID }).then(
         (action) => {
           if (action === null || action === undefined) {
@@ -81,10 +76,8 @@ actionsRouter.delete(
           res.status(200).json({ success: true, message: 'Action Removed' })
         }
       )
-    } catch (error) {
-      next(error)
     }
-  }) as RequestHandler
+  ) as RequestHandler
 )
 
 export default actionsRouter
