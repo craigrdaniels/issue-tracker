@@ -7,9 +7,8 @@ import {
 import express from 'express'
 import isAuthenticated from '../helpers/authHelper.js'
 import Action from '../models/actionModel.js'
-import User from '../models/userModel.js'
-import Issue from '../models/issueModel.js'
 import issuesRouter from './issuesRoute.js'
+import { findIssueById, getUserIdByEmail } from '../helpers/dbHelpers.js'
 
 const actionsRouter = express.Router()
 
@@ -49,27 +48,17 @@ actionsRouter.post(
   '/issues/:issueID/actions',
   isAuthenticated,
   issuesRouter,
+  getUserIdByEmail,
+  findIssueById,
   (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      await User.findOne({ email: req.email }).then(async (user) => {
-        if (user === null || user === undefined) {
-          next({ status: 400, message: 'User not found' })
-          return
-        }
-        await Issue.findOne({ _id: req.params.issueID }).then(async (issue) => {
-          if (issue === null || issue === undefined) {
-            next({ status: 400, message: 'Issue not found' })
-            return
-          }
-          const action = new Action({
-            action: req.body.action,
-            user: user._id,
-            issue: issue._id
-          })
-          await action.save()
-          res.status(200).json({ success: true, message: 'Action created' })
-        })
+      const action = new Action({
+        action: req.body.action,
+        user: req._id,
+        issue: req.params.issueID
       })
+      await action.save()
+      res.status(200).json({ success: true, message: 'Action created' })
     } catch (error) {
       next(error)
     }
