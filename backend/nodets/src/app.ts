@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { type Request, type Response, type NextFunction } from 'express'
 import cors from 'cors'
 import path from 'path'
+import fs from 'fs'
 import logger from 'morgan'
 import { startConnection } from './db/mongodb.js'
 import issuesRouter from './routes/issuesRoute.js'
@@ -48,7 +49,18 @@ app.use(
     origin: '*'
   })
 )
-app.use(logger('dev'))
+
+// set up logging
+if (process.env.NODE_ENV === 'development') {
+  app.use(logger('dev'))
+} else {
+  const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'),
+    { flags: 'a' }
+  )
+  app.use(logger('combined', { stream: accessLogStream }))
+}
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(_dirname, 'public')))
