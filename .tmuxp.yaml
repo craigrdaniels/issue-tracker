@@ -1,0 +1,23 @@
+session_name: dev
+start_directory: ./
+windows:
+  - window_name: NodeTS
+    layout: 6736,239x73,0,0[239x57,0,0,1,239x15,0,58{119x15,0,58,2,119x15,120,58,3}]
+    focus: True
+    start_directory: ./backend/nodets/
+    panes:
+      - focus: True
+        shell_command:
+          - nvim .
+      - npm run dev
+      - npm run test
+  - window_name: React
+    layout: 6736,239x73,0,0[239x57,0,0,1,239x15,0,58{119x15,0,58,2,119x15,120,58,3}]
+    focus: True
+    start_directory: ./frontend/
+    panes:
+      - focus: True
+        shell_command:
+          - nvim .
+      -
+      -
