@@ -49,7 +49,6 @@ const loadDevData = async (): Promise<void> => {
     await RefreshToken.create(devData.refreshToken)
     await Message.create(devData.message)
     await Action.create(devData.action)
-    console.log('JWT Token: ' + devData.token)
   } catch (err) {
     console.log(err)
   }
