@@ -10,7 +10,7 @@ import { startConnection } from './db/mongodb.js'
 import issuesRouter from './routes/issuesRoute.js'
 import indexRouter from './routes/indexRoute.js'
 import usersRouter from './routes/usersRoute.js'
-import { connectDB } from './db/testdb.js'
+import { connectDB, loadDevData } from './db/testdb.js'
 import messagesRouter from './routes/messagesRoute.js'
 
 interface Error {
@@ -38,6 +38,9 @@ if (process.env.NODE_ENV !== 'development') {
   connectDB()
     .then(() => {
       console.log('Connected to development database')
+    })
+    .then(async () => {
+      await loadDevData()
     })
     .catch((err) => {
       console.log(err)
