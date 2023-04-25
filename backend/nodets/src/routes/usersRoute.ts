@@ -207,12 +207,14 @@ usersRouter.post(
             // eslint-disable-next-line no-param-reassign
             data.token = newRefreshToken.token
             await data.save()
-            res.status(200).json({
-              success: true,
-              message: 'Token Updated',
-              token: newToken,
-              refreshToken: newRefreshToken.token
-            })
+            res
+              .status(200)
+              .cookie('JWT', newToken, { maxAge: 900000, httpOnly: true })
+              .json({
+                success: true,
+                message: 'Token Updated',
+                refreshToken: newRefreshToken.token
+              })
           } else {
             next({ status: 401, message: 'Invalid token' })
           }
