@@ -1,12 +1,14 @@
 import request from 'supertest'
 import express from 'express'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
+import cookieParser from 'cookie-parser'
 import * as testData from '../../db/testData.js'
 import issuesRouter from '../issuesRoute.js'
 import User from '../../models/userModel.js'
 import Issue from '../../models/issueModel.js'
 
 const app = express()
+app.use(cookieParser())
 app.use(express.json())
 app.use(issuesRouter)
 
@@ -34,7 +36,7 @@ describe('GET /issues', () => {
     const response = await request(app)
       .get('/issues')
       .set('Accept', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
     expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
@@ -43,7 +45,7 @@ describe('GET /issues', () => {
     const response = await request(app)
       .post('/issues')
       .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
       .send({
         title: 'Test issue'
       })
@@ -54,7 +56,7 @@ describe('GET /issues', () => {
     const response = await request(app)
       .get('/issues/' + testData.issue._id)
       .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
     expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
@@ -63,7 +65,7 @@ describe('GET /issues', () => {
     const response = await request(app)
       .put('/issues/' + testData.issue._id)
       .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
       .send({ title: 'New Title' })
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)

@@ -15,16 +15,12 @@ const isAuthenticated = (
 ): void => {
   try {
     // First check the auth headers were defined
-    if (
-      req.headers === undefined ||
-      req.headers.authorization === undefined ||
-      req.headers.authorization.split(' ')[0] !== 'JWT'
-    ) {
+    if (req.cookies === undefined || req.cookies.JWT === undefined) {
       res.status(401).json({ success: false, message: 'Token not found' })
-      return
     }
 
-    const token: string = req.headers.authorization.split(' ')[1]
+    // const token: string = req.headers.authorization.split(' ')[1]
+    const token: string = req.cookies.JWT
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const decoded = jsonwebtoken.verify(

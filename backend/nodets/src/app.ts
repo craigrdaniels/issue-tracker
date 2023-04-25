@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv'
 import express from 'express'
 import { fileURLToPath } from 'url'
 import { type Request, type Response, type NextFunction } from 'express'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import path from 'path'
 import fs from 'fs'
@@ -47,9 +48,12 @@ if (process.env.NODE_ENV !== 'development') {
     })
 }
 
+app.use(cookieParser())
+
 app.use(
   cors({
-    origin: '*'
+    origin: '*',
+    credentials: true
   })
 )
 

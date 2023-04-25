@@ -18,7 +18,7 @@ describe('authHelper middleware', () => {
     }
   })
 
-  it('without headers', () => {
+  it('without cookies', () => {
     const expectedResponse = {
       success: false,
       message: 'Token not found'
@@ -28,22 +28,22 @@ describe('authHelper middleware', () => {
 
     expect(mockResponse.json).toBeCalledWith(expectedResponse)
   })
-  it('without Authoriztaion headers', () => {
+  it('without JWT cookies', () => {
     const expectedResponse = {
       success: false,
       message: 'Token not found'
     }
     mockRequest = {
-      headers: {}
+      cookies: {}
     }
     authHelper(mockRequest as Request, mockResponse as Response, nextFunction)
 
     expect(mockResponse.json).toBeCalledWith(expectedResponse)
   })
-  it('with Authoriztaion headers', () => {
+  it('with JWT cookies', () => {
     mockRequest = {
-      headers: {
-        authorization: `JWT ${testData.token}`
+      cookies: {
+        JWT: testData.token
       }
     }
     authHelper(mockRequest as Request, mockResponse as Response, nextFunction)

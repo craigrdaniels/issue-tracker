@@ -1,6 +1,7 @@
 import request from 'supertest'
 import express from 'express'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
+import cookieParser from 'cookie-parser'
 import * as testData from '../../db/testData.js'
 import actionsRouter from '../actionsRoute.js'
 import User from '../../models/userModel.js'
@@ -8,6 +9,7 @@ import Issue from '../../models/issueModel.js'
 import Action from '../../models/actionModel.js'
 
 const app = express()
+app.use(cookieParser())
 app.use(express.json())
 app.use(actionsRouter)
 
@@ -38,7 +40,7 @@ describe('Test actions router', () => {
     const response = await request(app)
       .get('/issues/' + testData.issue._id + '/actions')
       .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
     expect(response.error).toBe(false)
     expect(response.statusCode).toBe(200)
     expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
@@ -47,7 +49,7 @@ describe('Test actions router', () => {
     const response = await request(app)
       .get('/issues/' + testData.issue._id + '/actions/' + testData.action._id)
       .set('Content-Type', 'applications/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
     expect(response.error).toBe(false)
     expect(response.statusCode).toBe(200)
     expect(Object.keys(response.body).length).toBeGreaterThanOrEqual(1)
@@ -56,7 +58,7 @@ describe('Test actions router', () => {
     const response = await request(app)
       .post('/issues/' + testData.issue._id + '/actions')
       .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
       .send({
         action: 'Test Action'
       })
@@ -69,7 +71,7 @@ describe('Test actions router', () => {
         '/issues/' + testData.issue._id + '/actions/' + testData.action._id
       )
       .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', `JWT=${testData.token}`)
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
   })

@@ -1,12 +1,14 @@
 import request from 'supertest'
 import express from 'express'
 import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
+import cookieParser from 'cookie-parser'
 import * as testData from '../../db/testData.js'
 import usersRouter from '../usersRoute.js'
 import User from '../../models/userModel.js'
 import RefreshToken from '../../models/refreshTokenModel.js'
 
 const app = express()
+app.use(cookieParser())
 app.use(express.json())
 app.use(usersRouter)
 
@@ -106,8 +108,7 @@ describe('User Functions', () => {
   it('User can update details', async () => {
     const response = await request(app)
       .put('/users/update')
-      .set('Content-Type', 'application/json')
-      .set('Authorization', `JWT ${testData.token}`)
+      .set('Cookie', [`JWT=${testData.token}`])
       .send({
         username: 'New Username'
       })
