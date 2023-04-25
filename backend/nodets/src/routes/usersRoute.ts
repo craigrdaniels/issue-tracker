@@ -106,12 +106,14 @@ usersRouter.post(
 
         await newRefreshToken.save()
 
-        res.status(200).json({
-          success: true,
-          message: 'User created',
-          token,
-          refreshToken: newRefreshToken.token
-        })
+        res
+          .status(200)
+          .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
+          .json({
+            success: true,
+            message: 'User created',
+            refreshToken: newRefreshToken.token
+          })
       })
     }
   ) as RequestHandler
@@ -163,7 +165,8 @@ usersRouter.post(
 
           res
             .status(200)
-            .json({ success: true, token, refreshToken: newRefreshToken.token })
+            .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
+            .json({ success: true, refreshToken: newRefreshToken.token })
         })
         .catch((error) => {
           next({ status: 400, message: `Error finding user ${error}` })
