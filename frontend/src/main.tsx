@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { AuthProvider } from './hooks/useAuth'
 import ErrorPage from './pages/error-page'
 import './index.css'
 import Home from './pages/home'
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: '/',
+    path: '/*',
     element: <ProtectedRoute />,
     children: [{ path: 'issues', element: <Issues /> }],
   },
@@ -27,6 +28,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 )

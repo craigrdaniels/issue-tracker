@@ -1,11 +1,12 @@
 import { Outlet, Navigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 const ProtectedRoute = () => {
-  let auth = { token: false }
+  const auth = useAuth()
 
-  if (!auth.token) {
+  if (!auth.user) {
     console.log('Not authorized!')
-    return <Navigate to="/" />
+    return <Navigate to="/login" />
   }
 
   return <Outlet />

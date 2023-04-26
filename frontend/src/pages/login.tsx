@@ -1,8 +1,10 @@
-import type { ReactElement } from 'react'
+import { ReactElement } from 'react'
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 const LoginPage = (): ReactElement => {
+  const auth = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const [error, setError] = useState<string>('')
@@ -20,8 +22,11 @@ const LoginPage = (): ReactElement => {
       const password = formData.get('password') as string
 
       // await auth.signIn(email, password)
-      navigate(from, { replace: true })
-    } catch {
+      await auth.logIn(email, password, () => {
+        navigate(from, { replace: true })
+      })
+    } catch (e) {
+      console.log(e)
       setError('Failed to log on')
     }
 
