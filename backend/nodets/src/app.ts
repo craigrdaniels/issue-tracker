@@ -52,7 +52,7 @@ app.use(cookieParser())
 
 app.use(
   cors({
-    origin: '*',
+    origin: ['http://127.0.0.1:5173'],
     credentials: true
   })
 )
@@ -73,8 +73,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(_dirname, 'public')))
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'X-Requested-Width')
   res.header('Content-Type', 'application/json')
   next()
 })

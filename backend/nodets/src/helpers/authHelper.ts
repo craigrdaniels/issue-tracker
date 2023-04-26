@@ -1,4 +1,4 @@
-import { type Request, type Response, type NextFunction } from 'express'
+import type { Request, Response, NextFunction, RequestHandler } from 'express'
 import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 
@@ -8,15 +8,13 @@ interface IDecode {
   email: string
 }
 
-const isAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   try {
     // First check the auth headers were defined
     if (req.cookies === undefined || req.cookies.JWT === undefined) {
-      res.status(401).json({ success: false, message: 'Token not found' })
+      return res
+        .status(401)
+        .json({ success: false, message: 'Token not found' })
     }
 
     // const token: string = req.headers.authorization.split(' ')[1]
@@ -32,7 +30,7 @@ const isAuthenticated = (
     req.email = decoded.email
     next()
   } catch (error) {
-    res.status(403).json({ success: false, error })
+    return res.status(403).json({ success: false, error })
   }
 }
 
