@@ -109,11 +109,14 @@ usersRouter.post(
         res
           .status(200)
           .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
+          .cookie('refreshToken', newRefreshToken.token, {
+            maxAge: 900000,
+            httpOnly: true
+          })
           .json({
             success: true,
             message: 'User created',
-            user: data.username,
-            refreshToken: newRefreshToken.token
+            user: data.username
           })
       })
     }
@@ -167,10 +170,13 @@ usersRouter.post(
           res
             .status(200)
             .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
+            .cookie('refreshToken', newRefreshToken.token, {
+              maxAge: 900000,
+              httpOnly: true
+            })
             .json({
               success: true,
-              user: user.username,
-              refreshToken: newRefreshToken.token
+              user: user.username
             })
         })
         .catch((error) => {
@@ -215,10 +221,13 @@ usersRouter.post(
             res
               .status(200)
               .cookie('JWT', newToken, { maxAge: 900000, httpOnly: true })
+              .cookie('refreshTokn', newRefreshToken.token, {
+                maxAge: 900000,
+                httpOnly: true
+              })
               .json({
                 success: true,
-                message: 'Token Updated',
-                refreshToken: newRefreshToken.token
+                message: 'Token Updated'
               })
           } else {
             next({ status: 401, message: 'Invalid token' })
