@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 import { type Request, type Response, type NextFunction } from 'express'
-import authHelper from '../authHelper.js'
+import { checkJwt } from '../authHelpers.js'
 import * as testData from '../../db/testData.js'
 
 describe('authHelper middleware', () => {
@@ -9,6 +9,7 @@ describe('authHelper middleware', () => {
   const nextFunction: NextFunction = jest.fn()
 
   beforeEach(() => {
+    jest.clearAllMocks()
     mockRequest = {}
     mockResponse = {
       // @ts-expect-error wrong types
@@ -18,35 +19,60 @@ describe('authHelper middleware', () => {
     }
   })
 
-  it('without cookies', () => {
+  it('without cookies', async () => {
     const expectedResponse = {
       success: false,
-      message: 'Token not found'
+      message: 'Missing or invalid refresh token'
     }
     mockRequest = {}
-    authHelper(mockRequest as Request, mockResponse as Response, nextFunction)
+    await checkJwt(
+      mockRequest as Request,
+      mockResponse as Response,
+      nextFunction
+    )
 
     expect(mockResponse.json).toBeCalledWith(expectedResponse)
   })
-  it('without JWT cookies', () => {
+  it('without JWT cookies', async () => {
     const expectedResponse = {
       success: false,
-      message: 'Token not found'
+      message: 'Missing or invalid refresh token'
     }
     mockRequest = {
       cookies: {}
     }
-    authHelper(mockRequest as Request, mockResponse as Response, nextFunction)
+    await checkJwt(
+      mockRequest as Request,
+      mockResponse as Response,
+      nextFunction
+    )
 
     expect(mockResponse.json).toBeCalledWith(expectedResponse)
   })
-  it('with JWT cookies', () => {
+  it('with JWT cookie', async () => {
     mockRequest = {
       cookies: {
         JWT: testData.token
       }
     }
-    authHelper(mockRequest as Request, mockResponse as Response, nextFunction)
+    await checkJwt(
+      mockRequest as Request,
+      mockResponse as Response,
+      nextFunction
+    )
     expect(nextFunction).toBeCalledTimes(1) // fails
+  })
+  it('with refreshToken only', async () => {
+    mockRequest = {
+      cookies: {
+        refreshToken: testData.refreshToken
+      }
+    }
+    await checkJwt(
+      mockRequest as Request,
+      mockResponse as Response,
+      nextFunction
+    )
+    expect(nextFunction).toBeCalledTimes(1)
   })
 })

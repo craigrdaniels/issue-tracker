@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
 import Issue from '../models/issueModel.js'
 import User from '../models/userModel.js'
+import RefreshToken from '../models/refreshTokenModel.js'
 
 export const findIssueById = async (
   req: Request,
@@ -48,5 +49,18 @@ export const getUserIdByEmail = async (
       })
   } catch (error) {
     res.status(400).json({ success: false, error })
+  }
+}
+
+export const isValidRefreshToken = async (
+  email: string,
+  token: string
+): Promise<boolean> => {
+  try {
+    const refreshToken = await RefreshToken.findOne({ email, token })
+    if (refreshToken === null || refreshToken === undefined) return false
+    return true
+  } catch (e) {
+    return false
   }
 }

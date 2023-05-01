@@ -13,6 +13,7 @@ import indexRouter from './routes/indexRoute.js'
 import usersRouter from './routes/usersRoute.js'
 import { connectDB, loadDevData } from './db/testdb.js'
 import messagesRouter from './routes/messagesRoute.js'
+import authRouter from './routes/authRoute.js'
 
 interface Error {
   status?: number
@@ -78,6 +79,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 })
 
 app.use(indexRouter)
+app.use(authRouter)
 app.use(issuesRouter)
 app.use(usersRouter)
 app.use(messagesRouter)

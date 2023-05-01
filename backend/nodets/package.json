@@ -4,6 +4,10 @@
   "description": "",
   "main": "src/app.js",
   "type": "module",
+  "engines": {
+    "node": "16.17.0",
+    "npm": "9.6.4"
+  },
   "scripts": {
     "start": "NODE_ENV=production nodemon",
     "dev": "NODE_ENV=development nodemon",
