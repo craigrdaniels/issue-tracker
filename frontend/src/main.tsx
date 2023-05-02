@@ -4,33 +4,38 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import ErrorPage from './pages/error-page'
 import './index.css'
+import SharedRootLayout from './routes/SharedRootLayout'
 import Home from './pages/home'
 import LoginPage from './pages/login'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Issues from './pages/issues'
-import NavBar from './pages/navbar'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <SharedRootLayout />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/*',
-    element: <ProtectedRoute />,
-    children: [{ path: 'issues', element: <Issues /> }],
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/*',
+        element: <ProtectedRoute />,
+        children: [{ path: 'issues', element: <Issues /> }],
+      },
+    ],
   },
 ])
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthProvider>
-      <NavBar />
       <RouterProvider router={router} />
     </AuthProvider>
   </React.StrictMode>

@@ -14,13 +14,23 @@ const NavBar = (): ReactElement => {
   // const [user, setUser] = useState<IUser | null>()
   const [user, setUser] = useState<string | null>()
 
+  const logout = async (): Promise<void> => {
+    auth.logOut(() => {})
+  }
+
   useEffect(() => {
     setUser(auth.user)
-  }, [useAuth])
+  }, [auth])
 
   return (
     <>
-      <div className="h-5 w-screen border border-b-black">{user}</div>
+      <div className="h-5 w-screen border border-b-black">
+        {user && (
+          <div>
+            Logged in as {user} - <a onClick={logout}>Log Out</a>
+          </div>
+        )}
+      </div>
     </>
   )
 }

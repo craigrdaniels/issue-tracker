@@ -46,9 +46,15 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     callback()
   }
 
-  const logOut = (callback: VoidFunction) => {
+  const logOut = async (callback: VoidFunction) => {
+    const location = window.location.hostname
+    const settings: RequestInit = {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+    }
+    await fetch(`http://${location}:3000/logout`, settings)
     setUser(null)
-    // navigate('/', { replace: true })
     callback()
   }
 
