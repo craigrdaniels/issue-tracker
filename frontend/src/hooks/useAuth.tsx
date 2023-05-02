@@ -37,10 +37,7 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
 
     console.log('Logging on..')
 
-    const response = await fetch(
-      `http://${location}:3000/users/login`,
-      settings
-    )
+    const response = await fetch(`http://${location}:3000/login`, settings)
     const data = await response.json()
     console.log(data.user)
     setUser(data.user)

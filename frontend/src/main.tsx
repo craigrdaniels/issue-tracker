@@ -8,6 +8,7 @@ import Home from './pages/home'
 import LoginPage from './pages/login'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Issues from './pages/issues'
+import NavBar from './pages/navbar'
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthProvider>
+      <NavBar />
       <RouterProvider router={router} />
     </AuthProvider>
   </React.StrictMode>
