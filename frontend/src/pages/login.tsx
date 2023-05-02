@@ -34,7 +34,7 @@ const LoginPage = (): ReactElement => {
   }
 
   return (
-    <div className="flex h-screen flex-col items-center gap-4 pt-16 align-middle text-neutral-800 dark:text-neutral-50">
+    <div className="flex h-screen flex-col items-center gap-4 pt-16 align-middle text-neutral-800">
       <h3 className="text-lg font-bold">Login</h3>
       {error && (
         <div className="rounded-full bg-red-200 px-4 text-red-900">{error}</div>
@@ -44,13 +44,13 @@ const LoginPage = (): ReactElement => {
         onSubmit={handleSubmit}
       >
         <input
-          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-50  dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none focus:border-blue-500 focus:ring-blue-500"
           name="email"
           type="text"
           placeholder="Email"
         />
         <input
-          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-50  dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none focus:border-blue-500 focus:ring-blue-500"
           name="password"
           type="password"
           placeholder="Password"
@@ -59,7 +59,7 @@ const LoginPage = (): ReactElement => {
           Forgot password?
         </Link>
         <button
-          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none hover:border-blue-500 focus:border-blue-500 focus:ring-blue-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-50  dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none hover:border-blue-500 focus:border-blue-500 focus:ring-blue-500"
           disabled={loading}
           type="submit"
         >
