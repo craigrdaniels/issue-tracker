@@ -52,13 +52,10 @@ const NavBar = (): ReactElement => {
       <h1>Issue Tracker</h1>
       <div className="flex gap-4">
         <BellIcon
-          className={clsx('h-5 w-5', user ? 'text-black' : 'text-neutral-500')}
+          className={clsx('navicon', user ? 'opacity-100' : 'opacity-50')}
         />
         <UserCircleIcon
-          className={clsx(
-            'h-5 w-5 cursor-pointer',
-            user ? 'text-black' : 'text-neutral-500'
-          )}
+          className={clsx('navicon', user ? 'opacity-100' : 'opacity-50')}
           onClick={user ? logout : () => navigate('/login')}
         />
       </div>

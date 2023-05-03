@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-50
+    text-neutral-950
+    transition
+    duration-500
+    dark:bg-neutral-950
+    dark:text-neutral-50;
+  }
+
+  #root {
+    @apply min-h-screen
+    w-screen;
+  }
+
+  input {
+    @apply rounded-full
+    border
+    bg-neutral-100
+    px-4
+    py-1
+    text-neutral-800
+    outline-none
+    focus:border-blue-500
+    focus:ring-blue-500
+    dark:bg-neutral-900
+    dark:text-neutral-200;
+  }
+
+  button {
+    @apply rounded-full
+    border
+    bg-neutral-100
+    px-4
+    py-1
+    text-neutral-800
+    outline-none
+    hover:border-blue-500
+    focus:border-blue-500
+    focus:ring-blue-500
+    dark:bg-neutral-50
+    dark:text-neutral-200;
+  }
+}
+
+@layer components {
+  .navicon {
+    @apply h-5
+    w-5
+    cursor-pointer
+    text-neutral-950
+    dark:text-neutral-50;
+  }
+}

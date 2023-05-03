@@ -43,26 +43,12 @@ const LoginPage = (): ReactElement => {
         className="flex flex-col items-center gap-4 align-middle"
         onSubmit={handleSubmit}
       >
-        <input
-          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none focus:border-blue-500 focus:ring-blue-500"
-          name="email"
-          type="text"
-          placeholder="Email"
-        />
-        <input
-          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none focus:border-blue-500 focus:ring-blue-500"
-          name="password"
-          type="password"
-          placeholder="Password"
-        />
+        <input name="email" type="text" placeholder="Email" />
+        <input name="password" type="password" placeholder="Password" />
         <Link style={{ textDecoration: 'underline' }} to="/resetpassword">
           Forgot password?
         </Link>
-        <button
-          className="rounded-full border bg-neutral-100 px-4 py-1 text-neutral-800 outline-none hover:border-blue-500 focus:border-blue-500 focus:ring-blue-500"
-          disabled={loading}
-          type="submit"
-        >
+        <button disabled={loading} type="submit">
           Login
         </button>
       </form>
