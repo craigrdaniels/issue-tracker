@@ -34,8 +34,8 @@ const LoginPage = (): ReactElement => {
   }
 
   return (
-    <div className="flex h-screen flex-col items-center gap-4 pt-16 align-middle text-neutral-800">
-      <h3 className="text-lg font-bold">Login</h3>
+    <div className="flex flex-col items-center gap-4 pt-16 align-middle">
+      <h3>Login</h3>
       {error && (
         <div className="rounded-full bg-red-200 px-4 text-red-900">{error}</div>
       )}
@@ -43,8 +43,18 @@ const LoginPage = (): ReactElement => {
         className="flex flex-col items-center gap-4 align-middle"
         onSubmit={handleSubmit}
       >
-        <input name="email" type="text" placeholder="Email" />
-        <input name="password" type="password" placeholder="Password" />
+        <input
+          className="text-input"
+          name="email"
+          type="text"
+          placeholder="Email"
+        />
+        <input
+          className="text-input"
+          name="password"
+          type="password"
+          placeholder="Password"
+        />
         <Link style={{ textDecoration: 'underline' }} to="/resetpassword">
           Forgot password?
         </Link>

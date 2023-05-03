@@ -3,11 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply transition
+    duration-500;
+  }
+
   body {
     @apply bg-neutral-50
     text-neutral-950
-    transition
-    duration-500
     dark:bg-neutral-950
     dark:text-neutral-50;
   }
@@ -17,18 +20,9 @@
     w-screen;
   }
 
-  input {
-    @apply rounded-full
-    border
-    bg-neutral-100
-    px-4
-    py-1
-    text-neutral-800
-    outline-none
-    focus:border-blue-500
-    focus:ring-blue-500
-    dark:bg-neutral-900
-    dark:text-neutral-200;
+  h2 {
+    @apply text-lg
+    font-bold;
   }
 
   button {
@@ -38,16 +32,30 @@
     px-4
     py-1
     text-neutral-800
-    outline-none
     hover:border-blue-500
     focus:border-blue-500
+    focus:outline-none
     focus:ring-blue-500
-    dark:bg-neutral-50
-    dark:text-neutral-200;
+    dark:text-neutral-100;
   }
 }
 
 @layer components {
+  .text-input {
+    @apply form-input
+    rounded-full
+    border
+    border-opacity-25
+    bg-neutral-100
+    px-4
+    py-1
+    text-neutral-800
+    focus:border-blue-500
+    focus:outline-none
+    dark:border-neutral-800
+    dark:bg-neutral-900;
+  }
+
   .navicon {
     @apply h-5
     w-5
