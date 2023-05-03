@@ -2,9 +2,9 @@ import clsx from 'clsx'
 import { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 
-const Navigation = ({ navigation, className }): ReactElement => {
+const Navigation = ({ navigation }): ReactElement => {
   return (
-    <nav className={clsx('text-base lg:text-sm', className)}>
+    <nav className={clsx('text-base lg:text-sm')}>
       <ul role="list" className="flex flex-row space-x-4">
         {navigation.map((section) => (
           <li key={section.title}>

@@ -1,7 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import Navigation from '../components/Navigation'
 import clsx from 'clsx'
+import { BellIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 
 export interface IUser {
   _id: string
@@ -11,13 +13,9 @@ export interface IUser {
   created: Date
 }
 
-const navigation = [
-  { title: 'Issues', href: 'issues' },
-  { title: 'Messages', href: 'messages' },
-]
-
 const NavBar = (): ReactElement => {
   const auth = useAuth()
+  const navigate = useNavigate()
   // const [user, setUser] = useState<IUser | null>()
   const [user, setUser] = useState<string | null>()
 
@@ -51,16 +49,18 @@ const NavBar = (): ReactElement => {
           : 'dark:bg-transparent'
       )}
     >
-      <Navigation navigation={navigation} />
-      <div className="text-base lg:text-sm">
-        {user && (
-          <div>
-            Logged in as {user} -{' '}
-            <a onClick={logout} className="cursor-pointer">
-              Log Out
-            </a>
-          </div>
-        )}
+      <h1>Issue Tracker</h1>
+      <div className="flex gap-4">
+        <BellIcon
+          className={clsx('h-5 w-5', user ? 'text-black' : 'text-neutral-500')}
+        />
+        <UserCircleIcon
+          className={clsx(
+            'h-5 w-5 cursor-pointer',
+            user ? 'text-black' : 'text-neutral-500'
+          )}
+          onClick={user ? logout : () => navigate('/login')}
+        />
       </div>
     </header>
   )
