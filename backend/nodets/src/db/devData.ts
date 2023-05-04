@@ -35,6 +35,13 @@ interface IProjects {
   project_lead: string
 }
 
+interface IMessages {
+  created_by: string
+  issue: string
+  created_at: string
+  last_edit: string
+  content: string
+}
 const usersObj: IUser[] = [
   {
     _id: '61547f2a2e52c9b2c2d0d2c5',
@@ -70,28 +77,28 @@ const usersObj: IUser[] = [
 
 const issuesObj: IIssues[] = [
   {
-    _id: Object('616f474ced6f1a1822b72cb1'),
+    _id: '616f474ced6f1a1822b72cb1',
     title: 'Login page not working',
     created_by: '61547f2a2e52c9b2c2d0d2c5',
-    project: Object('616f474ced6f1a1822b72cb4'),
+    project: '616f474ced6f1a1822b72cb4',
     assigned_users: ['61547f2a2e52c9b2c2d0d2c3'],
     is_open: true,
     tags: ['login', 'authentication']
   },
   {
-    _id: Object('616f474ced6f1a1822b72cb2'),
+    _id: '616f474ced6f1a1822b72cb2',
     title: 'Button not clickable on mobile devices',
     created_by: '61547f2a2e52c9b2c2d0d2c3',
-    project: Object('616f474ced6f1a1822b72cb5'),
+    project: '616f474ced6f1a1822b72cb5',
     assigned_users: ['61547f2a2e52c9b2c2d0d2c5'],
     is_open: true,
     tags: ['UI', 'design']
   },
   {
-    _id: Object('616f474ced6f1a1822b72cb3'),
+    _id: '616f474ced6f1a1822b72cb3',
     title: 'Access denied error for admin user',
     created_by: '61547f2a2e52c9b2c2d0d2c3',
-    project: Object('616f474ced6f1a1822b72cb4'),
+    project: '616f474ced6f1a1822b72cb4',
     assigned_users: [],
     is_open: false,
     tags: ['security', 'permissions']
@@ -100,14 +107,42 @@ const issuesObj: IIssues[] = [
 
 const projectsObj: IProjects[] = [
   {
-    _id: Object('616f474ced6f1a1822b72cb5'),
+    _id: '616f474ced6f1a1822b72cb5',
     name: 'Project A',
-    project_lead: Object('61547f2a2e52c9b2c2d0d2c4')
+    project_lead: '61547f2a2e52c9b2c2d0d2c4'
   },
   {
-    _id: Object('616f474ced6f1a1822b72cb4'),
+    _id: '616f474ced6f1a1822b72cb4',
     name: 'Project B',
-    project_lead: Object('61547f2a2e52c9b2c2d0d2c5')
+    project_lead: '61547f2a2e52c9b2c2d0d2c5'
+  }
+]
+
+const messagesObj: IMessages[] = [
+  {
+    created_by: '61547f2a2e52c9b2c2d0d2c5',
+    issue: '616f474ced6f1a1822b72cb1',
+    created_at: '2023-05-02T09:15:00Z',
+    last_edit: '2023-05-03T10:30:00Z',
+    content:
+      "I'm unable to log in to the system. When I enter my username and password on the login page, nothing happens. The page just refreshes and the fields are cleared. Can you please investigate and fix this issue?"
+  },
+
+  {
+    created_by: '61547f2a2e52c9b2c2d0d2c3',
+    issue: '616f474ced6f1a1822b72cb3',
+    created_at: '2023-05-04T14:30:00Z',
+    last_edit: '2023-05-04T14:35:00Z',
+    content:
+      "As an admin user, I'm getting an access denied error when I try to access the user management page. This was working fine earlier. Can you please investigate and fix this issue?"
+  },
+  {
+    created_by: '61547f2a2e52c9b2c2d0d2c3',
+    issue: '616f474ced6f1a1822b72cb2',
+    created_at: '2023-05-05T10:00:00Z',
+    last_edit: '2023-05-05T10:05:00Z',
+    content:
+      "I'm unable to click the button on my mobile device. It seems to work fine on desktop. Can you please look into this issue?"
   }
 ]
 
@@ -125,4 +160,4 @@ usersObj.forEach((user) => {
   refreshTokensObj.push(rToken)
 })
 
-export { usersObj, refreshTokensObj, issuesObj, projectsObj }
+export { usersObj, refreshTokensObj, issuesObj, projectsObj, messagesObj }

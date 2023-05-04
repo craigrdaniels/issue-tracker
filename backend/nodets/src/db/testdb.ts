@@ -49,6 +49,7 @@ const loadDevData = async (): Promise<void> => {
     await RefreshToken.insertMany(devData.refreshTokensObj)
     await Project.insertMany(devData.projectsObj)
     await Issue.insertMany(devData.issuesObj)
+    await Message.insertMany(devData.messagesObj)
   } catch (err) {
     console.log(err)
   }
