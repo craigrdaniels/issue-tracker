@@ -16,7 +16,7 @@ const issueSchema = new Schema({
   title: String,
   created_at: { type: Date, default: Date.now },
   created_by: { type: Schema.Types.ObjectId, refPath: 'User' },
-  project: { type: Number, refPath: 'Project' },
+  project: { type: Schema.Types.ObjectId, refPath: 'Project' },
   assigned_users: { type: [Schema.Types.ObjectId], refPath: 'User' },
   is_open: { type: Boolean, default: true },
   tags: { type: [String] }
