@@ -5,6 +5,7 @@ import User from '../models/userModel.js'
 import Issue from '../models/issueModel.js'
 import Message from '../models/messageModel.js'
 import Action from '../models/actionModel.js'
+import Project from '../models/projectModel.js'
 import RefreshToken from '../models/refreshTokenModel.js'
 
 let mongodb: MongoMemoryServer = new MongoMemoryServer()
@@ -44,11 +45,10 @@ const dropCollections = async (): Promise<void> => {
 
 const loadDevData = async (): Promise<void> => {
   try {
-    await User.create(devData.user)
-    await Issue.create(devData.issue)
-    await RefreshToken.create(devData.refreshToken)
-    await Message.create(devData.message)
-    await Action.create(devData.action)
+    await User.insertMany(devData.usersObj)
+    await RefreshToken.insertMany(devData.refreshTokensObj)
+    await Project.insertMany(devData.projectsObj)
+    await Issue.insertMany(devData.issuesObj)
   } catch (err) {
     console.log(err)
   }
