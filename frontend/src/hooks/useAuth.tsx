@@ -80,10 +80,13 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
       settings
     )
     const data = await response.json()
-    setUser(data.user)
 
+    if (response.status !== 201) throw new Error(data.message)
+
+    setUser(data.user)
     callback()
   }
+
   const logOut = async (callback: VoidFunction) => {
     const location = window.location.hostname
     const settings: RequestInit = {

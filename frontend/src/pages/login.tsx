@@ -21,7 +21,6 @@ const LoginPage = (): ReactElement => {
       const email = formData.get('email') as string
       const password = formData.get('password') as string
 
-      // await auth.signIn(email, password)
       await auth.logIn(email, password, () => {
         navigate(from, { replace: true })
       })
