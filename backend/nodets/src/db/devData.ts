@@ -53,7 +53,7 @@ const usersObj: IUser[] = [
     _id: '61547f2a2e52c9b2c2d0d2c6',
     username: 'johnsmith',
     password: '$2b$10$l5f5TVqbGQyRHg/vn6q3D.e1zhfB1rZ6UvZ6Pruh6bwYRlW.DgTbi',
-    email: 'johnsmith@example.com',
+    email: 'testuser@email.com',
     role: '61547f2a2e52c9b2c2d0d2c3',
     projects: ['61547f2a2e52c9b2c2d0d2c4']
   },
