@@ -8,6 +8,12 @@ interface AuthContextType {
     password: string,
     callback: VoidFunction
   ) => Promise<void>
+  register: (
+    email: string,
+    username: string,
+    password: string,
+    callback: VoidFunction
+  ) => Promise<void>
   logOut: (callback: VoidFunction) => void
 }
 
@@ -46,6 +52,38 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     callback()
   }
 
+  const register = async (
+    email: string,
+    username: string,
+    password: string,
+    callback: VoidFunction
+  ): Promise<void> => {
+    const location = window.location.hostname
+    const settings: RequestInit = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        email,
+        username,
+        password,
+      }),
+    }
+
+    console.log('Registering user..')
+
+    const response = await fetch(
+      `http://${location}:3000/users/signup`,
+      settings
+    )
+    const data = await response.json()
+    setUser(data.user)
+
+    callback()
+  }
   const logOut = async (callback: VoidFunction) => {
     const location = window.location.hostname
     const settings: RequestInit = {
@@ -63,6 +101,7 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
       user,
       logIn,
       logOut,
+      register,
     }),
     [user]
   )

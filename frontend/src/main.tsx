@@ -7,6 +7,7 @@ import './index.css'
 import SharedRootLayout from './routes/SharedRootLayout'
 import Home from './pages/home'
 import LoginPage from './pages/login'
+import RegisterPage from './pages/register'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Issues from './pages/issues'
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <LoginPage />,
+      },
+      {
+        path: '/register',
+        element: <RegisterPage />,
       },
       {
         path: '/*',
