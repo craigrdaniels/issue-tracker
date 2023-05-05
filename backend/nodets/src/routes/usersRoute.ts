@@ -50,7 +50,7 @@ usersRouter.post(
         })
 
       if (exists !== null) {
-        next({ status: 400, messages: 'User already exists' })
+        next({ status: 400, message: 'User already exists' })
         return
       }
 
