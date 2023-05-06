@@ -55,8 +55,6 @@ usersRouter.post(
       }
 
       await UserController.newUser(req, res, next)
-
-      await AuthController.login(req, res, next)
       next()
     }
   )

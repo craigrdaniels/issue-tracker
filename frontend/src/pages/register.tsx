@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import HTTPRequestError from '../utils/HTTPError'
 
 const RegisterPage = (): ReactElement => {
   const auth = useAuth()
@@ -26,8 +27,12 @@ const RegisterPage = (): ReactElement => {
         navigate(from, { replace: true })
       })
     } catch (e) {
-      console.log(e)
-      setError('Registration Failed')
+      if (e instanceof HTTPRequestError) {
+        setError(`Registration Failed: ${e.message}`)
+      } else {
+        setError('Registration Failed - Unknown Error')
+        console.log(e)
+      }
     }
     setLoading(false)
   }

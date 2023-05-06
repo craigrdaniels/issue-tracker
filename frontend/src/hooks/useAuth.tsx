@@ -1,5 +1,6 @@
 import { ReactNode, createContext, useContext, useMemo } from 'react'
 import useLocalStorage from './useLocalStorage'
+import HTTPRequestError from '../utils/HTTPError'
 
 interface AuthContextType {
   user: any
@@ -81,9 +82,11 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     )
     const data = await response.json()
 
-    if (response.status !== 201) throw new Error(data.message)
+    if (response.status !== 201)
+      throw new HTTPRequestError(response.status, data.message)
 
-    setUser(data.user)
+    logIn(email, password, callback)
+
     callback()
   }
 
