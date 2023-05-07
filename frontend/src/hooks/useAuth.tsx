@@ -18,6 +18,14 @@ interface AuthContextType {
   logOut: (callback: VoidFunction) => void
 }
 
+const location = import.meta.env.SERVER
+  ? process.env.SERVER?.split(':')[0]
+  : window.location.hostname
+
+const port = import.meta.env.SERVER?.split(':')[1]
+  ? process.env.SERVER?.split(':')
+  : '3000'
+
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
@@ -28,7 +36,6 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     password: string,
     callback: VoidFunction
   ): Promise<void> => {
-    const location = window.location.hostname
     const settings: RequestInit = {
       method: 'POST',
       mode: 'cors',
@@ -44,7 +51,7 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
 
     console.log('Logging on..')
 
-    const response = await fetch(`http://${location}:3000/login`, settings)
+    const response = await fetch(`http://${location}:${port}/login`, settings)
     const data = await response.json()
     console.log(data.user)
     setUser(data.user)
@@ -59,7 +66,6 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     password: string,
     callback: VoidFunction
   ): Promise<void> => {
-    const location = window.location.hostname
     const settings: RequestInit = {
       method: 'POST',
       mode: 'cors',
@@ -77,7 +83,7 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     console.log('Registering user..')
 
     const response = await fetch(
-      `http://${location}:3000/users/signup`,
+      `http://${location}:${port}/users/signup`,
       settings
     )
     const data = await response.json()
@@ -91,13 +97,12 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   }
 
   const logOut = async (callback: VoidFunction) => {
-    const location = window.location.hostname
     const settings: RequestInit = {
       method: 'POST',
       mode: 'cors',
       credentials: 'include',
     }
-    await fetch(`http://${location}:3000/logout`, settings)
+    await fetch(`http://${location}:${port}/logout`, settings)
     setUser(null)
     callback()
   }

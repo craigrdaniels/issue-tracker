@@ -9,10 +9,10 @@
   }
 
   body {
-    @apply bg-neutral-50
-    text-neutral-950
-    dark:bg-neutral-950
-    dark:text-neutral-50;
+    @apply bg-zinc-50
+    text-gray-950
+    dark:bg-zinc-900
+    dark:text-gray-50;
   }
 
   #root {
@@ -26,7 +26,7 @@
   }
 
   button {
-    @apply rounded-full
+    @apply rounded-lg
     border
     bg-neutral-100
     px-4
@@ -36,6 +36,7 @@
     focus:border-blue-500
     focus:outline-none
     focus:ring-blue-500
+    dark:bg-neutral-800
     dark:text-neutral-100;
   }
 }
@@ -43,7 +44,7 @@
 @layer components {
   .text-input {
     @apply form-input
-    rounded-full
+    rounded-md
     border
     border-opacity-25
     bg-neutral-100
