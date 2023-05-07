@@ -10,7 +10,14 @@ class IssueController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const issues: IIssue[] = await Issue.find().sort({ added: -1 })
+    const issues: IIssue[] = await Issue.find()
+      .populate({
+        path: 'created_by',
+        select: '_id, username',
+        options: { lean: true }
+      })
+      .sort({ added: -1 })
+
     res.status(200).json(issues)
   }
 

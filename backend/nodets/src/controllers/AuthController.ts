@@ -18,7 +18,7 @@ class AuthController {
       throw new Error('Email and password are required')
     }
 
-    const user: IUser | null = await User.findOne({ email })
+    const user: IUser | null = await User.findOne({ email }).select('+password')
 
     if (
       user === undefined ||
