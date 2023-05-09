@@ -14,7 +14,10 @@ export interface IIssue {
     username: string
   }
   tags: string[]
-  project: string
+  project: {
+    _id: string
+    name: string
+  }
   is_open: boolean
 }
 
@@ -66,7 +69,9 @@ const Issues = (): ReactElement => {
             <button onClick={() => handleClickSort('title', 'asc')}>
               sort
             </button>
-            <button onClick={() => handleClickSort('created_by', 'asc')}>
+            <button
+              onClick={() => handleClickSort('created_by.username', 'asc')}
+            >
               Created By
             </button>
           </div>
@@ -81,7 +86,7 @@ const Issues = (): ReactElement => {
                 </div>
                 <div className="px-4">
                   <h2>
-                    {issue.project} / {issue.title}
+                    {issue.project.name} / {issue.title}
                   </h2>
                   <ul className="flex flex-row gap-1">
                     {issue.tags?.map((tag) => (

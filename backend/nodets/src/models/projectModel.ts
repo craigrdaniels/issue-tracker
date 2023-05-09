@@ -6,9 +6,18 @@ export interface IProject extends Document {
   project_lead: IUser['_id']
 }
 
-const projectSchema = new Schema({
-  name: String,
-  project_lead: { type: Schema.Types.ObjectId, refPath: 'User' }
-})
+const projectSchema = new Schema(
+  {
+    name: String,
+    project_lead: { type: Schema.Types.ObjectId, refPath: 'User' }
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.__v
+      }
+    }
+  }
+)
 
 export default model<IProject>('Project', projectSchema, 'projects')

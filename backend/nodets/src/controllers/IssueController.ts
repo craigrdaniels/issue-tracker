@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
+import type { PipelineStage } from 'mongoose'
 import Issue from '../models/issueModel.js'
 import type { IIssue } from '../models/issueModel.js'
 import User from '../models/userModel.js'
@@ -10,13 +11,73 @@ class IssueController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const issues: IIssue[] = await Issue.find()
-      .populate({
-        path: 'created_by',
-        select: '_id, username',
-        options: { lean: true }
-      })
-      .sort({ added: -1 })
+    const pipeline = [
+      {
+        $lookup: {
+          from: 'messages',
+          localField: '_id',
+          foreignField: 'issue',
+          as: 'messages'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'assigned_users',
+          foreignField: '_id',
+          as: 'assigned_users'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'created_by',
+          foreignField: '_id',
+          as: 'created_by'
+        }
+      },
+      {
+        $set: {
+          created_by: {
+            $first: '$created_by'
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'projects',
+          localField: 'project',
+          foreignField: '_id',
+          as: 'project'
+        }
+      },
+      {
+        $set: {
+          project: {
+            $first: '$project'
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          created_at: 1,
+          is_open: 1,
+          'created_by._id': 1,
+          'created_by.username': 1,
+          'project._id': 1,
+          'project.name': 1,
+          'assigned_users._id': 1,
+          'assigned_users.username': 1,
+          message_count: {
+            $size: '$messages'
+          }
+        }
+      }
+    ]
+
+    const issues: IIssue[] = await Issue.aggregate(pipeline)
 
     res.status(200).json(issues)
   }

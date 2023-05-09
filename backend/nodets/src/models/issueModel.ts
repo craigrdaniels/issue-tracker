@@ -8,8 +8,9 @@ export interface IIssue extends Document {
   is_open: boolean
   tags: [string]
   created_by: IUser
-  project: IProject['_id']
-  assigned_users: [IUser['_id']]
+  project: IProject
+  assigned_users: [IUser]
+  messages_count?: number
 }
 
 const issueSchema = new Schema(
@@ -17,8 +18,8 @@ const issueSchema = new Schema(
     title: String,
     created_at: { type: Date, default: Date.now },
     created_by: { type: Schema.Types.ObjectId, ref: 'User' },
-    project: { type: Schema.Types.ObjectId, refPath: 'Project' },
-    assigned_users: { type: [Schema.Types.ObjectId], refPath: 'User' },
+    project: { type: Schema.Types.ObjectId, ref: 'Project' },
+    assigned_users: { type: [Schema.Types.ObjectId], ref: 'User' },
     is_open: { type: Boolean, default: true },
     tags: { type: [String] }
   },
@@ -30,5 +31,12 @@ const issueSchema = new Schema(
     }
   }
 )
+
+issueSchema.virtual('messages_count', {
+  ref: 'Message',
+  localField: '_id',
+  foreignField: 'issue',
+  count: true
+})
 
 export default model<IIssue>('Issue', issueSchema, 'issues')

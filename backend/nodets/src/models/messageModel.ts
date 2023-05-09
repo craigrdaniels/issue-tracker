@@ -10,12 +10,21 @@ export interface IMessage extends Document {
   content: string
 }
 
-const messageSchema = new Schema({
-  created_by: { type: Schema.Types.ObjectId, refPath: 'User' },
-  issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },
-  created_at: Date,
-  last_edit: Date,
-  content: String
-})
+const messageSchema = new Schema(
+  {
+    created_by: { type: Schema.Types.ObjectId, refPath: 'User' },
+    issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },
+    created_at: Date,
+    last_edit: Date,
+    content: String
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.__v
+      }
+    }
+  }
+)
 
 export default model<IMessage>('Message', messageSchema, 'messages')
