@@ -10,6 +10,7 @@ import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import ProtectedRoute from './routes/ProtectedRoute'
 import Issues from './pages/issues'
+import Issue from './pages/issue'
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,16 @@ const router = createBrowserRouter([
       {
         path: '/*',
         element: <ProtectedRoute />,
-        children: [{ path: 'issues', element: <Issues /> }],
+        children: [
+          {
+            path: 'issues',
+            element: <Issues />,
+          },
+          {
+            path: 'issues/:id',
+            element: <Issue />,
+          },
+        ],
       },
     ],
   },

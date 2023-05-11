@@ -107,7 +107,7 @@ const Issues = (): ReactElement => {
                   </span>
                 </div>
                 <div className="w-fit">&nbsp;</div>
-                <div className="ml-auto mr-4 justify-self-end">
+                <div className="ml-auto mr-4 flex flex-row items-center gap-2 justify-self-end">
                   {/** show number of comments ignoring first message by issue creator**/}
                   {issue.message_count > 1 && issue.message_count - 1}
                   <ChatBubbleLeftIcon className="navicon" />
