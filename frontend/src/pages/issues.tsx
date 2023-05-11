@@ -19,6 +19,7 @@ export interface IIssue {
     name: string
   }
   is_open: boolean
+  message_count: number
 }
 
 const location = import.meta.env.SERVER
@@ -107,6 +108,8 @@ const Issues = (): ReactElement => {
                 </div>
                 <div className="w-fit">&nbsp;</div>
                 <div className="ml-auto mr-4 justify-self-end">
+                  {/** show number of comments ignoring first message by issue creator**/}
+                  {issue.message_count > 1 && issue.message_count - 1}
                   <ChatBubbleLeftIcon className="navicon" />
                 </div>
               </li>
