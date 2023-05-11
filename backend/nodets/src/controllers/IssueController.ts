@@ -65,6 +65,7 @@ class IssueController {
           title: 1,
           created_at: 1,
           is_open: 1,
+          tags: 1,
           'created_by._id': 1,
           'created_by.username': 1,
           'project._id': 1,
