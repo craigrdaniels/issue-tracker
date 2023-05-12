@@ -57,7 +57,7 @@ export const checkJwt = async (
       res
         .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
         .cookie('refreshToken', refreshToken, {
-          maxAge: 900000,
+          maxAge: 3600000,
           httpOnly: true
         })
 
@@ -66,8 +66,9 @@ export const checkJwt = async (
     } catch (err2) {
       res
         .status(401)
+        .clearCookie('JWT')
+        .clearCookie('refreshToken')
         .json({ success: false, message: 'Missing or invalid refresh token' })
-      next()
     }
   }
 }

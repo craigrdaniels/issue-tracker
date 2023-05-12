@@ -54,7 +54,7 @@ class AuthController {
       .status(200)
       .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
       .cookie('refreshToken', newRefreshToken.token, {
-        maxAge: 900000,
+        maxAge: 3600000,
         httpOnly: true
       })
       .json({
