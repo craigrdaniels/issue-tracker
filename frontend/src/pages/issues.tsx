@@ -67,7 +67,7 @@ const Issues = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-8 mt-12 dark:bg-zinc-900 dark:bg-opacity-50">
+      <main className="mx-2 mt-8 dark:bg-zinc-900 dark:bg-opacity-50 md:mx-8">
         <div className="mx-auto max-w-7xl rounded-md border dark:border-zinc-500/50">
           <div className="flex h-10 w-full bg-zinc-200 dark:bg-zinc-800">
             <button onClick={() => handleClickSort('title', 'asc')}>
@@ -96,7 +96,7 @@ const Issues = (): ReactElement => {
                   />
                 </div>
                 <div className="px-4">
-                  <div className="flex flex-row gap-1">
+                  <div className="flex flex-col gap-1 md:flex-row">
                     <h2 className="text-zinc-500 dark:text-zinc-400">
                       {issue.project.name} /{' '}
                     </h2>

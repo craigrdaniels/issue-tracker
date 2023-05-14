@@ -58,7 +58,7 @@ const Issue = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-8 mt-12 dark:bg-zinc-900 dark:bg-opacity-50">
+      <main className="mx-2 mt-8 dark:bg-zinc-900 dark:bg-opacity-50 md:mx-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex h-10 w-full">
             <h1>

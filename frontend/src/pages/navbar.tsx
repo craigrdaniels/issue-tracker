@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import clsx from 'clsx'
-import { BellIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export interface IUser {
   _id: string
@@ -41,25 +41,45 @@ const NavBar = (): ReactElement => {
   }, [auth])
 
   return (
-    <header
-      className={clsx(
-        'sticky top-0 z-50 flex flex-wrap items-center justify-between bg-white px-4 py-5 shadow-md shadow-slate-900/5 transition duration-500 dark:border-b dark:border-zinc-500 dark:shadow-none sm:px-6 lg:px-8',
-        isScrolled
-          ? 'dark:bg-zinc-900/95 dark:backdrop-blur dark:[@supports(backdrop-filter:blur(0))]:bg-slate-900/75'
-          : 'dark:bg-transparent'
-      )}
-    >
-      <h1>Issue Tracker</h1>
-      <div className="flex gap-4">
-        <BellIcon
-          className={clsx('navicon', user ? 'opacity-100' : 'opacity-50')}
-        />
-        <UserCircleIcon
-          className={clsx('navicon', user ? 'opacity-100' : 'opacity-50')}
-          onClick={user ? logout : () => navigate('/login')}
-        />
+    <div className="navbar bg-base-100">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <label tabIndex={0} className="btn-ghost btn-circle btn">
+            <Bars3Icon className="h-6 w-6" />
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+          >
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/issues">Issues</Link>
+            </li>
+          </ul>
+        </div>
       </div>
-    </header>
+      <div className="navbar-center">
+        <Link to="/" className="text-lg">
+          Issue-Tracker
+        </Link>
+      </div>
+      <div className="navbar-end">
+        <div className="btn-ghost btn-circle btn">
+          <BellIcon
+            className={clsx('h-6 w-6', user ? 'opacity-100' : 'opacity-50')}
+          />
+        </div>
+
+        <div className="btn-ghost btn-circle btn">
+          <UserCircleIcon
+            className={clsx('h-6 w-6', user ? 'opacity-100' : 'opacity-50')}
+            onClick={user ? logout : () => navigate('/login')}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
