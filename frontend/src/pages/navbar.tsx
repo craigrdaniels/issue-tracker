@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useRef, useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import clsx from 'clsx'
 import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline'
@@ -16,8 +16,9 @@ export interface IUser {
 const NavBar = (): ReactElement => {
   const auth = useAuth()
   const navigate = useNavigate()
-  // const [user, setUser] = useState<IUser | null>()
   const [user, setUser] = useState<string | null>()
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false)
+  const ref = useRef()
 
   const [isScrolled, setIsScrolled] = useState<boolean>(false)
 
@@ -25,14 +26,21 @@ const NavBar = (): ReactElement => {
     auth.logOut(() => {})
   }
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setDropdownOpen(false)
+    }
+  }
   useEffect(() => {
     function onScroll() {
       setIsScrolled(window.scrollY > 0)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('click', handleClickOutside, true)
     return () => {
       window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('click', handleClickOutside)
     }
   }, [])
 
@@ -40,22 +48,37 @@ const NavBar = (): ReactElement => {
     setUser(auth.user)
   }, [auth])
 
+  const handledropdownClick = () => {
+    setDropdownOpen(false)
+  }
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn-ghost btn-circle btn">
+        <div className="dropdown" ref={ref}>
+          <label
+            tabIndex={0}
+            className="btn-ghost btn-circle btn"
+            onClick={() => setDropdownOpen((prev: boolean) => !prev)}
+          >
             <Bars3Icon className="h-6 w-6" />
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+            className={clsx(
+              'dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow',
+              !dropdownOpen && 'hidden'
+            )}
           >
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/" onClick={handledropdownClick}>
+                Home
+              </Link>
             </li>
             <li>
-              <Link to="/issues">Issues</Link>
+              <Link to="/issues" onClick={handledropdownClick}>
+                Issues
+              </Link>
             </li>
           </ul>
         </div>
