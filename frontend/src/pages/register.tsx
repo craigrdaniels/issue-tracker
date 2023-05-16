@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import HTTPRequestError from '../utils/HTTPError'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 const RegisterPage = (): ReactElement => {
   const auth = useAuth()
@@ -41,31 +42,34 @@ const RegisterPage = (): ReactElement => {
     <div className="flex flex-col items-center gap-4 pt-16 align-middle">
       <h3>Register</h3>
       {error && (
-        <div className="rounded-full bg-red-200 px-4 text-red-900">{error}</div>
+        <div className="alert alert-error w-fit shadow-lg">
+          <ExclamationTriangleIcon className="h-6 w-6" />
+          {error}
+        </div>
       )}
       <form
         className="flex flex-col items-center gap-4 align-middle"
         onSubmit={handleSubmit}
       >
         <input
-          className="text-input"
+          className="input-bordered input w-full max-w-xs"
           name="email"
           type="text"
           placeholder="Email"
         />
         <input
-          className="text-input"
+          className="input-bordered input w-full max-w-xs"
           name="username"
           type="text"
           placeholder="Username"
         />
         <input
-          className="text-input"
+          className="input-bordered input w-full max-w-xs"
           name="password"
           type="password"
           placeholder="Password"
         />
-        <button disabled={loading} type="submit">
+        <button disabled={loading} className="btn-primary btn" type="submit">
           Register
         </button>
       </form>

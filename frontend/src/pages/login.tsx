@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 const LoginPage = (): ReactElement => {
   const auth = useAuth()
@@ -36,20 +37,23 @@ const LoginPage = (): ReactElement => {
     <div className="flex flex-col items-center gap-4 pt-16 align-middle">
       <h3>Login</h3>
       {error && (
-        <div className="rounded-full bg-red-200 px-4 text-red-900">{error}</div>
+        <div className="alet alert-error shadow-lg">
+          <ExclamationTriangleIcon className="h-6 w-6" />
+          {error}
+        </div>
       )}
       <form
         className="flex flex-col items-center gap-4 align-middle"
         onSubmit={handleSubmit}
       >
         <input
-          className="text-input"
+          className="input-bordered input w-full max-w-xs"
           name="email"
           type="text"
           placeholder="Email"
         />
         <input
-          className="text-input"
+          className="input-bordered input w-full max-w-xs"
           name="password"
           type="password"
           placeholder="Password"
@@ -57,7 +61,7 @@ const LoginPage = (): ReactElement => {
         <Link style={{ textDecoration: 'underline' }} to="/resetpassword">
           Forgot password?
         </Link>
-        <button disabled={loading} type="submit">
+        <button disabled={loading} className="btn-primary btn" type="submit">
           Login
         </button>
       </form>
