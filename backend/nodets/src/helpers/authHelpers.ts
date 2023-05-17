@@ -58,7 +58,7 @@ export const checkJwt = async (
         .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
         .cookie('refreshToken', refreshToken, {
           maxAge: 3600000,
-          httpOnly: false
+          httpOnly: true
         })
 
       req.email = decoded.email
