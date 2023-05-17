@@ -7,6 +7,7 @@ import {
   MinusCircleIcon,
   ChatBubbleLeftIcon,
 } from '@heroicons/react/24/outline'
+import { location, port } from '../utils/Server'
 
 export interface IIssue {
   _id: string
@@ -25,15 +26,7 @@ export interface IIssue {
   message_count: number
 }
 
-const location = import.meta.env.SERVER
-  ? process.env.SERVER?.split(':')[0]
-  : window.location.hostname
-
-const port = import.meta.env.SERVER?.split(':')[1]
-  ? process.env.SERVER?.split(':')
-  : '3000'
-
-const issuesLoader = async () => {
+export const issuesLoader = async () => {
   const response = await fetch(`http://${location}:${port}/issues`, {
     credentials: 'include',
   })
@@ -45,7 +38,7 @@ const issuesLoader = async () => {
   return response.json()
 }
 
-const Issues = (): ReactElement => {
+export const Issues = (): ReactElement => {
   const issues = useLoaderData()
   const [sortField, setSortField] = useState<string | null>()
   const [sortOrder, setSortOrder] = useState<string | null>()
@@ -147,4 +140,3 @@ const Issues = (): ReactElement => {
   )
 }
 
-export { Issues, issuesLoader }
