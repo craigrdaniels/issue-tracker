@@ -42,13 +42,8 @@ const getCookie = (key: string): string =>
     return itemKey === key ? decodeURIComponent(itemValue) : total
   }, '')
 
-const useCookie = (
-  key: string,
-  defaultValue: string | null
-): [string, updateItem] => {
-  const [item, setItem] = useState<string | null>(
-    () => getCookie(key) || defaultValue
-  )
+const useCookie = (key: string): [string, updateItem] => {
+  const [item, setItem] = useState(() => getCookie(key))
 
   const updateItem = (value: string, options?: cookieOptions) => {
     setItem(value)
