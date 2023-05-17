@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useContext, useMemo } from 'react'
 import useLocalStorage from './useLocalStorage'
 import HTTPRequestError from '../utils/HTTPError'
+import useCookie from './useCookie'
 
 interface AuthContextType {
   user: any
@@ -29,7 +30,7 @@ const port = import.meta.env.SERVER?.split(':')[1]
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
-  const [user, setUser] = useLocalStorage('user', null)
+  const [user, setUser] = useCookie('refreshToken', null)
 
   const logIn = async (
     email: string,
