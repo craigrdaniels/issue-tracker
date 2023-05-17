@@ -9,7 +9,7 @@ import Home from './pages/home'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import ProtectedRoute from './routes/ProtectedRoute'
-import Issues from './pages/issues'
+import { Issues, issuesLoader } from './pages/issues'
 import Issue from './pages/issue'
 
 const router = createBrowserRouter([
@@ -37,6 +37,7 @@ const router = createBrowserRouter([
           {
             path: 'issues',
             element: <Issues />,
+            loader: issuesLoader,
           },
           {
             path: 'issues/:id',

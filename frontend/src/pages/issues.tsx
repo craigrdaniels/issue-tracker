@@ -1,7 +1,7 @@
-import { ReactElement, useEffect } from 'react'
+import { ReactElement } from 'react'
 import { useState } from 'react'
 import clsx from 'clsx'
-import { Link } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
   MinusCircleIcon,
@@ -33,22 +33,22 @@ const port = import.meta.env.SERVER?.split(':')[1]
   ? process.env.SERVER?.split(':')
   : '3000'
 
+const issuesLoader = async () => {
+  const response = await fetch(`http://${location}:${port}/issues`, {
+    credentials: 'include',
+  })
+
+  if (response.status === 401) {
+    throw new Response('Not Authenticated', { status: 401 })
+  }
+
+  return response.json()
+}
+
 const Issues = (): ReactElement => {
-  const [issues, setIssues] = useState<IIssue[]>([])
+  const issues = useLoaderData()
   const [sortField, setSortField] = useState<string | null>()
   const [sortOrder, setSortOrder] = useState<string | null>()
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`http://${location}:${port}/issues`, {
-        credentials: 'include',
-      })
-      const data = await response.json()
-      setIssues(data)
-    }
-
-    fetchData().catch(console.error)
-  }, [])
 
   const handleClickSort = (sortField: string, sortOrder: string) => {
     const order = 1 * (sortOrder === 'asc' ? 1 : -1)
@@ -147,4 +147,4 @@ const Issues = (): ReactElement => {
   )
 }
 
-export default Issues
+export { Issues, issuesLoader }
