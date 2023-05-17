@@ -1,8 +1,9 @@
 import { ReactElement, useEffect } from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLoaderData, useParams } from 'react-router-dom'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
+import { location, port } from '../utils/Server'
 
 interface IMessage {
   _id: string
@@ -32,29 +33,22 @@ interface IIssue {
   messages: IMessage[]
 }
 
-const location = import.meta.env.SERVER
-  ? process.env.SERVER?.split(':')[0]
-  : window.location.hostname
-
-const port = import.meta.env.SERVER?.split(':')[1]
-  ? process.env.SERVER?.split(':')
-  : '3000'
-
-const Issue = (): ReactElement => {
-  const [issue, setIssue] = useState<IIssue | null>()
-  const { id } = useParams()
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`http://${location}:${port}/issues/${id}`, {
-        credentials: 'include',
-      })
-      const data = await response.json()
-      setIssue(data)
+export const issueLoader = async ({ params }) => {
+  const response = await fetch(
+    `http://${location}:${port}/issues/${params.id}`,
+    {
+      credentials: 'include',
     }
+  )
 
-    fetchData().catch(console.error)
-  }, [])
+  if (response.status === 401) {
+    throw new Response('Not Authenticated', { status: 401 })
+  }
+  return response.json()
+}
+
+export const Issue = (): ReactElement => {
+  const issue = useLoaderData()
 
   return (
     <>
