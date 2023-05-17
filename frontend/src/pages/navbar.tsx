@@ -1,7 +1,7 @@
 import { ReactElement, useRef, useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import clsx from 'clsx'
-import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useNavigate, Link } from 'react-router-dom'
 
@@ -58,10 +58,16 @@ const NavBar = (): ReactElement => {
         <div className="dropdown" ref={ref}>
           <label
             tabIndex={0}
-            className="btn-ghost btn-circle btn"
-            onClick={() => setDropdownOpen((prev: boolean) => !prev)}
+            className="swap btn-ghost swap-rotate btn-circle btn"
           >
-            <Bars3Icon className="h-6 w-6" />
+            <input
+              type="checkbox"
+              className="hidden"
+              checked={dropdownOpen}
+              onChange={() => setDropdownOpen((prev: boolean) => !prev)}
+            />
+            <Bars3Icon className="swap-off h-6 w-6" />
+            <XMarkIcon className="swap-on h-6 w-6" />
           </label>
           <ul
             tabIndex={0}
