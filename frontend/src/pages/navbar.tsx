@@ -53,7 +53,7 @@ const NavBar = (): ReactElement => {
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-200">
       <div className="navbar-start">
         <div className="dropdown" ref={ref}>
           <label
@@ -72,7 +72,7 @@ const NavBar = (): ReactElement => {
           <ul
             tabIndex={0}
             className={clsx(
-              'dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow',
+              'dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-200 p-2 shadow',
               !dropdownOpen && 'hidden'
             )}
           >

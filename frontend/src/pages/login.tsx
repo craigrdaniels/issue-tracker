@@ -34,43 +34,45 @@ const LoginPage = (): ReactElement => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 pt-16 align-middle">
-      <h3>Login</h3>
-      {error && (
-        <div className="alet alert-error shadow-lg">
-          <ExclamationTriangleIcon className="h-6 w-6" />
-          {error}
-        </div>
-      )}
-      <form
-        className="flex flex-col items-center gap-4 align-middle"
-        onSubmit={handleSubmit}
-      >
-        <input
-          className="input-bordered input w-full max-w-xs"
-          name="email"
-          type="text"
-          placeholder="Email"
-        />
-        <input
-          className="input-bordered input w-full max-w-xs"
-          name="password"
-          type="password"
-          placeholder="Password"
-        />
-        <Link style={{ textDecoration: 'underline' }} to="/resetpassword">
-          Forgot password?
-        </Link>
-        <button disabled={loading} className="btn-primary btn" type="submit">
-          Login
-        </button>
-      </form>
-      <p>
-        Don&apos;t have an account?{' '}
-        <Link style={{ textDecoration: 'underline' }} to="/register">
-          Sign Up
-        </Link>
-      </p>
+    <div className="card mx-auto mt-20 w-96 place-self-center self-center justify-self-center bg-base-200 shadow-lg">
+      <div className="card-body">
+        <h2 className="card-title">Login</h2>
+        {error && (
+          <div className="alert alert-error shadow-lg">
+            <ExclamationTriangleIcon className="h-6 w-6" />
+            {error}
+          </div>
+        )}
+        <form
+          className="flex flex-col items-center gap-4 align-middle"
+          onSubmit={handleSubmit}
+        >
+          <input
+            className="input-bordered input w-full max-w-xs"
+            name="email"
+            type="text"
+            placeholder="Email"
+          />
+          <input
+            className="input-bordered input w-full max-w-xs"
+            name="password"
+            type="password"
+            placeholder="Password"
+          />
+          <Link style={{ textDecoration: 'underline' }} to="/resetpassword">
+            Forgot password?
+          </Link>
+          <button disabled={loading} className="btn-primary btn" type="submit">
+            Login
+          </button>
+        </form>
+        <p>
+          Don&apos;t have an account?{' '}
+          <Link style={{ textDecoration: 'underline' }} to="/register">
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </div>
   )
 }

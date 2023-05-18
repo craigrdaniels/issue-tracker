@@ -8,61 +8,8 @@
     duration-500;
   }
 
-  body {
-    @apply bg-zinc-50
-    text-gray-950
-    dark:bg-zinc-900
-    dark:text-gray-50;
-  }
-
   #root {
     @apply min-h-screen
     w-screen;
-  }
-
-  h2 {
-    @apply text-lg
-    font-bold;
-  }
-
-  button {
-    @apply rounded-lg
-    border
-    bg-gray-100
-    px-4
-    py-1
-    text-gray-800
-    hover:border-blue-500
-    focus:border-blue-500
-    focus:outline-none
-    focus:ring-blue-500
-    dark:bg-gray-800
-    dark:text-gray-100;
-  }
-}
-
-@layer components {
-  .text-input {
-    @apply form-input
-    rounded-md
-    border
-    border-opacity-25
-    bg-gray-100
-    px-4
-    py-1
-    text-gray-800
-    focus:border-blue-500
-    focus:outline-none
-    dark:border-gray-800
-    dark:bg-gray-900
-    dark:text-gray-100;
-  }
-
-  .navicon {
-    @apply h-5
-    w-5
-    cursor-pointer
-    text-gray-950
-    dark:text-gray-50;
   }
 }

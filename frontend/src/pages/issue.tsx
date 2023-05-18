@@ -52,12 +52,12 @@ export const Issue = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-2 mt-8 dark:bg-zinc-900 dark:bg-opacity-50 md:mx-8">
+      <main className="mx-2 mt-20 md:mx-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex h-10 w-full">
-            <h1>
+            <h2>
               {issue?.project.name} / {issue?.title}
-            </h1>
+            </h2>
           </div>
           <ul className="flex flex-col gap-4">
             {issue?.messages?.map((message) => (
@@ -66,8 +66,8 @@ export const Issue = (): ReactElement => {
                   <div className="h-12 w-12">
                     <UserCircleIcon />
                   </div>
-                  <div className="flex w-full grow flex-col rounded-md border pb-2 first:border-blue-400 dark:border-zinc-500/50 first:dark:border-blue-500/50 dark:hover:bg-zinc-800">
-                    <div className="rounded-t bg-zinc-200 px-2 py-1 dark:bg-zinc-800">
+                  <div className="pb-2i flex w-full grow flex-col rounded-md border border-primary-content/50 bg-base-200 shadow-md hover:bg-base-300">
+                    <div className="rounded-t bg-base-300 px-2 py-1">
                       <span className="font-bold">
                         {message.created_by.username}
                       </span>{' '}

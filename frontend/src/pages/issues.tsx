@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns'
 import {
   MinusCircleIcon,
   ChatBubbleLeftIcon,
+  CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 import { location, port } from '../utils/Server'
 
@@ -60,13 +61,17 @@ export const Issues = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-2 mt-8 dark:bg-zinc-900 dark:bg-opacity-50 md:mx-8">
-        <div className="mx-auto max-w-7xl rounded-md border dark:border-zinc-500/50">
-          <div className="flex h-10 w-full bg-zinc-200 dark:bg-zinc-800">
-            <button onClick={() => handleClickSort('title', 'asc')}>
+      <main className="mx-2 mt-20 bg-base-200 shadow-md md:mx-8">
+        <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50">
+          <div className="flex h-10 w-full items-center rounded-t-md bg-base-300">
+            <button
+              className="badge"
+              onClick={() => handleClickSort('title', 'asc')}
+            >
               sort
             </button>
             <button
+              className="badge"
               onClick={() => handleClickSort('created_by.username', 'asc')}
             >
               Created By
@@ -76,27 +81,22 @@ export const Issues = (): ReactElement => {
             {issues?.map((issue) => (
               <li
                 key={issue._id}
-                className="flex grow flex-row border-b py-2 last:border-0 hover:bg-zinc-200 dark:border-zinc-500/50 dark:hover:bg-zinc-800"
+                className="flex grow flex-row border-b border-primary-content/50 py-2 last:border-0 hover:bg-base-300"
               >
                 <div className="items-top px-4 pt-1">
-                  <MinusCircleIcon
-                    className={clsx(
-                      'navicon',
-                      issue.is_open
-                        ? 'text-green-500 dark:text-green-500'
-                        : 'text-purple-500 dark:text-purple-500'
-                    )}
-                  />
+                  {issue.is_open ? (
+                    <MinusCircleIcon className="h-5 w-5 text-success" />
+                  ) : (
+                    <CheckCircleIcon className="h-5 w-5 text-secondary" />
+                  )}
                 </div>
                 <div className="px-4">
                   <div className="flex flex-col gap-1 md:flex-row">
-                    <h2 className="text-zinc-500 dark:text-zinc-400">
-                      {issue.project.name} /{' '}
-                    </h2>
+                    <h2>{issue.project.name} / </h2>
                     <h2>
                       <Link
                         to={issue._id}
-                        className="transition-none hover:text-cyan-600 hover:dark:text-cyan-600"
+                        className="transition-none hover:text-accent"
                       >
                         {issue.title}
                       </Link>
@@ -129,7 +129,7 @@ export const Issues = (): ReactElement => {
                 >
                   {/** show number of comments ignoring first message by issue creator**/}
                   {issue.message_count > 1 && issue.message_count - 1}
-                  <ChatBubbleLeftIcon className="navicon" />
+                  <ChatBubbleLeftIcon className="h-5 w-5" />
                 </Link>
               </li>
             ))}
@@ -139,4 +139,3 @@ export const Issues = (): ReactElement => {
     </>
   )
 }
-
