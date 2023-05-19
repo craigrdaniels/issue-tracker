@@ -9,6 +9,7 @@ import fs from 'fs'
 import logger from 'morgan'
 import { startConnection } from './db/mongodb.js'
 import issuesRouter from './routes/issuesRoute.js'
+import projectsRouter from './routes/projectsRoute.js'
 import indexRouter from './routes/indexRoute.js'
 import usersRouter from './routes/usersRoute.js'
 import { connectDB, loadDevData } from './db/testdb.js'
@@ -81,6 +82,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(indexRouter)
 app.use(authRouter)
 app.use(issuesRouter)
+app.use(projectsRouter)
 app.use(usersRouter)
 app.use(messagesRouter)
 // error handler
