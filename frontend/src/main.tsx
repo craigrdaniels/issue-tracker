@@ -9,8 +9,9 @@ import Home from './pages/home'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import ProtectedRoute from './routes/ProtectedRoute'
-import { Issues, issuesLoader } from './pages/issues'
+import { Issues, issuesLoader } from './pages/issues-list'
 import Issue, { issueLoader } from './pages/issue'
+import { Projects, projectsLoader } from './pages/projects-list'
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
             path: 'issues/:id',
             element: <Issue />,
             loader: issueLoader,
+          },
+          {
+            path: 'projects',
+            element: <Projects />,
+            loader: projectsLoader,
           },
         ],
       },
