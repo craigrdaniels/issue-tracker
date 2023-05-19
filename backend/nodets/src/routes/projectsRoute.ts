@@ -11,4 +11,10 @@ projectsRouter.get(
   catchAsyncFunction(ProjectController.getAll)
 )
 
+projectsRouter.get(
+  '/projects/:id',
+  [checkJwt],
+  catchAsyncFunction(ProjectController.getOneById)
+)
+
 export default projectsRouter
