@@ -3,28 +3,20 @@ import { checkJwt } from '../helpers/authHelpers.js'
 import catchAsyncFunction from '../helpers/catchAsyncFunction.js'
 import IssueController from '../controllers/IssueController.js'
 
-const issuesRouter = express.Router()
+const issuesRouter = express.Router({ mergeParams: true })
+
+issuesRouter.get('/', [checkJwt], catchAsyncFunction(IssueController.getAll))
+
+issuesRouter.post('/', [checkJwt], catchAsyncFunction(IssueController.newIssue))
 
 issuesRouter.get(
-  '/issues',
-  [checkJwt],
-  catchAsyncFunction(IssueController.getAll)
-)
-
-issuesRouter.post(
-  '/issues',
-  [checkJwt],
-  catchAsyncFunction(IssueController.newIssue)
-)
-
-issuesRouter.get(
-  '/issues/:id',
+  '/:id',
   [checkJwt],
   catchAsyncFunction(IssueController.getOneById)
 )
 
 issuesRouter.put(
-  '/issues/:id',
+  '/:id',
   [checkJwt],
   catchAsyncFunction(IssueController.editIssue)
 )

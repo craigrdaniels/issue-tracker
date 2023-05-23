@@ -34,7 +34,7 @@ afterAll(async () => {
 describe('GET /issues', () => {
   it('should return 200', async () => {
     const response = await request(app)
-      .get('/issues')
+      .get('/')
       .set('Accept', 'application/json')
       .set('Cookie', `JWT=${testData.token}`)
     expect(response.statusCode).toBe(200)
@@ -43,7 +43,7 @@ describe('GET /issues', () => {
   })
   it('should insert a new issue', async () => {
     const response = await request(app)
-      .post('/issues')
+      .post('/')
       .set('Content-Type', 'application/json')
       .set('Cookie', `JWT=${testData.token}`)
       .send({
@@ -54,7 +54,7 @@ describe('GET /issues', () => {
   })
   it('should return specified issue', async () => {
     const response = await request(app)
-      .get('/issues/' + testData.issue._id)
+      .get('/' + testData.issue._id)
       .set('Content-Type', 'application/json')
       .set('Cookie', `JWT=${testData.token}`)
     expect(response.statusCode).toBe(200)
@@ -63,7 +63,7 @@ describe('GET /issues', () => {
   })
   it('should update specified issue', async () => {
     const response = await request(app)
-      .put('/issues/' + testData.issue._id)
+      .put('/' + testData.issue._id)
       .set('Content-Type', 'application/json')
       .set('Cookie', `JWT=${testData.token}`)
       .send({ title: 'New Title' })
@@ -71,4 +71,3 @@ describe('GET /issues', () => {
     expect(response.error).toBe(false)
   })
 })
-// Commented out sections do not work until push functions added

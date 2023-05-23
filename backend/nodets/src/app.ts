@@ -81,8 +81,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(indexRouter)
 app.use(authRouter)
-app.use(issuesRouter)
-app.use(projectsRouter)
+app.use('/issues', issuesRouter)
+app.use('/projects', projectsRouter)
 app.use(usersRouter)
 app.use(messagesRouter)
 // error handler
