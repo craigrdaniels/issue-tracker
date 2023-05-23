@@ -51,12 +51,12 @@ class AuthController {
     })
 
     res
-      .status(200)
       .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
       .cookie('refreshToken', newRefreshToken.token, {
         maxAge: 3600000,
         httpOnly: true
       })
+      .status(200)
       .json({
         success: true,
         user: user.username
@@ -70,7 +70,7 @@ class AuthController {
   ): Promise<void> => {
     await RefreshToken.findOneAndDelete({ email: req.body.email })
 
-    res.status(200).clearCookie('JWT').clearCookie('refreshToken').json({
+    res.clearCookie('JWT').clearCookie('refreshToken').status(200).json({
       success: true,
       message: 'User logged out'
     })

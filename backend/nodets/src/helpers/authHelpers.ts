@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express'
 import jsonwebtoken from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import { isValidRefreshToken } from './dbHelpers.js'
+import { warn } from 'console'
 
 dotenv.config()
 
@@ -54,6 +55,8 @@ export const checkJwt = async (
       // if refresh token is valid we create a new jwt
       const token = generateToken(decoded.email)
 
+      req.email = decoded.email
+
       res
         .cookie('JWT', token, { maxAge: 900000, httpOnly: true })
         .cookie('refreshToken', refreshToken, {
@@ -61,13 +64,10 @@ export const checkJwt = async (
           httpOnly: true
         })
 
-      req.email = decoded.email
       next()
     } catch (err2) {
       res
         .status(401)
-        .clearCookie('JWT')
-        .clearCookie('refreshToken')
         .json({ success: false, message: 'Missing or invalid refresh token' })
     }
   }
