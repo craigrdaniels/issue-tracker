@@ -4,6 +4,7 @@ import type { PipelineStage } from 'mongoose'
 import Project from '../models/projectModel.js'
 import type { IProject } from '../models/projectModel.js'
 
+// return list of projects
 class ProjectController {
   static getAll = async (
     req: Request,
@@ -59,6 +60,7 @@ class ProjectController {
     res.status(200).json(projects)
   }
 
+  // return project details with associated issues
   static getOneById = async (
     req: Request,
     res: Response,
@@ -72,80 +74,6 @@ class ProjectController {
       },
       {
         $limit: 1
-      },
-      {
-        $lookup: {
-          from: 'issues',
-          localField: '_id',
-          foreignField: 'project',
-          pipeline: [
-            {
-              $lookup: {
-                from: 'messages',
-                localField: '_id',
-                foreignField: 'issue',
-                as: 'messages'
-              }
-            },
-            {
-              $lookup: {
-                from: 'users',
-                localField: 'assigned_users',
-                foreignField: '_id',
-                as: 'assigned_users'
-              }
-            },
-            {
-              $lookup: {
-                from: 'users',
-                localField: 'created_by',
-                foreignField: '_id',
-                as: 'created_by'
-              }
-            },
-            {
-              $set: {
-                created_by: {
-                  $first: '$created_by'
-                }
-              }
-            },
-            {
-              $lookup: {
-                from: 'projects',
-                localField: 'project',
-                foreignField: '_id',
-                as: 'project'
-              }
-            },
-            {
-              $set: {
-                project: {
-                  $first: '$project'
-                }
-              }
-            },
-            {
-              $project: {
-                _id: 1,
-                title: 1,
-                created_at: 1,
-                is_open: 1,
-                tags: 1,
-                'created_by._id': 1,
-                'created_by.username': 1,
-                'project._id': 1,
-                'project.name': 1,
-                'assigned_users._id': 1,
-                'assigned_users.username': 1,
-                message_count: {
-                  $size: '$messages'
-                }
-              }
-            }
-          ],
-          as: 'issues'
-        }
       },
       {
         $lookup: {
@@ -167,8 +95,8 @@ class ProjectController {
           _id: 1,
           name: 1,
           'project_lead._id': 1,
-          'project_lead.username': 1,
-          issues: 1
+          'project_lead.username': 1
+          // issues: 1
         }
       }
     ]

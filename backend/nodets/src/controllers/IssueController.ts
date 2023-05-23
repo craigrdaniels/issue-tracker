@@ -12,7 +12,12 @@ class IssueController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const pipeline: PipelineStage[] = [
+    const projectId =
+      req.params.id !== undefined
+        ? new mongoose.Types.ObjectId(req.params.id)
+        : null
+
+    let pipeline: PipelineStage[] = [
       {
         $lookup: {
           from: 'messages',
@@ -78,6 +83,17 @@ class IssueController {
         }
       }
     ]
+
+    if (projectId !== null) {
+      pipeline = [
+        {
+          $match: {
+            project: projectId
+          }
+        },
+        ...pipeline
+      ]
+    }
 
     const issues: IIssue[] = await Issue.aggregate(pipeline)
 
