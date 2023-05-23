@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import { useState } from 'react'
 import clsx from 'clsx'
-import { Link, useLoaderData } from 'react-router-dom'
+import { Link, useLoaderData, useParams } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
   MinusCircleIcon,
@@ -27,22 +27,24 @@ export interface IIssue {
   message_count: number
 }
 
-export const issuesLoader = async () => {
-  const response = await fetch(`http://${location}:${port}/issues`, {
+export const issuesLoader = async ({ params }) => {
+  const tail = params.id ? `/projects/${params.id}/issues` : '/issues'
+
+  const issues = await fetch(`http://${location}:${port}${tail}`, {
     credentials: 'include',
   })
 
-  if (response.status === 401) {
+  if (issues.status === 401) {
     throw new Response('Not Authenticated', { status: 401 })
   }
-
-  return response.json()
+  return issues.json()
 }
 
 export const Issues = (): ReactElement => {
   const issues = useLoaderData()
   const [sortField, setSortField] = useState<string | null>()
   const [sortOrder, setSortOrder] = useState<string | null>()
+  const params = useParams()
 
   const handleClickSort = (sortField: string, sortOrder: string) => {
     const order = 1 * (sortOrder === 'asc' ? 1 : -1)
@@ -61,7 +63,19 @@ export const Issues = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-2 mt-20 bg-base-200 shadow-md md:mx-8">
+      <div className="breadcrumbs mx-2 mt-4 text-sm md:mx-8">
+        <ul>
+          {params.id && (
+            <li>
+              <Link to={`/projects/${params.id}`}>
+                {issues[0].project.name}
+              </Link>
+            </li>
+          )}{' '}
+          <li>Issues</li>
+        </ul>
+      </div>
+      <main className="mx-2 mt-4 bg-base-200 shadow-md md:mx-8">
         <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50">
           <div className="flex h-10 w-full items-center rounded-t-md bg-base-300">
             <button
@@ -92,10 +106,18 @@ export const Issues = (): ReactElement => {
                 </div>
                 <div className="px-4">
                   <div className="flex flex-col gap-1 md:flex-row">
-                    <h2>{issue.project.name} / </h2>
                     <h2>
                       <Link
-                        to={issue._id}
+                        to={`/projects/${issue.project._id}/issues`}
+                        className="transition-none hover:text-accent"
+                      >
+                        {issue.project.name}
+                      </Link>{' '}
+                      /{' '}
+                    </h2>
+                    <h2>
+                      <Link
+                        to={`/issues/${issue._id}`}
                         className="transition-none hover:text-accent"
                       >
                         {issue.title}
@@ -124,7 +146,7 @@ export const Issues = (): ReactElement => {
                 </div>
                 <div className="w-fit">&nbsp;</div>
                 <Link
-                  to={issue._id}
+                  to={`/issues/${issue._id}`}
                   className="ml-auto mr-4 flex flex-row items-center gap-2 justify-self-end"
                 >
                   {/** show number of comments ignoring first message by issue creator**/}
