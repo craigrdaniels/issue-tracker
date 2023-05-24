@@ -60,6 +60,13 @@ usersRouter.post(
   )
 )
 
+// get one user by _id
+usersRouter.get(
+  '/users/:id',
+  [checkJwt],
+  catchAsyncFunction(UserController.getOneById)
+)
+
 usersRouter.put(
   '/users/update',
   [checkJwt],

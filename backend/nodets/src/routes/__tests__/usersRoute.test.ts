@@ -58,4 +58,12 @@ describe('User Functions', () => {
     expect(response.statusCode).toBe(204)
     expect(response.error).toBe(false)
   })
+  it('get user', async () => {
+    const response = await request(app)
+      .get(`/users/${testData.user._id}`)
+      .set('Accept', 'application/json')
+      .set('Cookie', [`JWT=${testData.token}`])
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
 })

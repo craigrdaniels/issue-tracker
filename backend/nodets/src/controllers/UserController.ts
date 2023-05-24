@@ -4,13 +4,23 @@ import User from '../models/userModel.js'
 import type { IUser } from '../models/userModel.js'
 
 // generate a copy of the user without a password
-const generateSafeCopy = (user: IUser): IUser => {
-  // const _user: IUser = { ...user }
-  // delete _user.password
-  return user
-}
+const generateSafeCopy = (user: IUser) => user.toJSON()
 
 class UserController {
+  static getOneById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const user: IUser | null = await User.findOne({ _id: req.params.id })
+
+    if (user === null || user === undefined) {
+      throw new Error(`User with id ${req.params.id} not found`)
+    }
+
+    res.status(200).type('json').send(generateSafeCopy(user))
+  }
+
   static getOneByEmail = async (
     req: Request,
     res: Response,
