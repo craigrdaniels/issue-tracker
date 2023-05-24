@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Footer = (): ReactElement => {
   return (
-    <footer className="footer bottom-0 w-full items-center bg-neutral p-4 text-neutral-content">
+    <footer className="footer bottom-0 flex w-full items-center justify-between bg-neutral p-4 text-neutral-content">
       <div className="grid-flow-col items-center">
         <p>Copyright &copy; 2023 - Craig Daniels</p>
       </div>
