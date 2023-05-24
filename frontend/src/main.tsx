@@ -12,7 +12,6 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import { Issues, issuesLoader } from './pages/issues-list'
 import Issue, { issueLoader } from './pages/issue'
 import { Projects, projectsLoader } from './pages/projects-list'
-import { Project, projectLoader } from './pages/project'
 
 const router = createBrowserRouter([
   {
