@@ -41,7 +41,7 @@ const RegisterPage = (): ReactElement => {
   return (
     <div className="card mx-auto mt-20 w-96 place-self-center self-center justify-self-center bg-base-200 shadow-lg">
       <div className="card-body">
-        <h3>Register</h3>
+        <h2 className="card-title">Register</h2>
         {error && (
           <div className="alert alert-error shadow-lg">
             <ExclamationTriangleIcon className="h-6 w-6" />
