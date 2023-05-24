@@ -25,8 +25,15 @@ export const Projects = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-2 mt-20 bg-base-200 shadow-md md:mx-8">
-        <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50">
+      <main className="mx-2 mt-4 md:mx-8">
+        <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base ">
+          <ul>
+            <li>
+              <Link to={'/projects'}>Projects</Link>
+            </li>
+          </ul>
+        </div>
+        <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50 shadow-md">
           <div className="flex h-10 w-full items-center rounded-t-md bg-base-300">
             <button
               className="badge"

@@ -1,6 +1,5 @@
-import { ReactElement, useEffect } from 'react'
-import { useState } from 'react'
-import { useLoaderData, useParams } from 'react-router-dom'
+import { ReactElement } from 'react'
+import { useLoaderData, Link } from 'react-router-dom'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { location, port } from '../utils/Server'
@@ -52,13 +51,24 @@ export const Issue = (): ReactElement => {
 
   return (
     <>
-      <main className="mx-2 mt-20 md:mx-8">
+      <main className="mx-2 mt-4 md:mx-8">
+        <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
+          <ul>
+            <li>
+              <Link to={'/projects'}>Projects</Link>
+            </li>
+            <li>
+              <Link to={`/projects/${issue.project._id}`}>
+                {issue.project.name}
+              </Link>
+            </li>
+            <li>
+              <Link to={`/projects/${issue.project._id}/issues`}>Issues</Link>
+            </li>
+            <li>{issue.title}</li>
+          </ul>
+        </div>
         <div className="mx-auto max-w-7xl">
-          <div className="flex h-10 w-full">
-            <h2>
-              {issue?.project.name} / {issue?.title}
-            </h2>
-          </div>
           <ul className="flex flex-col gap-4">
             {issue?.messages?.map((message) => (
               <li key={message._id}>

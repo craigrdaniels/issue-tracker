@@ -1,6 +1,5 @@
 import { ReactElement } from 'react'
 import { useState } from 'react'
-import clsx from 'clsx'
 import { Link, useLoaderData, useParams } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
@@ -63,20 +62,23 @@ export const Issues = (): ReactElement => {
 
   return (
     <>
-      <div className="breadcrumbs mx-2 mt-4 text-sm md:mx-8">
-        <ul>
-          {params.id && (
+      <main className="mx-2 mt-4 md:mx-8">
+        <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
+          <ul>
             <li>
-              <Link to={`/projects/${params.id}`}>
-                {issues[0].project.name}
-              </Link>
+              <Link to={'/projects'}>Projects</Link>
             </li>
-          )}{' '}
-          <li>Issues</li>
-        </ul>
-      </div>
-      <main className="mx-2 mt-4 bg-base-200 shadow-md md:mx-8">
-        <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50">
+            {params.id && (
+              <li>
+                <Link to={`/projects/${params.id}`}>
+                  {issues[0].project.name}
+                </Link>
+              </li>
+            )}{' '}
+            <li>Issues</li>
+          </ul>
+        </div>
+        <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50 shadow-md">
           <div className="flex h-10 w-full items-center rounded-t-md bg-base-300">
             <button
               className="badge"
