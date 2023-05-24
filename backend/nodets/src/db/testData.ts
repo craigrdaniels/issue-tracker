@@ -6,7 +6,7 @@ import RefreshToken from '../models/refreshTokenModel.js'
 import Issue from '../models/issueModel.js'
 import Message from '../models/messageModel.js'
 import Action from '../models/actionModel.js'
-// const testUserSchema = new User({}, { skipVersioning: true })
+import Project from '../models/projectModel.js'
 
 dotenv.config({ path: '.env.development' })
 
@@ -32,9 +32,14 @@ export const refreshToken = new RefreshToken({
   token: rToken
 })
 
+export const project = new Project({
+  name: 'test project'
+})
+
 export const issue = new Issue({
   title: 'Test Issue',
-  created_by: user._id
+  created_by: user._id,
+  project: project._id
 })
 
 export const message = new Message({
