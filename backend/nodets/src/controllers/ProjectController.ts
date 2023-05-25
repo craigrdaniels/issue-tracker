@@ -91,18 +91,34 @@ class ProjectController {
         }
       },
       {
+        $lookup: {
+          from: 'issues',
+          localField: '_id',
+          foreignField: 'project',
+          pipeline: [
+            {
+              $match: {
+                is_open: true
+              }
+            }
+          ],
+          as: 'issues'
+        }
+      },
+      {
         $project: {
           _id: 1,
           name: 1,
           'project_lead._id': 1,
-          'project_lead.username': 1
-          // issues: 1
+          'project_lead.username': 1,
+          open_issues: {
+            $size: '$issues'
+          }
         }
       }
     ]
 
     const project: IProject[] = await Project.aggregate(pipeline)
-    console.log(project)
 
     res.status(200).json(project[0])
   }
