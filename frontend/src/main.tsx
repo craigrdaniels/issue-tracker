@@ -12,6 +12,7 @@ import ProtectedRoute from './routes/ProtectedRoute'
 import { Issues, issuesLoader } from './pages/issues-list'
 import Issue, { issueLoader } from './pages/issue'
 import { Projects, projectsLoader } from './pages/projects-list'
+import { Project, projectLoader } from './pages/project'
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,12 @@ const router = createBrowserRouter([
             loader: projectsLoader,
           },
           {
-            path: 'projects/:id/*',
+            path: 'projects/:id',
+            element: <Project />,
+            loader: projectLoader,
+          },
+          {
+            path: 'projects/:id/issues',
             element: <Issues />,
             loader: issuesLoader,
           },

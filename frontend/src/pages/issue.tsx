@@ -4,34 +4,6 @@ import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { location, port } from '../utils/Server'
 
-interface IMessage {
-  _id: string
-  content: string
-  created_at: Date
-  created_by: {
-    _id: string
-    username: string
-  }
-  last_edit: Date
-}
-
-interface IIssue {
-  _id: string
-  title: string
-  created_at: Date
-  created_by: {
-    _id: string
-    username: string
-  }
-  tags: string[]
-  project: {
-    _id: string
-    name: string
-  }
-  is_open: boolean
-  messages: IMessage[]
-}
-
 export const issueLoader = async ({ params }) => {
   const response = await fetch(
     `http://${location}:${port}/issues/${params.id}`,
