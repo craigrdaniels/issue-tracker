@@ -42,7 +42,7 @@ export const Project = (): ReactElement => {
               <div className="flex flex-col gap-1 md:flex-row">
                 <h2>
                   <Link
-                    to={project._id}
+                    to="issues"
                     className="transition-none hover:text-accent"
                   >
                     {project.name}
@@ -56,7 +56,7 @@ export const Project = (): ReactElement => {
 
             <div className="w-fit">&nbsp;</div>
             <Link
-              to={project._id}
+              to="issues"
               className="ml-auto mr-4 flex flex-row items-center gap-2 justify-self-end"
             >
               {project.open_issues || 0}
