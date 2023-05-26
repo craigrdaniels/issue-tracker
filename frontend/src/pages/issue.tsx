@@ -1,5 +1,6 @@
-import { ReactElement } from 'react'
+import { FormEvent, ReactElement, useState } from 'react'
 import { useLoaderData, Link } from 'react-router-dom'
+import clsx from 'clsx'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { location, port } from '../utils/Server'
@@ -20,6 +21,37 @@ export const issueLoader = async ({ params }) => {
 
 export const Issue = (): ReactElement => {
   const issue = useLoaderData()
+  const [buttonLoader, setButtonLoader] = useState<boolean>(false)
+  const [messageContent, setMessageContent] = useState<string>('')
+  const [infoMessage, setInfoMessage] = useState<stirng>('')
+
+  const handleSubmit = async (e: FormEvent): Promise<void> => {
+    e.preventDefault()
+    setButtonLoader(true)
+    try {
+      if (messageContent.length === 0)
+        throw new Error('Message must not be empty')
+      const response = await fetch(
+        `http://${location}:${port}/issues/${issue._id}/messages`,
+        {
+          credentials: 'include',
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            content: messageContent,
+          }),
+        }
+      )
+      if (response.status === 200) {
+        setMessageContent('')
+        setInfoMessage('Message succesfully sent')
+      }
+    } catch (err: Error) {
+      setInfoMessage(err.message)
+    }
+    setButtonLoader(false)
+  }
 
   return (
     <>
@@ -63,8 +95,41 @@ export const Issue = (): ReactElement => {
                   </div>
                 </div>
               </li>
-            ))}
+            ))}{' '}
           </ul>
+          <div className="mt-8 flex flex-col gap-4">
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-row gap-4">
+                <div className="h-12 w-12">
+                  <UserCircleIcon />
+                </div>
+                <div className="flex w-full grow flex-col gap-2 rounded-md border border-primary-content/50 bg-base-200 p-2 shadow-md hover:bg-base-300">
+                  <textarea
+                    className="textarea bg-base-100"
+                    placeholder="Leave your comment"
+                    id="content"
+                    value={messageContent ?? ''}
+                    onChange={(e) => {
+                      setMessageContent(e.target.value)
+                    }}
+                  ></textarea>
+                  <div className="flex w-full">
+                    <button
+                      type="submit"
+                      className={clsx(
+                        'btn-primary btn-wide btn ml-auto place-self-end',
+                        buttonLoader && 'loading',
+                        messageContent === '' && 'btn-disabled'
+                      )}
+                      aria-disabled={messageContent === ''}
+                    >
+                      Comment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </main>
     </>

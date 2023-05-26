@@ -37,9 +37,11 @@ class MessageController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const message: IMessage = new Message(req.body, {
+    console.log(req.body)
+    const message: IMessage = new Message({
+      content: req.body.content,
       issue: req.params.issueID,
-      created_by: req.params.userID
+      created_by: req._id
     })
     const _message: IMessage | null = await message.save()
     res.status(200).json(_message)

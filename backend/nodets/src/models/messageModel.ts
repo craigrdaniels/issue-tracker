@@ -14,8 +14,8 @@ const messageSchema = new Schema(
   {
     created_by: { type: Schema.Types.ObjectId, refPath: 'User' },
     issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },
-    created_at: Date,
-    last_edit: Date,
+    created_at: { type: Date, default: Date.now },
+    last_edit: { type: Date, default: Date.now },
     content: String
   },
   {
