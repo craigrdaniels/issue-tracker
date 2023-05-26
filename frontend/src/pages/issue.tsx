@@ -80,7 +80,7 @@ export const Issue = (): ReactElement => {
                   <div className="h-12 w-12">
                     <UserCircleIcon />
                   </div>
-                  <div className="pb-2i flex w-full grow flex-col rounded-md border border-primary-content/50 bg-base-200 shadow-md hover:bg-base-300">
+                  <div className="flex w-full grow flex-col rounded-md border border-primary-content/50 bg-base-200 pb-2 shadow-md hover:bg-base-300">
                     <div className="rounded-t bg-base-300 px-2 py-1">
                       <span className="font-bold">
                         {message.created_by.username}

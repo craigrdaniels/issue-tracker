@@ -79,7 +79,7 @@ export const Issues = (): ReactElement => {
           </ul>
         </div>
         <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50 shadow-md">
-          <div className="flex h-10 w-full items-center rounded-t-md bg-base-300">
+          <div className="flex h-10 w-full items-center rounded-t-md bg-base-300 px-2">
             <button
               className="badge"
               onClick={() => handleClickSort('title', 'asc')}
@@ -91,6 +91,9 @@ export const Issues = (): ReactElement => {
               onClick={() => handleClickSort('created_by.username', 'asc')}
             >
               Created By
+            </button>
+            <button className="btn-primary btn-sm btn ml-auto justify-self-end">
+              <Link to={`/projects/${params.id}/new`}>New issue</Link>
             </button>
           </div>
           <ul>

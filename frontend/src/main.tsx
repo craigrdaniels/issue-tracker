@@ -13,6 +13,7 @@ import { Issues, issuesLoader } from './pages/issues-list'
 import Issue, { issueLoader } from './pages/issue'
 import { Projects, projectsLoader } from './pages/projects-list'
 import { Project, projectLoader } from './pages/project'
+import { newIssueLoader, NewIssue } from './pages/new-issue'
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,11 @@ const router = createBrowserRouter([
             path: 'projects/:id',
             element: <Project />,
             loader: projectLoader,
+          },
+          {
+            path: 'projects/:id/new',
+            element: <NewIssue />,
+            loader: newIssueLoader,
           },
           {
             path: 'projects/:id/issues',

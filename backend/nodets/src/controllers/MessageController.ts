@@ -43,8 +43,8 @@ class MessageController {
       issue: req.params.issueID,
       created_by: req._id
     })
-    const _message: IMessage | null = await message.save()
-    res.status(200).json(_message)
+    await message.save()
+    res.status(200).json({ success: true, message: 'Message created' })
   }
 
   static editMessage = async (

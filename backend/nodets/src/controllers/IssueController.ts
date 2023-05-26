@@ -5,6 +5,8 @@ import Issue from '../models/issueModel.js'
 import type { IIssue } from '../models/issueModel.js'
 import User from '../models/userModel.js'
 import type { IUser } from '../models/userModel.js'
+import Message from '../models/messageModel.js'
+import type { IMessage } from '../models/messageModel.js'
 
 class IssueController {
   static getAll = async (
@@ -225,12 +227,22 @@ class IssueController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const user: IUser | null = await User.findOne({ email: req.email })
-
-    if (user === null || user === undefined) throw new Error('User not found')
-
-    const issue: IIssue = new Issue(req.body, { created_by: user._id })
+    const issue: IIssue = new Issue({
+      title: req.body.title,
+      created_by: req._id,
+      project: req.body.project
+    })
     await issue.save()
+
+    console.log(issue._id)
+
+    const message: IMessage = new Message({
+      content: req.body.content,
+      issue: issue._id.toString(),
+      created_by: req._id
+    })
+
+    await message.save()
     res.status(200).json({ success: true, message: 'Issue created' })
   }
 
