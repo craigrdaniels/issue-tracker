@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { useState } from 'react'
 import { Link, useLoaderData, useParams } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
@@ -26,6 +26,16 @@ export interface IIssue {
   message_count: number
 }
 
+interface IProject {
+  _id: string
+  name: string
+  project_lead: {
+    _id: string
+    username: string
+  }
+  open_issues: number
+}
+
 export const issuesLoader = async ({ params }) => {
   const tail = params.id ? `/projects/${params.id}/issues` : '/issues'
 
@@ -41,9 +51,37 @@ export const issuesLoader = async ({ params }) => {
 
 export const Issues = (): ReactElement => {
   const issues = useLoaderData()
+  const [project, setProject] = useState<IProject | undefined>()
   const [sortField, setSortField] = useState<string | null>()
   const [sortOrder, setSortOrder] = useState<string | null>()
   const params = useParams()
+
+  useEffect(() => {
+    const getProject = async () => {
+      try {
+        const response = await fetch(
+          `http://${location}:${port}/projects/${params.id}`,
+          {
+            credentials: 'include',
+          }
+        )
+
+        if (response.status === 401) {
+          throw new Response('Not Authenticated', { status: 401 })
+        }
+        const json = await response.json()
+        // hackish way to get json parsed to project interface
+        // unsure why it doesnt work without stringify
+        const proj: IProject = JSON.parse(JSON.stringify(json))
+        setProject(proj)
+      } catch (err: Error) {
+        console.log(err)
+      }
+    }
+    if (params.id !== undefined) {
+      getProject()
+    }
+  }, [params.id])
 
   const handleClickSort = (sortField: string, sortOrder: string) => {
     const order = 1 * (sortOrder === 'asc' ? 1 : -1)
@@ -68,11 +106,9 @@ export const Issues = (): ReactElement => {
             <li>
               <Link to={'/projects'}>Projects</Link>
             </li>
-            {params.id && (
+            {project && (
               <li>
-                <Link to={`/projects/${params.id}`}>
-                  {issues[0].project.name}
-                </Link>
+                <Link to={`/projects/${params.id}`}>{project.name}</Link>
               </li>
             )}{' '}
             <li>Issues</li>
@@ -96,6 +132,11 @@ export const Issues = (): ReactElement => {
               <Link to={`/projects/${params.id}/new`}>New issue</Link>
             </button>
           </div>
+          {Object.keys(issues).length === 0 && (
+            <div className="flex grow flex-row justify-center py-2 hover:bg-base-300">
+              No Issues
+            </div>
+          )}
           <ul>
             {issues?.map((issue) => (
               <li
