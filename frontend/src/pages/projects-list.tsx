@@ -34,7 +34,7 @@ export const Projects = (): ReactElement => {
           </ul>
         </div>
         <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50 shadow-md">
-          <div className="flex h-10 w-full items-center rounded-t-md bg-base-300">
+          <div className="flex h-10 w-full items-center rounded-t-md bg-base-300 px-2">
             <button
               className="badge"
               onClick={() => handleClickSort('title', 'asc')}
