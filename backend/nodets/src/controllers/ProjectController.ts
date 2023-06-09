@@ -122,6 +122,20 @@ class ProjectController {
 
     res.status(200).json(project[0])
   }
+
+  static newProject = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    console.log(req.body.name)
+    const project: IProject = new Project({
+      name: req.body.name,
+      project_lead: req._id
+    })
+    await project.save()
+    res.status(200).json({ success: true, message: 'Project created' })
+  }
 }
 
 export default ProjectController

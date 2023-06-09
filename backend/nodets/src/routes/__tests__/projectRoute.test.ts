@@ -56,3 +56,17 @@ describe('Get /projects/:id', () => {
     expect(response.error).toBe(false)
   })
 })
+
+describe('Post /projects', () => {
+  it('should return 200', async () => {
+    const response = await request(app)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('Cookie', [`JWT=${testData.token}`])
+      .send({
+        name: 'New Test Project'
+      })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
+})
