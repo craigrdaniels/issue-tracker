@@ -14,6 +14,7 @@ import Issue, { issueLoader } from './pages/issue'
 import { Projects, projectsLoader } from './pages/projects-list'
 import { Project, projectLoader } from './pages/project'
 import { newIssueLoader, NewIssue } from './pages/new-issue'
+import { NewProject } from './pages/new-project'
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             path: 'projects',
             element: <Projects />,
             loader: projectsLoader,
+          },
+          {
+            path: 'projects/new',
+            element: <NewProject />,
           },
           {
             path: 'projects/:id',

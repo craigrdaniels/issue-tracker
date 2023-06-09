@@ -113,10 +113,10 @@ export const Issues = (): ReactElement => {
                   <div className="flex flex-col gap-1 md:flex-row">
                     <h2>
                       <Link
-                        to={`/projects/${issue.project._id}/issues`}
+                        to={`/projects/${issue.project?._id}/issues`}
                         className="transition-none hover:text-accent"
                       >
-                        {issue.project.name}
+                        {issue.project?.name}
                       </Link>{' '}
                       /{' '}
                     </h2>

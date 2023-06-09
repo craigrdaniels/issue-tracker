@@ -47,6 +47,9 @@ export const Projects = (): ReactElement => {
             >
               Created By
             </button>
+            <button className="btn-primary btn-sm btn ml-auto justify-self-end">
+              <Link to={'/projects/new'}>New project</Link>
+            </button>
           </div>
           <ul>
             {projects?.map((project) => (

@@ -62,12 +62,12 @@ export const Issue = (): ReactElement => {
               <Link to={'/projects'}>Projects</Link>
             </li>
             <li>
-              <Link to={`/projects/${issue.project._id}`}>
-                {issue.project.name}
+              <Link to={`/projects/${issue.project?._id}`}>
+                {issue.project?.name}
               </Link>
             </li>
             <li>
-              <Link to={`/projects/${issue.project._id}/issues`}>Issues</Link>
+              <Link to={`/projects/${issue.project?._id}/issues`}>Issues</Link>
             </li>
             <li>{issue.title}</li>
           </ul>
