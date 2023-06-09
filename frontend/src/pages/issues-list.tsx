@@ -133,7 +133,7 @@ export const Issues = (): ReactElement => {
             </button>
           </div>
           {Object.keys(issues).length === 0 && (
-            <div className="flex grow flex-row justify-center py-2 hover:bg-base-300">
+            <div className="flex grow flex-row justify-center rounded-b-md py-2 hover:bg-base-300">
               No Issues
             </div>
           )}
@@ -141,7 +141,7 @@ export const Issues = (): ReactElement => {
             {issues?.map((issue) => (
               <li
                 key={issue._id}
-                className="flex grow flex-row border-b border-primary-content/50 py-2 last:border-0 hover:bg-base-300"
+                className="flex grow flex-row border-b border-primary-content/50 py-2 last:rounded-b-md last:border-0 hover:bg-base-300"
               >
                 <div className="items-top px-4 pt-1">
                   {issue.is_open ? (

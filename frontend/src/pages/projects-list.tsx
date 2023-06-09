@@ -55,7 +55,7 @@ export const Projects = (): ReactElement => {
             {projects?.map((project) => (
               <li
                 key={project._id}
-                className="flex grow flex-row border-b border-primary-content/50 py-2 last:border-0 hover:bg-base-300"
+                className="flex grow flex-row border-b border-primary-content/50 py-2 last:rounded-b-md last:border-0 hover:bg-base-300"
               >
                 <div className="px-4">
                   <div className="flex flex-col gap-1 md:flex-row">
