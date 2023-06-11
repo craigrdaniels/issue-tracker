@@ -27,7 +27,12 @@ const AlertBar = (): ReactElement => {
           alert ? 'translate-y-0 opacity-100' : 'h-0 -translate-y-5 opacity-0'
         )}
       >
-        <div className={clsx('alert', alert?.type)}>
+        <div
+          className={clsx(
+            'alert flex flex-row content-center space-y-0.5',
+            alert?.type
+          )}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6 shrink-0 stroke-current"
