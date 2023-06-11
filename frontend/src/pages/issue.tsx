@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { location, port } from '../utils/Server'
+import { useAlert } from '../hooks/useAlert'
 
 export const issueLoader = async ({ params }) => {
   const response = await fetch(
@@ -20,10 +21,10 @@ export const issueLoader = async ({ params }) => {
 }
 
 export const Issue = (): ReactElement => {
+  const { addAlert } = useAlert()
   const issue = useLoaderData()
   const [buttonLoader, setButtonLoader] = useState<boolean>(false)
   const [messageContent, setMessageContent] = useState<string>('')
-  const [infoMessage, setInfoMessage] = useState<stirng>('')
 
   const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault()
@@ -44,11 +45,11 @@ export const Issue = (): ReactElement => {
         }
       )
       if (response.status === 200) {
+        addAlert('alert-success', 'Message added.')
         setMessageContent('')
-        setInfoMessage('Message succesfully sent')
       }
     } catch (err: Error) {
-      setInfoMessage(err.message)
+      addAlert('alert-error', err.message)
     }
     setButtonLoader(false)
   }

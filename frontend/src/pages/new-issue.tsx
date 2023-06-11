@@ -3,6 +3,7 @@ import { useLoaderData, Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { useAlert } from '../hooks/useAlert'
 
 export const newIssueLoader = async ({ params }) => {
   const response = await fetch(
@@ -20,6 +21,7 @@ export const newIssueLoader = async ({ params }) => {
 }
 
 export const NewIssue = (): ReactElement => {
+  const { addAlert } = useAlert()
   const project = useLoaderData()
   const [buttonLoader, setButtonLoader] = useState<boolean>(false)
   const [subjectContent, setSubjectContent] = useState<string>('')
@@ -41,6 +43,7 @@ export const NewIssue = (): ReactElement => {
         }),
       })
       if (response.status === 200) {
+        addAlert('alert-success', 'Issue successfully created.')
         setMessageContent('')
         setSubjectContent('')
       }
