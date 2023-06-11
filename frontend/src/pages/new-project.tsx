@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { useAlert } from '../hooks/useAlert'
 
 export const NewProject = (): ReactElement => {
+  const { addAlert } = useAlert()
   const [buttonLoader, setButtonLoader] = useState<boolean>(false)
   const [nameContent, setNameContent] = useState<string>('')
 
@@ -22,6 +24,7 @@ export const NewProject = (): ReactElement => {
         }),
       })
       if (response.status === 200) {
+        addAlert('alert-success', 'Project successfully created.')
         setNameContent('')
       }
     } catch (err: Error) {
