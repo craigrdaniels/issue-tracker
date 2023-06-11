@@ -15,6 +15,7 @@ import { Projects, projectsLoader } from './pages/projects-list'
 import { Project, projectLoader } from './pages/project'
 import { newIssueLoader, NewIssue } from './pages/new-issue'
 import { NewProject } from './pages/new-project'
+import { AlertProvider } from './hooks/useAlert'
 
 const router = createBrowserRouter([
   {
@@ -81,7 +82,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <AlertProvider>
+        <RouterProvider router={router} />
+      </AlertProvider>
     </AuthProvider>
   </React.StrictMode>
 )
