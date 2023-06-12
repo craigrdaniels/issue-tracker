@@ -113,6 +113,7 @@ export const Issue = (): ReactElement => {
                     onChange={(e) => {
                       setMessageContent(e.target.value)
                     }}
+                    required
                   ></textarea>
                   <div className="flex w-full">
                     <button

@@ -61,6 +61,7 @@ export const NewProject = (): ReactElement => {
                 onChange={(e) => {
                   setNameContent(e.target.value)
                 }}
+                required
               />
               <div className="flex w-full">
                 <button

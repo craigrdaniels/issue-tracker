@@ -84,6 +84,7 @@ export const NewIssue = (): ReactElement => {
                 onChange={(e) => {
                   setSubjectContent(e.target.value)
                 }}
+                required
               />
               <textarea
                 className="textarea bg-base-100"
@@ -93,6 +94,7 @@ export const NewIssue = (): ReactElement => {
                 onChange={(e) => {
                   setMessageContent(e.target.value)
                 }}
+                required
               ></textarea>
               <div className="flex w-full">
                 <button
