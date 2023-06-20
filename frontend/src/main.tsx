@@ -10,7 +10,7 @@ import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import ProtectedRoute from './routes/ProtectedRoute'
 import { Issues, issuesLoader } from './pages/issues-list'
-import Issue, { issueLoader } from './pages/issue'
+import Issue, { issueLoader, action as messageAction } from './pages/issue'
 import { Projects, projectsLoader } from './pages/projects-list'
 import { Project, projectLoader } from './pages/project'
 import { newIssueLoader, NewIssue } from './pages/new-issue'
@@ -48,6 +48,7 @@ const router = createBrowserRouter([
             path: 'issues/:id',
             element: <Issue />,
             loader: issueLoader,
+            action: messageAction,
           },
           {
             path: 'projects',

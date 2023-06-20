@@ -1,4 +1,4 @@
-import { FormEvent, ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { useAlert } from '../hooks/useAlert'
 import clsx from 'clsx'
 
@@ -23,7 +23,7 @@ const AlertBar = (): ReactElement => {
     <>
       <div
         className={clsx(
-          'p-2 transition-all duration-500',
+          'fixed inset-x-1/4 w-1/2 p-2 transition-all duration-500',
           alert ? 'translate-y-0 opacity-100' : 'h-0 -translate-y-5 opacity-0'
         )}
       >

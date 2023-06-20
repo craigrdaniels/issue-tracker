@@ -1,5 +1,11 @@
-import { FormEvent, ReactElement, useState } from 'react'
-import { useLoaderData, Link } from 'react-router-dom'
+import { FormEvent, ReactElement, useEffect, useState } from 'react'
+import {
+  useLoaderData,
+  Form,
+  Link,
+  useParams,
+  useActionData,
+} from 'react-router-dom'
 import clsx from 'clsx'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
@@ -20,39 +26,47 @@ export const issueLoader = async ({ params }) => {
   return response.json()
 }
 
+export const action = async ({ params, request }) => {
+  const formData = await request.formData()
+
+  const message = formData.get('message')
+
+  try {
+    const response = await fetch(
+      `http://${location}:${port}/issues/${params.id}/messages`,
+      {
+        credentials: 'include',
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: message }),
+      }
+    )
+
+    return { status: response.status, response }
+  } catch (err: Error) {
+    return {
+      error: err.message,
+    }
+  }
+}
+
 export const Issue = (): ReactElement => {
   const { addAlert } = useAlert()
+  const params = useParams()
   const issue = useLoaderData()
   const [buttonLoader, setButtonLoader] = useState<boolean>(false)
-  const [messageContent, setMessageContent] = useState<string>('')
+  const data = useActionData()
 
-  const handleSubmit = async (e: FormEvent): Promise<void> => {
-    e.preventDefault()
-    setButtonLoader(true)
-    try {
-      if (messageContent.length === 0)
-        throw new Error('Message must not be empty')
-      const response = await fetch(
-        `http://${location}:${port}/issues/${issue._id}/messages`,
-        {
-          credentials: 'include',
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            content: messageContent,
-          }),
-        }
-      )
-      if (response.status === 200) {
-        addAlert('alert-success', 'Message added.')
-        setMessageContent('')
-      }
-    } catch (err: Error) {
-      addAlert('alert-error', err.message)
+  useEffect(() => {
+    if (data?.status === 200) {
+      addAlert('alert-success', 'Message added.')
     }
-    setButtonLoader(false)
-  }
+
+    if (data?.error) {
+      addAlert('alert-error', data.error)
+    }
+  }, [data])
 
   return (
     <>
@@ -99,7 +113,7 @@ export const Issue = (): ReactElement => {
             ))}{' '}
           </ul>
           <div className="mt-8 flex flex-col gap-4">
-            <form onSubmit={handleSubmit}>
+            <Form action={`/issues/${params.id}`} method="post">
               <div className="flex flex-row gap-4">
                 <div className="h-12 w-12">
                   <UserCircleIcon />
@@ -108,11 +122,7 @@ export const Issue = (): ReactElement => {
                   <textarea
                     className="textarea bg-base-100"
                     placeholder="Leave your comment"
-                    id="content"
-                    value={messageContent ?? ''}
-                    onChange={(e) => {
-                      setMessageContent(e.target.value)
-                    }}
+                    name="message"
                     required
                   ></textarea>
                   <div className="flex w-full">
@@ -120,17 +130,15 @@ export const Issue = (): ReactElement => {
                       type="submit"
                       className={clsx(
                         'btn-primary btn-wide btn ml-auto place-self-end',
-                        buttonLoader && 'loading',
-                        messageContent === '' && 'btn-disabled'
+                        buttonLoader && 'loading'
                       )}
-                      aria-disabled={messageContent === ''}
                     >
                       Comment
                     </button>
                   </div>
                 </div>
               </div>
-            </form>
+            </Form>
           </div>
         </div>
       </main>
