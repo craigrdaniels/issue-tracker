@@ -53,7 +53,7 @@ const NavBar = (): ReactElement => {
   }
 
   return (
-    <div className="navbar z-10 bg-base-200">
+    <div className="navbar fixed z-10 bg-base-200">
       <div className="navbar-start">
         <div className="dropdown" ref={ref}>
           <label
