@@ -1,4 +1,4 @@
-import { FormEvent, ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import {
   useLoaderData,
   Form,
@@ -61,6 +61,10 @@ export const Issue = (): ReactElement => {
   useEffect(() => {
     if (data?.status === 200) {
       addAlert('alert-success', 'Message added.')
+      let theForm: HTMLFormElement = document.getElementById(
+        'NewMessageForm'
+      ) as HTMLFormElement
+      theForm.reset()
     }
 
     if (data?.error) {
@@ -113,7 +117,11 @@ export const Issue = (): ReactElement => {
             ))}{' '}
           </ul>
           <div className="mt-8 flex flex-col gap-4">
-            <Form action={`/issues/${params.id}`} method="post">
+            <Form
+              id="NewMessageForm"
+              action={`/issues/${params.id}`}
+              method="post"
+            >
               <div className="flex flex-row gap-4">
                 <div className="h-12 w-12">
                   <UserCircleIcon />
