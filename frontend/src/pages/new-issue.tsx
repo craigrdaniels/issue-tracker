@@ -1,5 +1,12 @@
-import { FormEvent, ReactElement, useState } from 'react'
-import { useLoaderData, Link } from 'react-router-dom'
+import { ReactElement, useEffect, useState } from 'react'
+import {
+  useLoaderData,
+  useNavigate,
+  Form,
+  Link,
+  useParams,
+  useActionData,
+} from 'react-router-dom'
 import clsx from 'clsx'
 import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
@@ -20,38 +27,55 @@ export const newIssueLoader = async ({ params }) => {
   return response.json()
 }
 
+export const action = async ({ params, request }) => {
+  const formData = await request.formData()
+
+  const project = params.id
+  const title = formData.get('subject')
+  const content = formData.get('content')
+
+  try {
+    const response = await fetch(`http://${location}:${port}/issues`, {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        project,
+        title,
+        content,
+      }),
+    })
+
+    const json = await response.json()
+    return { status: response.status, response: json }
+  } catch (err: Error) {
+    return {
+      error: err.message,
+    }
+  }
+}
+
 export const NewIssue = (): ReactElement => {
   const { addAlert } = useAlert()
+  const navigate = useNavigate()
+  const params = useParams()
   const project = useLoaderData()
   const [buttonLoader, setButtonLoader] = useState<boolean>(false)
-  const [subjectContent, setSubjectContent] = useState<string>('')
-  const [messageContent, setMessageContent] = useState<string>('')
+  const data = useActionData()
 
-  const handleSubmit = async (e: FormEvent): Promise<void> => {
-    e.preventDefault()
-    setButtonLoader(true)
-    try {
-      const response = await fetch(`http://${location}:${port}/issues`, {
-        credentials: 'include',
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          project: project._id,
-          title: subjectContent,
-          content: messageContent,
-        }),
-      })
-      if (response.status === 200) {
-        addAlert('alert-success', 'Issue successfully created.')
-        setMessageContent('')
-        setSubjectContent('')
-      }
-    } catch (err: Error) {
-      console.log(err.message)
+  useEffect(() => {
+    if (data?.status === 200) {
+      addAlert('alert-success', 'Issue added.')
+
+      // navigate away
+      navigate(`/issues/${data.response.id}`)
     }
-    setButtonLoader(false)
-  }
+
+    if (data?.error) {
+      addAlert('alert-error', data.error)
+    }
+  }, [data])
 
   return (
     <>
@@ -72,28 +96,22 @@ export const NewIssue = (): ReactElement => {
             <div className="h-12 w-12">
               <UserCircleIcon />
             </div>
-            <form
-              onSubmit={handleSubmit}
+            <Form
+              action={`/projects/${params.id}/new`}
+              method="post"
               className="flex w-full grow flex-col gap-2 rounded-md border border-primary-content/50 bg-base-200 p-2 shadow-md hover:bg-base-300"
             >
               <input
                 type="text"
                 placeholder="Subject"
+                name="subject"
                 className="input w-full"
-                value={subjectContent ?? ''}
-                onChange={(e) => {
-                  setSubjectContent(e.target.value)
-                }}
                 required
               />
               <textarea
                 className="textarea bg-base-100"
                 placeholder="Describe the issue..."
-                id="content"
-                value={messageContent ?? ''}
-                onChange={(e) => {
-                  setMessageContent(e.target.value)
-                }}
+                name="content"
                 required
               ></textarea>
               <div className="flex w-full">
@@ -101,16 +119,13 @@ export const NewIssue = (): ReactElement => {
                   type="submit"
                   className={clsx(
                     'btn-primary btn-wide btn ml-auto place-self-end',
-                    buttonLoader && 'loading',
-                    (subjectContent === '' || messageContent === '') &&
-                      'btn-disabled'
+                    buttonLoader && 'loading'
                   )}
-                  aria-disabled={messageContent === ''}
                 >
                   Submit
                 </button>
               </div>
-            </form>
+            </Form>
           </div>
         </div>
       </main>

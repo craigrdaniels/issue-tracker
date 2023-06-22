@@ -243,7 +243,9 @@ class IssueController {
     })
 
     await message.save()
-    res.status(200).json({ success: true, message: 'Issue created' })
+    res
+      .status(200)
+      .json({ success: true, message: 'Issue created', id: issue._id })
   }
 
   static editIssue = async (

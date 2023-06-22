@@ -13,7 +13,11 @@ import { Issues, issuesLoader } from './pages/issues-list'
 import Issue, { issueLoader, action as messageAction } from './pages/issue'
 import { Projects, projectsLoader } from './pages/projects-list'
 import { Project, projectLoader } from './pages/project'
-import { newIssueLoader, NewIssue } from './pages/new-issue'
+import {
+  newIssueLoader,
+  NewIssue,
+  action as newIssueAction,
+} from './pages/new-issue'
 import { NewProject } from './pages/new-project'
 import { AlertProvider } from './hooks/useAlert'
 
@@ -68,6 +72,7 @@ const router = createBrowserRouter([
             path: 'projects/:id/new',
             element: <NewIssue />,
             loader: newIssueLoader,
+            action: newIssueAction,
           },
           {
             path: 'projects/:id/issues',
