@@ -8,8 +8,8 @@ const SharedRootLayout = () => {
   return (
     <>
       <NavBar />
-      <div className={clsx('mb-auto transition-all duration-700')}>
-        <AlertBar />
+      <AlertBar />
+      <div className={clsx('mb-auto pb-4 pt-16 transition-all duration-700')}>
         <Outlet />
       </div>
       <Footer />
