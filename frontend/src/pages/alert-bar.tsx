@@ -10,7 +10,7 @@ const AlertBar = (): ReactElement => {
   useEffect(() => {
     const timer = setTimeout(() => {
       removeAlert()
-    }, delay * 1000)
+    }, delay * 750)
 
     return () => clearTimeout(timer)
   }, [alert])
@@ -23,8 +23,10 @@ const AlertBar = (): ReactElement => {
     <>
       <div
         className={clsx(
-          'fixed inset-x-1/4 w-1/2 p-2 transition-all duration-500',
-          alert ? 'translate-y-0 opacity-100' : 'h-0 -translate-y-5 opacity-0'
+          'fixed inset-x-1/4 z-0 w-1/2 p-2 transition-all duration-500',
+          alert
+            ? 'translate-y-0 opacity-100'
+            : 'max-h-0 -translate-y-16 opacity-0'
         )}
       >
         <div
