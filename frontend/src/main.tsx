@@ -18,7 +18,7 @@ import {
   NewIssue,
   action as newIssueAction,
 } from './pages/new-issue'
-import { NewProject } from './pages/new-project'
+import { NewProject, action as newProjectAction } from './pages/new-project'
 import { AlertProvider } from './hooks/useAlert'
 
 const router = createBrowserRouter([
@@ -62,6 +62,7 @@ const router = createBrowserRouter([
           {
             path: 'projects/new',
             element: <NewProject />,
+            action: newProjectAction,
           },
           {
             path: 'projects/:id',

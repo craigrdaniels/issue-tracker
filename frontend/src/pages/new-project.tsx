@@ -1,37 +1,53 @@
-import { FormEvent, ReactElement, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { FormEvent, ReactElement, useEffect, useState } from 'react'
+import { useNavigate, Form, Link, useActionData } from 'react-router-dom'
 import clsx from 'clsx'
 import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
 
+export const action = async ({ params, request }) => {
+  const formData = await request.formData()
+
+  const name = formData.get('name')
+
+  try {
+    const response = await fetch(`http://${location}:${port}/projects`, {
+      credentials: 'include',
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+      }),
+    })
+
+    const json = await response.json()
+    return { status: response.status, response: json }
+  } catch (err: Error) {
+    return {
+      error: err.message,
+    }
+  }
+}
+
 export const NewProject = (): ReactElement => {
   const { addAlert } = useAlert()
+  const navigate = useNavigate()
   const [buttonLoader, setButtonLoader] = useState<boolean>(false)
-  const [nameContent, setNameContent] = useState<string>('')
+  const data = useActionData()
 
-  const handleSubmit = async (e: FormEvent): Promise<void> => {
-    e.preventDefault()
-    setButtonLoader(true)
-    try {
-      const response = await fetch(`http://${location}:${port}/projects`, {
-        credentials: 'include',
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: nameContent,
-        }),
-      })
-      if (response.status === 200) {
-        addAlert('alert-success', 'Project successfully created.')
-        setNameContent('')
-      }
-    } catch (err: Error) {
-      console.log(err.message)
+  useEffect(() => {
+    if (data?.status === 200) {
+      addAlert('alert-success', 'Project added')
+
+      // navigate to new project
+      navigate(`/projects/${data.response.id}`)
     }
-    setButtonLoader(false)
-  }
+
+    if (data?.error) {
+      addAlert('alert-error', data.error)
+    }
+  }, [data])
 
   return (
     <>
@@ -49,18 +65,16 @@ export const NewProject = (): ReactElement => {
             <div className="h-12 w-12">
               <UserCircleIcon />
             </div>
-            <form
-              onSubmit={handleSubmit}
+            <Form
+              action="/projects/new"
+              method="post"
               className="flex w-full grow flex-col gap-2 rounded-md border border-primary-content/50 bg-base-200 p-2 shadow-md hover:bg-base-300"
             >
               <input
                 type="text"
                 placeholder="Project Name"
                 className="input w-full"
-                value={nameContent ?? ''}
-                onChange={(e) => {
-                  setNameContent(e.target.value)
-                }}
+                name="name"
                 required
               />
               <div className="flex w-full">
@@ -68,15 +82,13 @@ export const NewProject = (): ReactElement => {
                   type="submit"
                   className={clsx(
                     'btn-primary btn-wide btn ml-auto place-self-end',
-                    buttonLoader && 'loading',
-                    nameContent === '' && 'btn-disabled'
+                    buttonLoader && 'loading'
                   )}
-                  aria-disabled={nameContent === ''}
                 >
                   Submit
                 </button>
               </div>
-            </form>
+            </Form>
           </div>
         </div>
       </main>

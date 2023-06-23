@@ -134,7 +134,9 @@ class ProjectController {
       project_lead: req._id
     })
     await project.save()
-    res.status(200).json({ success: true, message: 'Project created' })
+    res
+      .status(200)
+      .json({ success: true, message: 'Project created', id: project._id })
   }
 }
 
