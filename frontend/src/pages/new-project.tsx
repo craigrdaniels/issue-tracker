@@ -1,4 +1,4 @@
-import { FormEvent, ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect } from 'react'
 import {
   useNavigate,
   Form,
@@ -6,7 +6,6 @@ import {
   useActionData,
   useNavigation,
 } from 'react-router-dom'
-import clsx from 'clsx'
 import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
@@ -40,7 +39,6 @@ export const NewProject = (): ReactElement => {
   const { state } = useNavigation()
   const { addAlert } = useAlert()
   const navigate = useNavigate()
-  const [buttonLoader, setButtonLoader] = useState<boolean>(false)
   const data = useActionData()
 
   useEffect(() => {
