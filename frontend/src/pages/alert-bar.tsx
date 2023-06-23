@@ -23,7 +23,7 @@ const AlertBar = (): ReactElement => {
     <>
       <div
         className={clsx(
-          'fixed inset-x-1/4 z-0 w-1/2 p-2 transition-all duration-500',
+          'fixed z-0 w-4/5 self-center p-2 transition-all duration-500 md:w-1/2',
           alert ? 'translate-y-full opacity-100' : '-translate-y-0 opacity-0'
         )}
       >
@@ -46,7 +46,7 @@ const AlertBar = (): ReactElement => {
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span className="justify-self-center">{alert?.message}</span>
+          <span className="justify-self-center">{alert?.message || ' '}</span>
           <button
             onClick={handleClose}
             className="btn-outline btn-info btn-xs btn-circle btn border-base-300"
