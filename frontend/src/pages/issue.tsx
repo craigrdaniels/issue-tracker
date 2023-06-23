@@ -66,7 +66,7 @@ export const Issue = (): ReactElement => {
       let theForm: HTMLFormElement = document.getElementById(
         'NewMessageForm'
       ) as HTMLFormElement
-      theForm.reset()
+      theForm?.reset()
     }
 
     if (data?.error) {
