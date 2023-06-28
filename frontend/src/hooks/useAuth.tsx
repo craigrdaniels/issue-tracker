@@ -53,10 +53,8 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
 
     const response = await fetch(`http://${location}:${port}/login`, settings)
     const data = await response.json()
-    console.log(data.user)
     setUser(data.user)
 
-    // navigate('/issues')
     callback()
   }
 
@@ -92,7 +90,6 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
       throw new HTTPRequestError(response.status, data.message)
 
     logIn(email, password, callback)
-
     callback()
   }
 
