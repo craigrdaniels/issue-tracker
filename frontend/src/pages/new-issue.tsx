@@ -1,5 +1,6 @@
-import { ReactElement, useEffect } from 'react'
+import { Suspense, ReactElement, useEffect } from 'react'
 import {
+  Await,
   defer,
   useLoaderData,
   useNavigate,
@@ -15,7 +16,7 @@ import { getProject } from '../api'
 
 export const newIssueLoader = async ({ params }) => {
   return defer({
-    projet: getProject(params.id),
+    project: getProject(params.id),
   })
 }
 
@@ -52,7 +53,7 @@ export const NewIssue = (): ReactElement => {
   const { addAlert } = useAlert()
   const navigate = useNavigate()
   const params = useParams()
-  const project = useLoaderData()
+  const loaderData = useLoaderData()
   const data = useActionData()
 
   useEffect(() => {
@@ -67,19 +68,33 @@ export const NewIssue = (): ReactElement => {
     }
   }, [data])
 
+  const renderLoadingElements = () => {
+    return (
+      <ul>
+        <li className="h-4 w-72 animate-pulse bg-base-200"> </li>
+      </ul>
+    )
+  }
+
   return (
     <>
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
-          <ul>
-            <li>
-              <Link to={'/projects'}>Projects</Link>
-            </li>
-            <li>
-              <Link to={`/projects/${project._id}`}>{project.name}</Link>
-            </li>
-            <li>New Issue</li>
-          </ul>
+          <Suspense fallback={renderLoadingElements()}>
+            <Await resolve={loaderData.project}>
+              {(project) => (
+                <ul>
+                  <li>
+                    <Link to={'/projects'}>Projects</Link>
+                  </li>
+                  <li>
+                    <Link to={`/projects/${project._id}`}>{project.name}</Link>
+                  </li>
+                  <li>New Issue</li>
+                </ul>
+              )}
+            </Await>
+          </Suspense>
         </div>
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-row gap-4">
