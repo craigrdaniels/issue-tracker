@@ -1,5 +1,6 @@
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect } from 'react'
 import {
+  defer,
   useLoaderData,
   useNavigate,
   Form,
@@ -7,24 +8,15 @@ import {
   useParams,
   useActionData,
 } from 'react-router-dom'
-import clsx from 'clsx'
 import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
+import { getProject } from '../api'
 
 export const newIssueLoader = async ({ params }) => {
-  const response = await fetch(
-    `http://${location}:${port}/projects/${params.id}`,
-    {
-      credentials: 'include',
-    }
-  )
-
-  if (response.status === 401) {
-    throw new Response('Not Authenticated', { status: 401 })
-  }
-
-  return response.json()
+  return defer({
+    projet: getProject(params.id),
+  })
 }
 
 export const action = async ({ params, request }) => {
@@ -61,13 +53,11 @@ export const NewIssue = (): ReactElement => {
   const navigate = useNavigate()
   const params = useParams()
   const project = useLoaderData()
-  const [buttonLoader, setButtonLoader] = useState<boolean>(false)
   const data = useActionData()
 
   useEffect(() => {
     if (data?.status === 200) {
       addAlert('alert-success', 'Issue added.')
-
       // navigate away
       navigate(`/issues/${data.response.id}`)
     }
@@ -117,10 +107,7 @@ export const NewIssue = (): ReactElement => {
               <div className="flex w-full">
                 <button
                   type="submit"
-                  className={clsx(
-                    'btn-primary btn-wide btn ml-auto place-self-end',
-                    buttonLoader && 'loading'
-                  )}
+                  className="btn-primary btn-wide btn ml-auto place-self-end"
                 >
                   Submit
                 </button>
