@@ -5,10 +5,8 @@ const ErrorPage = (): ReactElement => {
   const error = useRouteError()
   //console.log(error)
 
-  if (isRouteErrorResponse(error)) {
-    if (error.status === 401) {
-      return <Navigate to="/login" replace />
-    }
+  if (error.status === 401) {
+    return <Navigate to="/login" replace={true} />
   }
 
   return (
