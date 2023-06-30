@@ -1,32 +1,15 @@
 import { Suspense, ReactElement } from 'react'
-import {
-  Await,
-  defer,
-  type LoaderFunction,
-  type LoaderFunctionArgs,
-  Link,
-  useLoaderData,
-  useParams,
-} from 'react-router-dom'
+import { Await, Link, useLoaderData, useParams } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
   MinusCircleIcon,
   ChatBubbleLeftIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
-import { getIssues, getProject } from '../api'
-
-export const issuesLoader: LoaderFunction = async ({
-  params,
-}: LoaderFunctionArgs) => {
-  return defer({
-    issues: getIssues(params.id),
-    project: getProject(params.id),
-  })
-}
+import { Issue, IssuesResponse } from '../utils/Types'
 
 export const Issues = (): ReactElement => {
-  const data = useLoaderData()
+  const { issues, project } = useLoaderData() as IssuesResponse
   const params = useParams()
 
   const renderLoadingElements = () => {
@@ -76,7 +59,7 @@ export const Issues = (): ReactElement => {
     )
   }
 
-  const renderIssueElements = (issues) => {
+  const renderIssueElements = (issues: [Issue]) => {
     return (
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
@@ -85,7 +68,7 @@ export const Issues = (): ReactElement => {
               <Link to={'/projects'}>Projects</Link>
             </li>
             <Suspense fallback={' '}>
-              <Await resolve={data.project} errorElement={''}>
+              <Await resolve={project} errorElement={''}>
                 {(project) => (
                   <li>
                     <Link to={`/projects/${project._id}`}>{project.name}</Link>
@@ -98,18 +81,8 @@ export const Issues = (): ReactElement => {
         </div>
         <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50 shadow-md">
           <div className="flex h-10 w-full items-center rounded-t-md bg-base-300 px-2">
-            <button
-              className="badge"
-              onClick={() => handleClickSort('title', 'asc')}
-            >
-              sort
-            </button>
-            <button
-              className="badge"
-              onClick={() => handleClickSort('created_by.username', 'asc')}
-            >
-              Created By
-            </button>
+            <button className="badge">sort</button>
+            <button className="badge">Created By</button>
             <button className="btn-primary btn-sm btn ml-auto justify-self-end">
               <Link to={`/projects/${params.id}/new`}>New issue</Link>
             </button>
@@ -192,7 +165,7 @@ export const Issues = (): ReactElement => {
   return (
     <>
       <Suspense fallback={renderLoadingElements()}>
-        <Await resolve={data.issues}>{renderIssueElements}</Await>
+        <Await resolve={issues as [Issue]}>{renderIssueElements}</Await>
       </Suspense>
     </>
   )

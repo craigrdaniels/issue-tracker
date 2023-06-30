@@ -1,22 +1,10 @@
 import { Suspense, ReactElement } from 'react'
-import {
-  Await,
-  defer,
-  type LoaderFunction,
-  Link,
-  useLoaderData,
-} from 'react-router-dom'
+import { Await, Link, useLoaderData } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { getProjects } from '../api'
-
-export const projectsLoader: LoaderFunction = async () => {
-  return defer({
-    projects: getProjects(),
-  })
-}
+import { Project, ProjectsResponse } from '../utils/Types'
 
 export const Projects = (): ReactElement => {
-  const data = useLoaderData()
+  const { projects } = useLoaderData() as ProjectsResponse
 
   const renderLoadingElements = () => {
     return (
@@ -62,7 +50,7 @@ export const Projects = (): ReactElement => {
     )
   }
 
-  const renderProjectsElements = (projects) => {
+  const renderProjectsElements = (projects: [Project]) => {
     return (
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base ">
@@ -74,18 +62,8 @@ export const Projects = (): ReactElement => {
         </div>
         <div className="mx-auto max-w-7xl rounded-md border border-primary-content/50 shadow-md">
           <div className="flex h-10 w-full items-center rounded-t-md bg-base-300 px-2">
-            <button
-              className="badge"
-              onClick={() => handleClickSort('title', 'asc')}
-            >
-              sort
-            </button>
-            <button
-              className="badge"
-              onClick={() => handleClickSort('created_by.username', 'asc')}
-            >
-              Created By
-            </button>
+            <button className="badge">sort</button>
+            <button className="badge">Created By</button>
             <button className="btn-primary btn-sm btn ml-auto justify-self-end">
               <Link to={'/projects/new'}>New project</Link>
             </button>
@@ -131,7 +109,7 @@ export const Projects = (): ReactElement => {
   return (
     <>
       <Suspense fallback={renderLoadingElements()}>
-        <Await resolve={data.projects}>{renderProjectsElements}</Await>
+        <Await resolve={projects as [Project]}>{renderProjectsElements}</Await>
       </Suspense>
     </>
   )

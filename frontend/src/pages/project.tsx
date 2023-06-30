@@ -1,25 +1,10 @@
 import { Suspense, ReactElement } from 'react'
-import {
-  Await,
-  defer,
-  type LoaderFunction,
-  type LoaderFunctionArgs,
-  Link,
-  useLoaderData,
-} from 'react-router-dom'
+import { Await, Link, useLoaderData } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import { getProject } from '../api'
-
-export const projectLoader: LoaderFunction = async ({
-  params,
-}: LoaderFunctionArgs) => {
-  return defer({
-    project: getProject(params.id),
-  })
-}
+import { Project as TProject, ProjectResponse } from '../utils/Types'
 
 export const Project = (): ReactElement => {
-  const data = useLoaderData()
+  const { project } = useLoaderData() as ProjectResponse
 
   const renderLoadingElemends = () => {
     return (
@@ -65,7 +50,7 @@ export const Project = (): ReactElement => {
     )
   }
 
-  const renderProjectElements = (project) => {
+  const renderProjectElements = (project: TProject) => {
     return (
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
@@ -115,7 +100,7 @@ export const Project = (): ReactElement => {
   return (
     <>
       <Suspense fallback={renderLoadingElemends()}>
-        <Await resolve={data.project}>{renderProjectElements}</Await>
+        <Await resolve={project as TProject}>{renderProjectElements}</Await>
       </Suspense>
     </>
   )

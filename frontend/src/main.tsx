@@ -9,16 +9,22 @@ import Home from './pages/home'
 import LoginPage from './pages/login'
 import RegisterPage from './pages/register'
 import ProtectedRoute from './routes/ProtectedRoute'
-import { Issues, issuesLoader } from './pages/issues-list'
-import Issue, { issueLoader, action as messageAction } from './pages/issue'
-import { Projects, projectsLoader } from './pages/projects-list'
-import { Project, projectLoader } from './pages/project'
+import { Issues } from './pages/issues-list'
+import Issue from './pages/issue'
 import {
+  issueLoader,
+  issueAction,
+  issuesLoader,
+  projectLoader,
+  projectsLoader,
+  newIssueAction,
   newIssueLoader,
-  NewIssue,
-  action as newIssueAction,
-} from './pages/new-issue'
-import { NewProject, action as newProjectAction } from './pages/new-project'
+  newProjectAction,
+} from './utils/Loaders'
+import { Projects } from './pages/projects-list'
+import { Project } from './pages/project'
+import { NewIssue } from './pages/new-issue'
+import { NewProject } from './pages/new-project'
 import { AlertProvider } from './hooks/useAlert'
 
 const router = createBrowserRouter([
@@ -52,7 +58,7 @@ const router = createBrowserRouter([
             path: 'issues/:id',
             element: <Issue />,
             loader: issueLoader,
-            action: messageAction,
+            action: issueAction,
           },
           {
             path: 'projects',

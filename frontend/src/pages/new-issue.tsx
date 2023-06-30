@@ -1,68 +1,22 @@
 import { Suspense, ReactElement, useEffect } from 'react'
 import {
   Await,
-  defer,
   useLoaderData,
   useNavigate,
   Form,
-  type LoaderFunction,
-  type LoaderFunctionArgs,
-  type ActionFunction,
-  type ActionFunctionArgs,
   Link,
   useParams,
   useActionData,
 } from 'react-router-dom'
-import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
-import { getProject } from '../api'
-
-export const newIssueLoader: LoaderFunction = async ({
-  params,
-}: LoaderFunctionArgs) => {
-  return defer({
-    project: getProject(params.id),
-  })
-}
-
-export const action: ActionFunction = async ({
-  params,
-  request,
-}: ActionFunctionArgs) => {
-  const formData = await request.formData()
-
-  const project = params.id
-  const title = formData.get('subject')
-  const content = formData.get('content')
-
-  try {
-    const response = await fetch(`http://${location}:${port}/issues`, {
-      credentials: 'include',
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        project,
-        title,
-        content,
-      }),
-    })
-
-    const json = await response.json()
-    return { status: response.status, response: json }
-  } catch (err: Error) {
-    return {
-      error: err.message,
-    }
-  }
-}
+import { Project, ProjectResponse } from '../utils/Types'
 
 export const NewIssue = (): ReactElement => {
   const { addAlert } = useAlert()
   const navigate = useNavigate()
   const params = useParams()
-  const loaderData = useLoaderData()
+  const { project } = useLoaderData() as ProjectResponse
   const data = useActionData()
 
   useEffect(() => {
@@ -90,8 +44,8 @@ export const NewIssue = (): ReactElement => {
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
           <Suspense fallback={renderLoadingElements()}>
-            <Await resolve={loaderData.project}>
-              {(project) => (
+            <Await resolve={project as Project}>
+              {(project: Project) => (
                 <ul>
                   <li>
                     <Link to={'/projects'}>Projects</Link>

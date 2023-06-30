@@ -1,44 +1,13 @@
 import { ReactElement, useEffect } from 'react'
 import {
-  type ActionFunction,
-  type ActionFunctionArgs,
   useNavigate,
   Form,
   Link,
   useActionData,
   useNavigation,
 } from 'react-router-dom'
-import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
-
-export const action: ActionFunction = async ({
-  params,
-  request,
-}: ActionFunctionArgs) => {
-  const formData = await request.formData()
-
-  const name = formData.get('name')
-
-  try {
-    const response = await fetch(`http://${location}:${port}/projects`, {
-      credentials: 'include',
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-      }),
-    })
-
-    const json = await response.json()
-    return { status: response.status, response: json }
-  } catch (err: Error) {
-    return {
-      error: err.message,
-    }
-  }
-}
 
 export const NewProject = (): ReactElement => {
   const { state } = useNavigation()

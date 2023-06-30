@@ -1,63 +1,22 @@
 import { Suspense, ReactElement, useEffect } from 'react'
 import {
-  type ActionFunction,
-  type ActionFunctionArgs,
   Await,
-  defer,
   useLoaderData,
   type Params,
   Form,
-  type LoaderFunction,
-  type LoaderFunctionArgs,
   Link,
   useParams,
   useActionData,
 } from 'react-router-dom'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
-import { location, port } from '../utils/Server'
 import { useAlert } from '../hooks/useAlert'
-import { getIssue } from '../api'
-
-export const issueLoader: LoaderFunction = async ({
-  params,
-}: LoaderFunctionArgs) => {
-  return defer({
-    issue: getIssue(params.id),
-  })
-}
-
-export const action: ActionFunction = async ({
-  params,
-  request,
-}: ActionFunctionArgs) => {
-  const formData = await request.formData()
-  const message = formData.get('message')
-
-  try {
-    const response = await fetch(
-      `http://${location}:${port}/issues/${params.id}/messages`,
-      {
-        credentials: 'include',
-        method: 'POST',
-        mode: 'cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: message }),
-      }
-    )
-
-    return { status: response.status, response }
-  } catch (err: Error) {
-    return {
-      error: err.message,
-    }
-  }
-}
+import { Issue as TIssue, IssueResponse } from '../utils/Types'
 
 export const Issue = (): ReactElement => {
   const { addAlert } = useAlert()
   const params = useParams<keyof Params>() as Params
-  const loaderData = useLoaderData()
+  const { issue } = useLoaderData() as IssueResponse
   const data = useActionData()
 
   useEffect(() => {
@@ -94,7 +53,7 @@ export const Issue = (): ReactElement => {
     )
   }
 
-  const renderIssueElements = (issue) => {
+  const renderIssueElements = (issue: TIssue) => {
     return (
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
@@ -175,7 +134,7 @@ export const Issue = (): ReactElement => {
   return (
     <>
       <Suspense fallback={renderLoadingElements()}>
-        <Await resolve={loaderData.issue}>{renderIssueElements}</Await>
+        <Await resolve={issue as TIssue}>{renderIssueElements}</Await>
       </Suspense>
     </>
   )
