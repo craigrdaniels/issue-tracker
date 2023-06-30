@@ -1,6 +1,6 @@
 import { location, port } from './utils/Server'
 
-export const getIssues = async (projectID: string) => {
+export const getIssues = async (projectID: string | undefined) => {
   const tail = projectID ? `/projects/${projectID}/issues` : '/issues'
 
   const res = await fetch(`http://${location}:${port}${tail}`, {
@@ -18,7 +18,7 @@ export const getIssues = async (projectID: string) => {
   return data
 }
 
-export const getIssue = async (issueID: string) => {
+export const getIssue = async (issueID: string | undefined) => {
   const res = await fetch(`http://${location}:${port}/issues/${issueID}`, {
     credentials: 'include',
   })
@@ -50,7 +50,7 @@ export const getProjects = async () => {
   return data
 }
 
-export const getProject = async (projectID: string) => {
+export const getProject = async (projectID: string | undefined) => {
   if (projectID === undefined) return undefined
   const res = await fetch(`http://${location}:${port}/projects/${projectID}`, {
     credentials: 'include',

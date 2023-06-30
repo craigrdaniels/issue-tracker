@@ -1,5 +1,7 @@
 import { ReactElement, useEffect } from 'react'
 import {
+  type ActionFunction,
+  type ActionFunctionArgs,
   useNavigate,
   Form,
   Link,
@@ -10,7 +12,10 @@ import { location, port } from '../utils/Server'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
 
-export const action = async ({ params, request }) => {
+export const action: ActionFunction = async ({
+  params,
+  request,
+}: ActionFunctionArgs) => {
   const formData = await request.formData()
 
   const name = formData.get('name')

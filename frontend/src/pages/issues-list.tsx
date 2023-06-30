@@ -1,5 +1,13 @@
 import { Suspense, ReactElement } from 'react'
-import { Await, defer, Link, useLoaderData, useParams } from 'react-router-dom'
+import {
+  Await,
+  defer,
+  type LoaderFunction,
+  type LoaderFunctionArgs,
+  Link,
+  useLoaderData,
+  useParams,
+} from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
   MinusCircleIcon,
@@ -8,7 +16,9 @@ import {
 } from '@heroicons/react/24/outline'
 import { getIssues, getProject } from '../api'
 
-export const issuesLoader = async ({ params }) => {
+export const issuesLoader: LoaderFunction = async ({
+  params,
+}: LoaderFunctionArgs) => {
   return defer({
     issues: getIssues(params.id),
     project: getProject(params.id),

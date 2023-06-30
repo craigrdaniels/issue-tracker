@@ -5,6 +5,10 @@ import {
   useLoaderData,
   useNavigate,
   Form,
+  type LoaderFunction,
+  type LoaderFunctionArgs,
+  type ActionFunction,
+  type ActionFunctionArgs,
   Link,
   useParams,
   useActionData,
@@ -14,13 +18,18 @@ import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { useAlert } from '../hooks/useAlert'
 import { getProject } from '../api'
 
-export const newIssueLoader = async ({ params }) => {
+export const newIssueLoader: LoaderFunction = async ({
+  params,
+}: LoaderFunctionArgs) => {
   return defer({
     project: getProject(params.id),
   })
 }
 
-export const action = async ({ params, request }) => {
+export const action: ActionFunction = async ({
+  params,
+  request,
+}: ActionFunctionArgs) => {
   const formData = await request.formData()
 
   const project = params.id

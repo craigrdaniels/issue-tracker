@@ -1,9 +1,14 @@
 import { Suspense, ReactElement, useEffect } from 'react'
 import {
+  type ActionFunction,
+  type ActionFunctionArgs,
   Await,
   defer,
   useLoaderData,
+  type Params,
   Form,
+  type LoaderFunction,
+  type LoaderFunctionArgs,
   Link,
   useParams,
   useActionData,
@@ -12,15 +17,20 @@ import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { location, port } from '../utils/Server'
 import { useAlert } from '../hooks/useAlert'
-import { getIssue } from '../api.tsx'
+import { getIssue } from '../api'
 
-export const issueLoader = async ({ params }) => {
+export const issueLoader: LoaderFunction = async ({
+  params,
+}: LoaderFunctionArgs) => {
   return defer({
     issue: getIssue(params.id),
   })
 }
 
-export const action = async ({ params, request }) => {
+export const action: ActionFunction = async ({
+  params,
+  request,
+}: ActionFunctionArgs) => {
   const formData = await request.formData()
   const message = formData.get('message')
 
@@ -46,7 +56,7 @@ export const action = async ({ params, request }) => {
 
 export const Issue = (): ReactElement => {
   const { addAlert } = useAlert()
-  const params = useParams()
+  const params = useParams<keyof Params>() as Params
   const loaderData = useLoaderData()
   const data = useActionData()
 

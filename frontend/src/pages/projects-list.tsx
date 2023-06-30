@@ -1,9 +1,15 @@
 import { Suspense, ReactElement } from 'react'
-import { Await, defer, Link, useLoaderData } from 'react-router-dom'
+import {
+  Await,
+  defer,
+  type LoaderFunction,
+  Link,
+  useLoaderData,
+} from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { getProjects } from '../api'
 
-export const projectsLoader = async () => {
+export const projectsLoader: LoaderFunction = async () => {
   return defer({
     projects: getProjects(),
   })
