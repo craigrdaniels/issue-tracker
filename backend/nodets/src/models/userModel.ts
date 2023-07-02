@@ -8,7 +8,6 @@ export interface IUser extends Document {
   password: string
   email: string
   role: IRole['_id']
-  projects: [IProject['_id']]
   created: Date
 }
 
@@ -24,7 +23,6 @@ const userSchema = new Schema(
       trim: true
     },
     role: { type: Schema.Types.ObjectId, refPath: 'Role' },
-    projects: { type: [Schema.Types.ObjectId], refPath: 'Project' },
     created: {
       type: Date,
       default: Date.now

@@ -1,4 +1,4 @@
-import { Suspense, ReactElement, useEffect } from 'react'
+import { Suspense, ReactElement, useEffect, useState } from 'react'
 import {
   Await,
   useLoaderData,
@@ -8,16 +8,19 @@ import {
   useParams,
   useActionData,
 } from 'react-router-dom'
-import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { useAlert } from '../hooks/useAlert'
 import { Issue as TIssue, IssueResponse } from '../utils/Types'
+import { useAuth } from '../hooks/useAuth'
 
 export const Issue = (): ReactElement => {
   const { addAlert } = useAlert()
   const params = useParams<keyof Params>() as Params
   const { issue } = useLoaderData() as IssueResponse
   const data = useActionData()
+  const { user } = useAuth()
+  const [editing, setEditing] = useState<string | null>(null)
 
   useEffect(() => {
     if (data?.status === 200) {
@@ -32,6 +35,12 @@ export const Issue = (): ReactElement => {
       addAlert('alert-error', data.error)
     }
   }, [data])
+
+  const handleEditButtonClick = (e, message_id: string) => {
+    e.preventDefault()
+
+    editing === message_id ? setEditing(null) : setEditing(message_id)
+  }
 
   const renderLoadingElements = () => {
     return (
@@ -81,17 +90,63 @@ export const Issue = (): ReactElement => {
                     <UserCircleIcon />
                   </div>
                   <div className="flex w-full grow flex-col rounded-md border border-primary-content/50 bg-base-200 pb-2 shadow-md hover:bg-base-300">
-                    <div className="rounded-t bg-base-300 px-2 py-1">
+                    <div className="flex w-full grow gap-1 rounded-t bg-base-300 px-2 py-1">
                       <span className="font-bold">
                         {message.created_by.username}
-                      </span>{' '}
-                      wrote{' '}
-                      {formatDistanceToNow(new Date(message.created_at), {
-                        includeSeconds: true,
-                      })}{' '}
-                      ago:
+                      </span>
+                      <span>
+                        wrote{' '}
+                        {formatDistanceToNow(new Date(message.created_at), {
+                          includeSeconds: true,
+                        })}{' '}
+                        ago:
+                      </span>
+                      <div className="w-fit">&nbsp;</div>
+                      <button
+                        onClick={(e) => handleEditButtonClick(e, message._id)}
+                        className="ml-auto flex h-5 w-5 justify-self-end"
+                      >
+                        {message.created_by._id === user._id && (
+                          <PencilSquareIcon />
+                        )}
+                      </button>
                     </div>
-                    <div className="px-4 py-2">{message.content}</div>
+                    {editing === message._id ? (
+                      <Form
+                        id="EditMessageForm"
+                        action={`/issues/${params.id}`}
+                        method="put"
+                      >
+                        <input
+                          type="hidden"
+                          name="issue_id"
+                          value={issue._id}
+                        />
+                        <input
+                          type="hidden"
+                          name="message_id"
+                          value={message._id}
+                        />
+                        <div className="flex w-full flex-col gap-2 px-2">
+                          <textarea
+                            className="textarea bg-base-100"
+                            name="message"
+                            defaultValue={message.content}
+                            required
+                          ></textarea>
+                          <div className="flex w-full">
+                            <button
+                              type="submit"
+                              className="btn-primary btn-wide btn ml-auto place-self-end"
+                            >
+                              Update Comment
+                            </button>
+                          </div>
+                        </div>
+                      </Form>
+                    ) : (
+                      <div className="px-4 py-2">{message.content}</div>
+                    )}
                   </div>
                 </div>
               </li>
