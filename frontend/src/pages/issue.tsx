@@ -129,7 +129,7 @@ export const Issue = (): ReactElement => {
                         />
                         <div className="flex w-full flex-col gap-2 px-2">
                           <textarea
-                            className="textarea bg-base-100"
+                            className="textarea whitespace-pre-wrap bg-base-100"
                             name="message"
                             defaultValue={message.content}
                             required
@@ -145,7 +145,9 @@ export const Issue = (): ReactElement => {
                         </div>
                       </Form>
                     ) : (
-                      <div className="px-4 py-2">{message.content}</div>
+                      <div className="whitespace-pre-wrap  px-4 py-2">
+                        {message.content}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -164,7 +166,7 @@ export const Issue = (): ReactElement => {
                 </div>
                 <div className="flex w-full grow flex-col gap-2 rounded-md border border-primary-content/50 bg-base-200 p-2 shadow-md hover:bg-base-300">
                   <textarea
-                    className="textarea bg-base-100"
+                    className="textarea whitespace-pre-wrap bg-base-100"
                     placeholder="Leave your comment"
                     name="message"
                     required
