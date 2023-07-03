@@ -24,11 +24,17 @@ export const Issue = (): ReactElement => {
 
   useEffect(() => {
     if (data?.status === 200) {
-      addAlert('alert-success', 'Message added.')
-      let theForm: HTMLFormElement = document.getElementById(
-        'NewMessageForm'
-      ) as HTMLFormElement
-      theForm?.reset()
+      if (data?.method === 'PUT') {
+        addAlert('alert-success', 'Message updated.')
+        setEditing(null)
+      }
+      if (data?.method === 'POST') {
+        addAlert('alert-success', 'Message added.')
+        let theForm: HTMLFormElement = document.getElementById(
+          'NewMessageForm'
+        ) as HTMLFormElement
+        theForm?.reset()
+      }
     }
 
     if (data?.error) {

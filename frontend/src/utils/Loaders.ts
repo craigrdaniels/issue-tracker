@@ -37,7 +37,7 @@ export const issueAction: ActionFunction = async ({
           }
         )
 
-        return { status: response.status, response }
+        return { status: response.status, response, method: 'POST' }
       } catch (err: Error) {
         return {
           error: err.message,
@@ -61,7 +61,7 @@ export const issueAction: ActionFunction = async ({
           }
         )
         const json = await response.json()
-        return { status: response.status, response: json }
+        return { status: response.status, response: json, method: 'PUT' }
       } catch (err: Error) {
         return {
           error: err.message,
