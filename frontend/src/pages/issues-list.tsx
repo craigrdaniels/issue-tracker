@@ -1,4 +1,4 @@
-import { Suspense, ReactElement } from 'react'
+import { Suspense, ReactElement, useEffect } from 'react'
 import { Await, Link, useLoaderData, useParams } from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
@@ -7,6 +7,7 @@ import {
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Issue, IssuesResponse } from '../utils/Types'
+import clsx from 'clsx'
 
 export const Issues = (): ReactElement => {
   const { issues, project } = useLoaderData() as IssuesResponse
@@ -126,12 +127,15 @@ export const Issues = (): ReactElement => {
                     </h2>
                   </div>
                   <ul className="flex flex-row gap-1">
-                    {issue.tags?.map((tag) => (
+                    {issue.tags.map((tag) => (
                       <li
-                        key={tag}
-                        className="flex rounded-sm border px-1 text-sm dark:bg-zinc-600"
+                        key={tag.tag}
+                        className={clsx(
+                          'flex rounded-sm border px-1 text-sm',
+                          'bg-[' + tag.color + ']'
+                        )}
                       >
-                        {tag}
+                        {tag.tag}
                       </li>
                     ))}
                   </ul>

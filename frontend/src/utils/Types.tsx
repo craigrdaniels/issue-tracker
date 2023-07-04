@@ -6,9 +6,14 @@ export type Issue = {
   assigned_users: [User]
   messages: [Message]
   created_at: Date
-  tags: [string]
+  tags: [Tag]
   is_open: boolean
   message_count: number
+}
+
+export type Tag = {
+  tag: string
+  color: string
 }
 
 export type User = {
@@ -46,4 +51,11 @@ export type ProjectResponse = {
 
 export type ProjectsResponse = {
   projects: [Project]
+}
+
+export type ActionDataResponse = {
+  status: number
+  response: Response
+  method: string
+  error: Error
 }

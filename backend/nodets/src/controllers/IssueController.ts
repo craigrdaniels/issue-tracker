@@ -38,6 +38,14 @@ class IssueController {
       },
       {
         $lookup: {
+          from: 'tags',
+          localField: 'tags',
+          foreignField: '_id',
+          as: 'tags'
+        }
+      },
+      {
+        $lookup: {
           from: 'users',
           localField: 'created_by',
           foreignField: '_id',
@@ -72,7 +80,8 @@ class IssueController {
           title: 1,
           created_at: 1,
           is_open: 1,
-          tags: 1,
+          'tags.tag': 1,
+          'tags.color': 1,
           'created_by._id': 1,
           'created_by.username': 1,
           'project._id': 1,
@@ -156,6 +165,14 @@ class IssueController {
       },
       {
         $lookup: {
+          from: 'tags',
+          localField: 'tags',
+          foreignField: '_id',
+          as: 'tags'
+        }
+      },
+      {
+        $lookup: {
           from: 'messages',
           let: {
             issue_id: '$_id'
@@ -206,6 +223,8 @@ class IssueController {
         $project: {
           _id: 1,
           title: 1,
+          'tags.tag': 1,
+          'tags.color': 1,
           'created_by._id': 1,
           'created_by.username': 1,
           'project._id': 1,

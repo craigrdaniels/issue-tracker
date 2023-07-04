@@ -11,14 +11,18 @@ import {
 import { UserCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { useAlert } from '../hooks/useAlert'
-import { Issue as TIssue, IssueResponse } from '../utils/Types'
+import {
+  ActionDataResponse,
+  Issue as TIssue,
+  IssueResponse,
+} from '../utils/Types'
 import { useAuth } from '../hooks/useAuth'
 
 export const Issue = (): ReactElement => {
   const { addAlert } = useAlert()
   const params = useParams<keyof Params>() as Params
   const { issue } = useLoaderData() as IssueResponse
-  const data = useActionData()
+  const data = useActionData() as ActionDataResponse
   const { user } = useAuth()
   const [editing, setEditing] = useState<string | null>(null)
 

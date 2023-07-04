@@ -2,9 +2,9 @@ import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import * as devData from './devData.js'
 import User from '../models/userModel.js'
+import Tag from '../models/tagModel.js'
 import Issue from '../models/issueModel.js'
 import Message from '../models/messageModel.js'
-import Action from '../models/actionModel.js'
 import Project from '../models/projectModel.js'
 import RefreshToken from '../models/refreshTokenModel.js'
 
@@ -48,6 +48,7 @@ const loadDevData = async (): Promise<void> => {
     await User.insertMany(devData.usersObj)
     await RefreshToken.insertMany(devData.refreshTokensObj)
     await Project.insertMany(devData.projectsObj)
+    await Tag.insertMany(devData.tagsObj)
     await Issue.insertMany(devData.issuesObj)
     await Message.insertMany(devData.messagesObj)
   } catch (err) {

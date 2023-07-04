@@ -18,6 +18,12 @@ interface IRefreshToken {
   token: string
 }
 
+interface ITag {
+  _id: string
+  tag: string
+  color: string
+}
+
 interface IIssues {
   _id: string
   title: string
@@ -75,6 +81,34 @@ const usersObj: IUser[] = [
   }
 ]
 
+const tagsObj: ITag[] = [
+  {
+    _id: '516f474ced6f1a1822b72cb1',
+    tag: 'UI',
+    color: '#ffb3ba'
+  },
+  {
+    _id: '516f474ced6f1a1822b72cb2',
+    tag: 'design',
+    color: '#baffc9'
+  },
+  {
+    _id: '516f474ced6f1a1822b72cb3',
+    tag: 'login',
+    color: '#bae1ff'
+  },
+  {
+    _id: '516f474ced6f1a1822b72cb4',
+    tag: 'authentication',
+    color: '#ffdfba'
+  },
+  {
+    _id: '516f474ced6f1a1822b72cb5',
+    tag: 'security',
+    color: '#ffb3ba'
+  }
+]
+
 const issuesObj: IIssues[] = [
   {
     _id: '616f474ced6f1a1822b72cb1',
@@ -83,7 +117,7 @@ const issuesObj: IIssues[] = [
     project: '616f474ced6f1a1822b72cb4',
     assigned_users: ['61547f2a2e52c9b2c2d0d2c3'],
     is_open: true,
-    tags: ['login', 'authentication']
+    tags: ['516f474ced6f1a1822b72cb3', '516f474ced6f1a1822b72cb4']
   },
   {
     _id: '616f474ced6f1a1822b72cb2',
@@ -92,7 +126,7 @@ const issuesObj: IIssues[] = [
     project: '616f474ced6f1a1822b72cb5',
     assigned_users: ['61547f2a2e52c9b2c2d0d2c5'],
     is_open: true,
-    tags: ['UI', 'design']
+    tags: ['516f474ced6f1a1822b72cb1', '516f474ced6f1a1822b72cb2']
   },
   {
     _id: '616f474ced6f1a1822b72cb3',
@@ -101,7 +135,7 @@ const issuesObj: IIssues[] = [
     project: '616f474ced6f1a1822b72cb4',
     assigned_users: [],
     is_open: false,
-    tags: ['security', 'permissions']
+    tags: ['516f474ced6f1a1822b72cb4', '516f474ced6f1a1822b72cb5']
   }
 ]
 
@@ -167,4 +201,11 @@ usersObj.forEach((user) => {
   refreshTokensObj.push(rToken)
 })
 
-export { usersObj, refreshTokensObj, issuesObj, projectsObj, messagesObj }
+export {
+  usersObj,
+  refreshTokensObj,
+  tagsObj,
+  issuesObj,
+  projectsObj,
+  messagesObj
+}

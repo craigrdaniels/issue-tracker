@@ -1,12 +1,13 @@
 import { Schema, model, type Document } from 'mongoose'
 import { type IUser } from './userModel.js'
 import { type IProject } from './projectModel.js'
+import { type ITag } from './tagModel.js'
 
 export interface IIssue extends Document {
   title: string
   created_at: Date
   is_open: boolean
-  tags: [string]
+  tags: [ITag]
   created_by: IUser
   project: IProject
   assigned_users: [IUser]
@@ -21,7 +22,7 @@ const issueSchema = new Schema(
     project: { type: Schema.Types.ObjectId, ref: 'Project' },
     assigned_users: { type: [Schema.Types.ObjectId], ref: 'User' },
     is_open: { type: Boolean, default: true },
-    tags: { type: [String] }
+    tags: { type: [Schema.Types.ObjectId], ref: 'Tag' }
   },
   {
     toJSON: {

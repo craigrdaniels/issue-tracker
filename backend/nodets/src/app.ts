@@ -14,6 +14,7 @@ import indexRouter from './routes/indexRoute.js'
 import usersRouter from './routes/usersRoute.js'
 import { connectDB, loadDevData } from './db/testdb.js'
 import messagesRouter from './routes/messagesRoute.js'
+import tagsRouter from './routes/tagsRoute.js'
 import authRouter from './routes/authRoute.js'
 
 interface Error {
@@ -85,6 +86,7 @@ app.use('/issues', issuesRouter)
 app.use('/projects', projectsRouter)
 app.use(usersRouter)
 app.use(messagesRouter)
+app.use(tagsRouter)
 // error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const errorStatus = err.status ?? 500
