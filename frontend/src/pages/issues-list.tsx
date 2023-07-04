@@ -1,17 +1,37 @@
-import { Suspense, ReactElement, useEffect } from 'react'
-import { Await, Link, useLoaderData, useParams } from 'react-router-dom'
+import { Suspense, ReactElement, CSSProperties, useEffect } from 'react'
+import {
+  Await,
+  Link,
+  useLoaderData,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
 import {
   MinusCircleIcon,
   ChatBubbleLeftIcon,
   CheckCircleIcon,
+  XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Issue, IssuesResponse } from '../utils/Types'
-import clsx from 'clsx'
 
 export const Issues = (): ReactElement => {
   const { issues, project } = useLoaderData() as IssuesResponse
   const params = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const tagFilter = searchParams.get('tag')
+
+  const handleFilterChange = (key, value) => {
+    setSearchParams((prevParams) => {
+      if (value === null || value === prevParams.get('tag')) {
+        prevParams.delete(key)
+      } else {
+        prevParams.set(key, value)
+      }
+      return prevParams
+    })
+  }
 
   const renderLoadingElements = () => {
     return (
@@ -61,6 +81,12 @@ export const Issues = (): ReactElement => {
   }
 
   const renderIssueElements = (issues: [Issue]) => {
+    const displayedIssues: Issue[] = tagFilter
+      ? issues.filter((issue) =>
+          issue.tags.some((tag) => tag.tag === tagFilter)
+        )
+      : issues
+
     return (
       <main className="mx-2 mt-4 md:mx-8">
         <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
@@ -88,13 +114,13 @@ export const Issues = (): ReactElement => {
               <Link to={`/projects/${params.id}/new`}>New issue</Link>
             </button>
           </div>
-          {Object.keys(issues).length === 0 && (
+          {Object.keys(displayedIssues).length === 0 && (
             <div className="flex grow flex-row justify-center rounded-b-md py-2 hover:bg-base-300">
               No Issues
             </div>
           )}
           <ul>
-            {issues.map((issue) => (
+            {displayedIssues.map((issue) => (
               <li
                 key={issue._id}
                 className="flex grow flex-row border-b border-primary-content/50 py-2 last:rounded-b-md last:border-0 hover:bg-base-300"
@@ -128,15 +154,21 @@ export const Issues = (): ReactElement => {
                   </div>
                   <ul className="flex flex-row gap-1">
                     {issue.tags.map((tag) => (
-                      <li
+                      <button
+                        onClick={() => handleFilterChange('tag', tag.tag)}
                         key={tag.tag}
-                        className={clsx(
-                          'flex rounded-sm border px-1 text-sm',
-                          'bg-[' + tag.color + ']'
-                        )}
+                        style={
+                          {
+                            'background-color': tag.color + 'A0',
+                          } as CSSProperties
+                        }
+                        className="flex items-center gap-1 rounded-full border border-neutral-900 px-2 text-sm text-neutral-900"
                       >
+                        {searchParams.get('tag') === tag.tag && (
+                          <XCircleIcon className="h-4 w-4" />
+                        )}
                         {tag.tag}
-                      </li>
+                      </button>
                     ))}
                   </ul>
                   <span className="text-sm dark:text-zinc-300">
