@@ -80,6 +80,7 @@ class IssueController {
           title: 1,
           created_at: 1,
           is_open: 1,
+          'tags._id': 1,
           'tags.tag': 1,
           'tags.color': 1,
           'created_by._id': 1,
@@ -273,7 +274,7 @@ class IssueController {
     next: NextFunction
   ): Promise<void> => {
     const issue: IIssue | null = await Issue.findByIdAndUpdate(
-      req.params.issueID,
+      req.params.id,
       req.body
     )
     res.status(200).json(issue)
