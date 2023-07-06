@@ -1,4 +1,4 @@
-import { Suspense, ReactElement, CSSProperties, useEffect } from 'react'
+import { Suspense, ReactElement, CSSProperties } from 'react'
 import {
   Await,
   Link,
@@ -22,7 +22,7 @@ export const Issues = (): ReactElement => {
 
   const tagFilter = searchParams.get('tag')
 
-  const handleFilterChange = (key, value) => {
+  const handleFilterChange = (key: string, value: string) => {
     setSearchParams((prevParams) => {
       if (value === null || value === prevParams.get('tag')) {
         prevParams.delete(key)

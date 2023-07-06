@@ -66,3 +66,25 @@ export const getProject = async (projectID: string | undefined) => {
   const data = await res.json()
   return data
 }
+
+export const updateIssue = async (issueID: string, body) => {
+  const res = await fetch(`http://${location}:${port}/issues/${issueID}`, {
+    credentials: 'include',
+    method: 'PUT',
+    mode: 'cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+
+  console.log(JSON.stringify(body))
+
+  if (!res.ok) {
+    throw {
+      message: 'Erorr updating Isuse',
+      statusText: res.statusText,
+      status: res.status,
+    }
+  }
+  const data = await res.json()
+  return data
+}

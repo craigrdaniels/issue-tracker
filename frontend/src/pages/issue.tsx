@@ -1,4 +1,10 @@
-import { Suspense, ReactElement, useEffect, useState } from 'react'
+import {
+  Suspense,
+  ReactElement,
+  useEffect,
+  useState,
+  CSSProperties,
+} from 'react'
 import {
   Await,
   useLoaderData,
@@ -8,7 +14,11 @@ import {
   useParams,
   useActionData,
 } from 'react-router-dom'
-import { UserCircleIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import {
+  UserCircleIcon,
+  PencilSquareIcon,
+  XCircleIcon,
+} from '@heroicons/react/24/outline'
 import { formatDistanceToNow } from 'date-fns'
 import { useAlert } from '../hooks/useAlert'
 import {
@@ -17,6 +27,7 @@ import {
   IssueResponse,
 } from '../utils/Types'
 import { useAuth } from '../hooks/useAuth'
+import { updateIssue } from '../api'
 
 export const Issue = (): ReactElement => {
   const { addAlert } = useAlert()
@@ -46,9 +57,14 @@ export const Issue = (): ReactElement => {
     }
   }, [data])
 
+  const handleRemoveTag = (issue: TIssue, tagID: string) => {
+    updateIssue(issue._id, {
+      tags: issue.tags.filter((tag) => tag._id !== tagID).map((tag) => tag._id),
+    })
+  }
+
   const handleEditButtonClick = (e, message_id: string) => {
     e.preventDefault()
-
     editing === message_id ? setEditing(null) : setEditing(message_id)
   }
 
@@ -92,6 +108,29 @@ export const Issue = (): ReactElement => {
           </ul>
         </div>
         <div className="mx-auto max-w-7xl">
+          <ul className="ml-8 flex flex-row gap-1 pb-4">
+            {issue.tags.map((tag) => (
+              <Form method="put">
+                <input name="issue_id" value={issue._id} hidden />
+                <input name="tag_id" value={tag._id} hidden />
+                <button
+                  name="intent"
+                  value="removeTag"
+                  key={tag.tag}
+                  disabled={editing === null}
+                  style={
+                    {
+                      'background-color': tag.color + 'A0',
+                    } as CSSProperties
+                  }
+                  className="flex items-center gap-1 rounded-full border border-neutral-900 px-2 text-sm text-neutral-900"
+                >
+                  {tag.tag}
+                  {editing !== null && <XCircleIcon className="h-4 w-4" />}
+                </button>
+              </Form>
+            ))}
+          </ul>
           <ul className="flex flex-col gap-4">
             {issue?.messages?.map((message) => (
               <li key={message._id}>
@@ -146,6 +185,8 @@ export const Issue = (): ReactElement => {
                           ></textarea>
                           <div className="flex w-full">
                             <button
+                              name="intent"
+                              value="edit"
                               type="submit"
                               className="btn-primary btn-wide btn ml-auto place-self-end"
                             >
@@ -183,6 +224,8 @@ export const Issue = (): ReactElement => {
                   ></textarea>
                   <div className="flex w-full">
                     <button
+                      name="intent"
+                      value="new"
                       type="submit"
                       className="btn-primary btn-wide btn ml-auto place-self-end"
                     >

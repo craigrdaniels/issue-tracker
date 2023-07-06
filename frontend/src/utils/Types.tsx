@@ -3,15 +3,16 @@ export type Issue = {
   title: string
   created_by: User
   project: Project
-  assigned_users: [User]
-  messages: [Message]
+  assigned_users: User[]
+  messages: Message[]
   created_at: Date
-  tags: [Tag]
+  tags: Tag[]
   is_open: boolean
   message_count: number
 }
 
 export type Tag = {
+  _id: string
   tag: string
   color: string
 }
@@ -41,7 +42,7 @@ export type IssueResponse = {
 }
 
 export type IssuesResponse = {
-  issues: [Issue]
+  issues: Issue[]
   project: Project
 }
 
@@ -50,7 +51,7 @@ export type ProjectResponse = {
 }
 
 export type ProjectsResponse = {
-  projects: [Project]
+  projects: Project[]
 }
 
 export type ActionDataResponse = {
