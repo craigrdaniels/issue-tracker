@@ -7,6 +7,7 @@ import Issue from '../models/issueModel.js'
 import Message from '../models/messageModel.js'
 import Action from '../models/actionModel.js'
 import Project from '../models/projectModel.js'
+import Tag from '../models/tagModel.js'
 
 dotenv.config({ path: '.env.development' })
 
@@ -52,4 +53,9 @@ export const action = new Action({
   action: 'Test Action',
   user: user._id,
   issue: issue._id
+})
+
+export const tag = new Tag({
+  tag: 'Test Tag',
+  color: '#000000'
 })
