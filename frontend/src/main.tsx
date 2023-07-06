@@ -57,6 +57,7 @@ const router = createBrowserRouter([
           {
             path: 'issues/:id',
             element: <Issue />,
+            id: 'issue',
             loader: issueLoader,
             action: issueAction,
           },
