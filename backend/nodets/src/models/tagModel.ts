@@ -1,4 +1,5 @@
 import { Schema, model, type Document } from 'mongoose'
+import { getRandomColor } from '../helpers/tagColors.js'
 
 export interface ITag extends Document {
   tag: string
@@ -8,7 +9,7 @@ export interface ITag extends Document {
 const tagSchema = new Schema(
   {
     tag: String,
-    color: String
+    color: { type: String, default: getRandomColor }
   },
   {
     toJSON: {

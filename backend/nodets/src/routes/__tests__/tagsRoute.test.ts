@@ -7,6 +7,7 @@ import tagsRouter from '../tagsRoute.js'
 import User from '../../models/userModel.js'
 import Issue from '../../models/issueModel.js'
 import Tag from '../../models/tagModel.js'
+import { colorPalette } from '../../helpers/tagColors.js'
 
 const app = express()
 app.use(cookieParser())
@@ -64,6 +65,7 @@ describe('Test tags router', () => {
       })
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
+    expect(colorPalette).toContain(response.body.color)
   })
 
   it('edit a tag', async () => {
