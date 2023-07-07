@@ -128,7 +128,6 @@ class ProjectController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    console.log(req.body.name)
     const project: IProject = new Project({
       name: req.body.name,
       project_lead: req._id

@@ -3,10 +3,10 @@ import type { PipelineStage } from 'mongoose'
 import mongoose from 'mongoose'
 import Issue from '../models/issueModel.js'
 import type { IIssue } from '../models/issueModel.js'
-import User from '../models/userModel.js'
-import type { IUser } from '../models/userModel.js'
 import Message from '../models/messageModel.js'
 import type { IMessage } from '../models/messageModel.js'
+import type { ITag } from '../models/tagModel.js'
+import Tag from '../models/tagModel.js'
 
 class IssueController {
   static getAll = async (
@@ -224,6 +224,7 @@ class IssueController {
         $project: {
           _id: 1,
           title: 1,
+          'tags._id': 1,
           'tags.tag': 1,
           'tags.color': 1,
           'created_by._id': 1,
@@ -254,8 +255,6 @@ class IssueController {
     })
     await issue.save()
 
-    console.log(issue._id)
-
     const message: IMessage = new Message({
       content: req.body.content,
       issue: issue._id.toString(),
@@ -278,6 +277,35 @@ class IssueController {
       req.body
     )
     res.status(200).json(issue)
+  }
+
+  static tagIssue = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    // first check if tag exists in database
+    const tag: ITag | null = await Tag.findOne({ tag: req.body.tag })
+
+    if (tag === null || tag === undefined) {
+      const newTag: ITag = new Tag({ tag: req.body.tag })
+
+      const _tag: ITag | null = await newTag.save()
+
+      const issue: IIssue | null = await Issue.findByIdAndUpdate(
+        req.params.id,
+        { $push: { tags: _tag._id } }
+      )
+
+      res.status(200).json(issue)
+    } else {
+      const issue: IIssue | null = await Issue.findByIdAndUpdate(
+        req.params.id,
+        { $push: { tags: tag._id } }
+      )
+
+      res.status(200).json(issue)
+    }
   }
 }
 

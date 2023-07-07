@@ -26,4 +26,10 @@ issuesRouter.put(
   catchAsyncFunction(IssueController.editIssue)
 )
 
+issuesRouter.put(
+  '/:id/tag',
+  [checkJwt],
+  catchAsyncFunction(IssueController.tagIssue)
+)
+
 export default issuesRouter

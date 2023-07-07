@@ -20,9 +20,13 @@ const issueSchema = new Schema(
     created_at: { type: Date, default: Date.now },
     created_by: { type: Schema.Types.ObjectId, ref: 'User' },
     project: { type: Schema.Types.ObjectId, ref: 'Project' },
-    assigned_users: { type: [Schema.Types.ObjectId], ref: 'User' },
+    assigned_users: {
+      type: [Schema.Types.ObjectId],
+      unique: true,
+      ref: 'User'
+    },
     is_open: { type: Boolean, default: true },
-    tags: { type: [Schema.Types.ObjectId], ref: 'Tag' }
+    tags: { type: [Schema.Types.ObjectId], unique: true, ref: 'Tag' }
   },
   {
     toJSON: {

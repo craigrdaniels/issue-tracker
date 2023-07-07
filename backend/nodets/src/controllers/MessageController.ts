@@ -37,7 +37,6 @@ class MessageController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    console.log(req.body)
     const message: IMessage = new Message({
       content: req.body.content,
       issue: req.params.issueID,

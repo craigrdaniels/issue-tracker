@@ -8,8 +8,8 @@ export interface ITag extends Document {
 
 const tagSchema = new Schema(
   {
-    tag: String,
-    color: { type: String, default: getRandomColor }
+    tag: { type: String, required: true, trim: true, unique: true },
+    color: { type: String, required: true, trim: true, default: getRandomColor }
   },
   {
     toJSON: {

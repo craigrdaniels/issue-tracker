@@ -104,6 +104,36 @@ export const issueAction: ActionFunction = async ({
     }
   }
 
+  if (intent === 'addTag') {
+    try {
+      const issue_id = formData.get('issue_id') as string
+      const tag = formData.get('tag') as string
+
+      const response = await fetch(
+        `http://${location}:${port}/issues/${issue_id}/tag`,
+        {
+          credentials: 'include',
+          method: 'PUT',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tag: tag,
+          }),
+        }
+      )
+
+      const json = await response.json()
+      return { status: response.status, response: json, method: 'PUT' }
+    } catch (err: Error) {
+      return {
+        error: err.maessage,
+      }
+    }
+  }
+
+  console.log('no intent', intent)
+  // addTag current goes here
+
   throw json({ message: 'Invalid intent' }, { status: 400 })
 }
 

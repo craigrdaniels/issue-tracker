@@ -1,7 +1,7 @@
 import request from 'supertest'
 import express from 'express'
-import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
 import cookieParser from 'cookie-parser'
+import { connectDB, dropCollections, dropDB } from '../../db/testdb.js'
 import * as testData from '../../db/testData.js'
 import issuesRouter from '../issuesRoute.js'
 import User from '../../models/userModel.js'
@@ -54,7 +54,7 @@ describe('GET /issues', () => {
   })
   it('should return specified issue', async () => {
     const response = await request(app)
-      .get('/' + testData.issue._id)
+      .get(`/${testData.issue._id}`)
       .set('Content-Type', 'application/json')
       .set('Cookie', `JWT=${testData.token}`)
     expect(response.statusCode).toBe(200)
@@ -63,10 +63,32 @@ describe('GET /issues', () => {
   })
   it('should update specified issue', async () => {
     const response = await request(app)
-      .put('/' + testData.issue._id)
+      .put(`/${testData.issue._id}`)
       .set('Content-Type', 'application/json')
       .set('Cookie', `JWT=${testData.token}`)
       .send({ title: 'New Title' })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
+  it('should tag issue with a new tag', async () => {
+    const response = await request(app)
+      .put(`/${testData.issue._id}/tag`)
+      .set('Content-Type', 'application/json')
+      .set('Cookie', `JWT=${testData.token}`)
+      .send({
+        tag: 'Add New tag'
+      })
+    expect(response.statusCode).toBe(200)
+    expect(response.error).toBe(false)
+  })
+  it('should add an existing tag', async () => {
+    const response = await request(app)
+      .put(`/${testData.issue._id}/tag`)
+      .set('Content-Type', 'application/json')
+      .set('Cookie', `JWT=${testData.token}`)
+      .send({
+        tag: testData.tag.tag
+      })
     expect(response.statusCode).toBe(200)
     expect(response.error).toBe(false)
   })

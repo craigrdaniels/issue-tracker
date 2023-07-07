@@ -1,7 +1,6 @@
 import { Schema, model, type Document } from 'mongoose'
 import bcrypt from 'bcrypt'
 import { type IRole } from './roleModel.js'
-import { type IProject } from './projectModel.js'
 
 export interface IUser extends Document {
   username: string
