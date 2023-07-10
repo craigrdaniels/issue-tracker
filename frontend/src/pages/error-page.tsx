@@ -1,23 +1,29 @@
-import { ReactElement } from 'react'
-import { Navigate, isRouteErrorResponse, useRouteError } from 'react-router-dom'
+import { ReactElement, useEffect } from 'react'
+import { useNavigate, useRouteError } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 const ErrorPage = (): ReactElement => {
   const auth = useAuth()
+  const navigate = useNavigate()
   const error = useRouteError()
-  //console.log(error)
 
-  if (error.status === 401) {
-    auth.logOut(() => {})
-    return <Navigate to="/login" replace={true} />
-  }
+  useEffect(() => {
+    if ((error as { status?: number })?.status === 401) {
+      auth.logOut(() => {
+        navigate('/login', { replace: true })
+      })
+    }
+  }, [error])
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <h1 className="text-2xl">Oops!</h1>
       <p>Sorry, an unexpected error occured</p>
       <p>
-        <i>{error.statusText || error.message}</i>
+        <i>
+          {(error as { statusText?: string })?.statusText ||
+            (error as Error)?.message}
+        </i>
       </p>
     </div>
   )
