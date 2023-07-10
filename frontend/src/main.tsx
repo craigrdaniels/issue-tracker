@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import ErrorPage from './pages/error-page'
 import './index.css'
@@ -27,80 +27,87 @@ import { NewIssue } from './pages/new-issue'
 import { NewProject } from './pages/new-project'
 import { AlertProvider } from './hooks/useAlert'
 import WelcomePage from './pages/welcome'
+import { useAuth } from './hooks/useAuth'
 
-const router = createBrowserRouter([
-  {
-    element: <SharedRootLayout />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: '/',
-        element: <WelcomePage />,
-      },
-      {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/register',
-        element: <RegisterPage />,
-      },
-      {
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: 'home',
-            element: <Home />,
-          },
-          {
-            path: 'issues',
-            element: <Issues />,
-            loader: issuesLoader,
-          },
-          {
-            path: 'issues/:id',
-            element: <Issue />,
-            id: 'issue',
-            loader: issueLoader,
-            action: issueAction,
-          },
-          {
-            path: 'projects',
-            element: <Projects />,
-            loader: projectsLoader,
-          },
-          {
-            path: 'projects/new',
-            element: <NewProject />,
-            action: newProjectAction,
-          },
-          {
-            path: 'projects/:id',
-            element: <Project />,
-            loader: projectLoader,
-          },
-          {
-            path: 'projects/:id/new',
-            element: <NewIssue />,
-            loader: newIssueLoader,
-            action: newIssueAction,
-          },
-          {
-            path: 'projects/:id/issues',
-            element: <Issues />,
-            loader: issuesLoader,
-          },
-        ],
-      },
-    ],
-  },
-])
+const CustomRouterProvider = () => {
+  const auth = useAuth()
+
+  const router = createBrowserRouter([
+    {
+      element: <SharedRootLayout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: '/',
+          element: <WelcomePage />,
+          loader: async () => auth.user && redirect('/home'),
+        },
+        {
+          path: '/login',
+          element: <LoginPage />,
+        },
+        {
+          path: '/register',
+          element: <RegisterPage />,
+        },
+        {
+          element: <ProtectedRoute />,
+          children: [
+            {
+              path: 'home',
+              element: <Home />,
+            },
+            {
+              path: 'issues',
+              element: <Issues />,
+              loader: issuesLoader,
+            },
+            {
+              path: 'issues/:id',
+              element: <Issue />,
+              id: 'issue',
+              loader: issueLoader,
+              action: issueAction,
+            },
+            {
+              path: 'projects',
+              element: <Projects />,
+              loader: projectsLoader,
+            },
+            {
+              path: 'projects/new',
+              element: <NewProject />,
+              action: newProjectAction,
+            },
+            {
+              path: 'projects/:id',
+              element: <Project />,
+              loader: projectLoader,
+            },
+            {
+              path: 'projects/:id/new',
+              element: <NewIssue />,
+              loader: newIssueLoader,
+              action: newIssueAction,
+            },
+            {
+              path: 'projects/:id/issues',
+              element: <Issues />,
+              loader: issuesLoader,
+            },
+          ],
+        },
+      ],
+    },
+  ])
+  return <RouterProvider router={router} />
+}
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthProvider>
       <AlertProvider>
-        <RouterProvider router={router} />
+        <CustomRouterProvider />
       </AlertProvider>
     </AuthProvider>
   </React.StrictMode>
