@@ -17,10 +17,9 @@ const NavBar = (): ReactElement => {
   const auth = useAuth()
   const navigate = useNavigate()
   const [user, setUser] = useState<string | null>()
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false)
+  const [navMenuOpen, setNavMenuOpen] = useState<boolean>(false)
+  const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false)
   const ref = useRef()
-
-  const [isScrolled, setIsScrolled] = useState<boolean>(false)
 
   const logout = async (): Promise<void> => {
     auth.logOut(() => {})
@@ -28,18 +27,14 @@ const NavBar = (): ReactElement => {
 
   const handleClickOutside = (event: MouseEvent) => {
     if (ref.current && !ref.current.contains(event.target)) {
-      setDropdownOpen(false)
+      setNavMenuOpen(false)
+      setUserMenuOpen(false)
     }
   }
+
   useEffect(() => {
-    function onScroll() {
-      setIsScrolled(window.scrollY > 0)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('click', handleClickOutside, true)
     return () => {
-      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('click', handleClickOutside)
     }
   }, [])
@@ -47,10 +42,6 @@ const NavBar = (): ReactElement => {
   useEffect(() => {
     setUser(auth.user)
   }, [auth])
-
-  const handledropdownClick = () => {
-    setDropdownOpen(false)
-  }
 
   return (
     <div className="navbar fixed z-10 h-8 bg-base-200">
@@ -63,8 +54,8 @@ const NavBar = (): ReactElement => {
             <input
               type="checkbox"
               className="hidden"
-              checked={dropdownOpen}
-              onChange={() => setDropdownOpen((prev: boolean) => !prev)}
+              checked={navMenuOpen}
+              onChange={() => setNavMenuOpen((prev: boolean) => !prev)}
             />
             <Bars3Icon className="swap-off h-6 w-6" />
             <XMarkIcon className="swap-on h-6 w-6" />
@@ -73,19 +64,21 @@ const NavBar = (): ReactElement => {
             tabIndex={0}
             className={clsx(
               'dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-200 p-2 shadow',
-              !dropdownOpen && 'hidden'
+              !navMenuOpen && 'hidden'
             )}
           >
             <li>
-              <Link to="/" onClick={handledropdownClick}>
+              <Link to="/" onClick={() => setNavMenuOpen(false)}>
                 Home
               </Link>
             </li>
-            <li>
-              <Link to="/issues" onClick={handledropdownClick}>
-                Issues
-              </Link>
-            </li>
+            {user && (
+              <li>
+                <Link to="/issues" onClick={() => setNavMenuOpen(false)}>
+                  Issues
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
@@ -101,11 +94,51 @@ const NavBar = (): ReactElement => {
           />
         </div>
 
-        <div className="btn-ghost btn-circle btn">
-          <UserCircleIcon
-            className={clsx('h-6 w-6', user ? 'opacity-100' : 'opacity-50')}
-            onClick={user ? logout : () => navigate('/login')}
-          />
+        <div className="dropdown" ref={ref}>
+          <label tabIndex={1} className="btn-ghost btn-circle btn">
+            <input
+              type="checkbox"
+              className="hidden"
+              checked={userMenuOpen}
+              onChange={() => setUserMenuOpen((prev: boolean) => !prev)}
+            />
+            <UserCircleIcon
+              className={clsx('h-6 w-6', user ? 'opacity-100' : 'opacity-50')}
+            />
+          </label>
+          <ul
+            tabIndex={0}
+            className={clsx(
+              'dropdown-content menu rounded-box menu-compact mt-3 w-52 -translate-x-3/4 bg-base-200 p-2 shadow',
+              !userMenuOpen && 'hidden'
+            )}
+          >
+            {user ? (
+              <>
+                <li>
+                  <Link to="/user" onClick={() => setUserMenuOpen(false)}>
+                    User Info
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      logout()
+                      setUserMenuOpen(false)
+                    }}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li>
+                <Link to="/login" onClick={() => setUserMenuOpen(false)}>
+                  Login
+                </Link>
+              </li>
+            )}
+          </ul>
         </div>
       </div>
     </div>
