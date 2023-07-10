@@ -7,10 +7,10 @@ export interface IIssue extends Document {
   title: string
   created_at: Date
   is_open: boolean
-  tags: [ITag]
+  tags: [ITag['_id']]
   created_by: IUser
   project: IProject
-  assigned_users: [IUser]
+  assigned_users: [IUser['_id']]
   messages_count?: number
 }
 
