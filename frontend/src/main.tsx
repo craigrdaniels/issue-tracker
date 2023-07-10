@@ -26,16 +26,16 @@ import { Project } from './pages/project'
 import { NewIssue } from './pages/new-issue'
 import { NewProject } from './pages/new-project'
 import { AlertProvider } from './hooks/useAlert'
+import WelcomePage from './pages/welcome'
 
 const router = createBrowserRouter([
   {
-    path: '/',
     element: <SharedRootLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <WelcomePage />,
       },
       {
         path: '/login',
@@ -46,9 +46,12 @@ const router = createBrowserRouter([
         element: <RegisterPage />,
       },
       {
-        path: '/*',
         element: <ProtectedRoute />,
         children: [
+          {
+            path: 'home',
+            element: <Home />,
+          },
           {
             path: 'issues',
             element: <Issues />,
