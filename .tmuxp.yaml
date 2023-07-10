@@ -12,12 +12,12 @@ windows:
       - npm run dev
       - npm run test
   - window_name: React
-    layout: 6736,239x73,0,0[239x57,0,0,1,239x15,0,58{119x15,0,58,2,119x15,120,58,3}]
+    layout: 5c1e,239x73,0,0[239x63,0,0,4,239x9,0,64{129x9,0,64,5,109x9,130,64,6}]
     focus: True
     start_directory: ./frontend/
     panes:
       - focus: True
         shell_command:
           - nvim .
-      -
+      - npm run dev
       -
