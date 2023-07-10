@@ -6,6 +6,7 @@ const ProtectedRoute = () => {
 
   if (!auth.user) {
     console.log('Not authorized!')
+    auth.logOut(() => {})
     return <Navigate to="/login" />
   }
 

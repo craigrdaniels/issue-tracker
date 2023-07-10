@@ -1,11 +1,14 @@
 import { ReactElement } from 'react'
 import { Navigate, isRouteErrorResponse, useRouteError } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 const ErrorPage = (): ReactElement => {
+  const auth = useAuth()
   const error = useRouteError()
   //console.log(error)
 
   if (error.status === 401) {
+    auth.logOut(() => {})
     return <Navigate to="/login" replace={true} />
   }
 
