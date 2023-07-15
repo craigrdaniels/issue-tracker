@@ -1,15 +1,17 @@
-import { ReactElement } from 'react'
+import { ReactElement, ChangeEvent } from 'react'
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { Input } from '../components/Input'
+import useFormValues from '../hooks/useFormValues'
 
 const LoginPage = (): ReactElement => {
   const auth = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const [error, setError] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
+  const [values, setValue] = useFormValues()
 
   const from = location.state?.from?.pathname || '/'
 
@@ -17,20 +19,24 @@ const LoginPage = (): ReactElement => {
     event.preventDefault()
     try {
       setError('')
-      setLoading(true)
-      const formData = new FormData(event.currentTarget)
-      const email = formData.get('email') as string
-      const password = formData.get('password') as string
-
-      await auth.logIn(email, password, () => {
-        navigate(from, { replace: true })
-      })
+      await auth.logIn(
+        values.email as string,
+        values.password as string,
+        () => {
+          navigate(from, { replace: true })
+        }
+      )
     } catch (e) {
-      console.log(e)
-      setError('Failed to log on')
+      setError('Incorrect username/password')
     }
+  }
 
-    setLoading(false)
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue('email', e.target.value)
+  }
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue('password', e.target.value)
   }
 
   return (
@@ -47,22 +53,30 @@ const LoginPage = (): ReactElement => {
           className="flex flex-col items-center gap-4 align-middle"
           onSubmit={handleSubmit}
         >
-          <input
-            className="input-bordered input w-full max-w-xs"
+          <Input
             name="email"
+            id="email"
             type="text"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleEmailChange(e)
+            }
             placeholder="Email"
+            required={true}
           />
-          <input
-            className="input-bordered input w-full max-w-xs"
+          <Input
             name="password"
+            id="password"
             type="password"
             placeholder="Password"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handlePasswordChange(e)
+            }
+            required={true}
           />
           <Link style={{ textDecoration: 'underline' }} to="/resetpassword">
             Forgot password?
           </Link>
-          <button disabled={loading} className="btn-primary btn" type="submit">
+          <button className="btn-primary btn" type="submit">
             Login
           </button>
         </form>
