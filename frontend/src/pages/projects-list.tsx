@@ -78,7 +78,7 @@ export const Projects = (): ReactElement => {
                   <div className="flex flex-col gap-1 md:flex-row">
                     <h2>
                       <Link
-                        to={project._id}
+                        to={`${project._id}/issues`}
                         className="transition-none hover:text-accent"
                       >
                         {project.name}
