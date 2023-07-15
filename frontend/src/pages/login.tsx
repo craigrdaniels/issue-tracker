@@ -2,6 +2,7 @@ import { ReactElement, ChangeEvent } from 'react'
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import HTTPRequestError from '../utils/HTTPError'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { Input } from '../components/Input'
 import useFormValues from '../hooks/useFormValues'
@@ -27,7 +28,12 @@ const LoginPage = (): ReactElement => {
         }
       )
     } catch (e) {
-      setError('Incorrect username/password')
+      if (e instanceof HTTPRequestError) {
+        setError('Incorrect username/password')
+      } else {
+        setError('Unknown Error')
+        console.log(e)
+      }
     }
   }
 
