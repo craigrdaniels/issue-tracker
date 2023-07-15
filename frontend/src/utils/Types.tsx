@@ -20,6 +20,8 @@ export type Tag = {
 export type User = {
   _id: string
   username: string
+  email?: string
+  date_created?: Date
 }
 
 export type Project = {

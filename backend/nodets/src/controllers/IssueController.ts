@@ -109,7 +109,9 @@ class IssueController {
 
     const issues: IIssue[] = await Issue.aggregate(pipeline)
 
-    res.status(200).json(issues)
+    setTimeout(() => {
+      res.status(200).json(issues)
+    }, 1000)
   }
 
   static getOneById = async (
@@ -240,7 +242,9 @@ class IssueController {
 
     const issue: IIssue[] = await Issue.aggregate(pipeline)
 
-    res.status(200).json(issue[0])
+    setTimeout(() => {
+      res.status(200).json(issue[0])
+    }, 1000)
   }
 
   static newIssue = async (

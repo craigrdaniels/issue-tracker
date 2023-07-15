@@ -5,9 +5,9 @@ import type {
   LoaderFunctionArgs,
 } from 'react-router-dom'
 import { defer, json } from 'react-router-dom'
-import { getIssue, getIssues, getProject, getProjects } from '../api'
+import { getIssue, getIssues, getProject, getProjects, getUser } from '../api'
 import { location, port } from './Server'
-import { Issue } from '../utils/Types'
+import { Issue, User } from '../utils/Types'
 
 export const issueLoader: LoaderFunction = async ({
   params,
@@ -230,4 +230,10 @@ export const newProjectAction: ActionFunction = async ({
       error: err.message,
     }
   }
+}
+
+export const userLoader: LoaderFunction = async (user: User) => {
+  return defer({
+    user: getUser(user._id),
+  })
 }

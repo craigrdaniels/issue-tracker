@@ -88,3 +88,19 @@ export const updateIssue = async (issueID: string, body) => {
   const data = await res.json()
   return data
 }
+
+export const getUser = async (userID: string) => {
+  const res = await fetch(`http://${location}:${port}/users/${userID}`, {
+    credentials: 'include',
+  })
+  if (!res.ok) {
+    throw {
+      message: 'Failed to fetch user',
+      statusText: res.statusText,
+      status: res.status,
+    }
+  }
+
+  const data = await res.json()
+  return data
+}

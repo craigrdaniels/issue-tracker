@@ -20,6 +20,7 @@ import {
   newIssueAction,
   newIssueLoader,
   newProjectAction,
+  userLoader,
 } from './utils/Loaders'
 import { Projects } from './pages/projects-list'
 import { Project } from './pages/project'
@@ -28,6 +29,7 @@ import { NewProject } from './pages/new-project'
 import { AlertProvider } from './hooks/useAlert'
 import WelcomePage from './pages/welcome'
 import { useAuth } from './hooks/useAuth'
+import UserPage from './pages/user'
 
 const CustomRouterProvider = () => {
   const auth = useAuth()
@@ -56,6 +58,11 @@ const CustomRouterProvider = () => {
             {
               path: 'home',
               element: <Home />,
+            },
+            {
+              path: 'user',
+              element: <UserPage />,
+              loader: () => userLoader(auth.user),
             },
             {
               path: 'issues',
