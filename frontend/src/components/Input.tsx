@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 
 type InputProps = {
-  label: string
+  label?: string
   type: string
   id: string
   placeholder?: string
@@ -10,6 +10,8 @@ type InputProps = {
   required?: true
   pattern?: string
   onChange?: any
+  name?: string
+  value?: string
 }
 
 export const Input = ({
@@ -22,6 +24,8 @@ export const Input = ({
   required,
   pattern,
   onChange,
+  name,
+  value,
 }: InputProps) => {
   return (
     <div className="flex w-full flex-col gap-2">
@@ -39,6 +43,8 @@ export const Input = ({
         required={required}
         pattern={pattern}
         onChange={onChange}
+        name={name}
+        value={value}
       />
       <div className="flex justify-end">
         <span className="text-error">{error && '* ' + error}</span>
