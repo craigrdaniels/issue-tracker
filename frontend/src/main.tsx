@@ -42,7 +42,7 @@ const CustomRouterProvider = () => {
         {
           path: '/',
           element: <WelcomePage />,
-          loader: async () => auth.user && redirect('/home'),
+          loader: async () => (auth.user ? redirect('/home') : null),
         },
         {
           path: '/login',

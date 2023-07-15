@@ -50,11 +50,12 @@ const AuthProvider = ({ children }: { children: ReactNode }): JSX.Element => {
     }
 
     console.log('Logging on..')
-
     const response = await fetch(`http://${location}:${port}/login`, settings)
+
+    if (!response.ok) throw new Error('Error')
+
     const data = await response.json()
     setUser(data.user)
-
     callback()
   }
 
