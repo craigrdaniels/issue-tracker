@@ -1,5 +1,6 @@
 import { ReactElement, useEffect } from 'react'
 import { useAlert } from '../hooks/useAlert'
+import { XCircleIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
 const delay = 10
@@ -23,13 +24,13 @@ const AlertBar = (): ReactElement => {
     <>
       <div
         className={clsx(
-          'fixed z-0 w-4/5 self-center p-2 transition-all duration-500 md:w-1/2',
+          'fixed z-auto w-4/5 self-center p-2 transition-all duration-500 md:w-1/2',
           alert ? 'translate-y-full opacity-100' : '-translate-y-0 opacity-0'
         )}
       >
         <div
           className={clsx(
-            'alert flex flex-row content-center space-y-0.5',
+            'alert flex flex-row content-center justify-between space-y-0.5',
             alert?.type
           )}
         >
@@ -47,23 +48,8 @@ const AlertBar = (): ReactElement => {
             />
           </svg>
           <span className="justify-self-center">{alert?.message || ' '}</span>
-          <button
-            onClick={handleClose}
-            className="btn-outline btn-info btn-xs btn-circle btn border-base-300"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 stroke-base-300"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+          <button onClick={handleClose}>
+            <XCircleIcon className="h-6 w-6" />
           </button>
         </div>
       </div>
