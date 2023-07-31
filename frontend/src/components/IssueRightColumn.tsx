@@ -36,7 +36,7 @@ const IssueRightColumn = (): ReactElement => {
 
   const renderRightColumn = (issue: Issue) => {
     return (
-      <main className="mx-2 mt-20 h-52 w-56 flex-col rounded-md border border-primary-content/50 bg-base-200 hover:bg-base-300 md:mx-8">
+      <main className="h-52 w-56 flex-col rounded-md border border-primary-content/50 bg-base-200 hover:bg-base-300">
         <div className="flex w-full justify-between rounded-md rounded-t-md bg-base-300 px-2 py-1">
           <h2>Tags</h2>
           <button onClick={() => setEditing((prevState) => !prevState)}>

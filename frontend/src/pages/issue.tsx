@@ -13,7 +13,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { useAlert } from '../hooks/useAlert'
 import {
   ActionDataResponse,
-  Issue as TIssue,
+  Issue as IssueType,
   IssueResponse,
 } from '../utils/Types'
 import { useAuth } from '../hooks/useAuth'
@@ -72,29 +72,27 @@ export const Issue = (): ReactElement => {
     )
   }
 
-  const renderIssueElements = (issue: TIssue) => {
+  const renderIssueElements = (issue: IssueType) => {
     return (
-      <main className="flex justify-center">
-        <div className="mx-2 mt-4 md:mx-8">
-          <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
-            <ul>
-              <li>
-                <Link to={'/projects'}>Projects</Link>
-              </li>
-              <li>
-                <Link to={`/projects/${issue.project?._id}`}>
-                  {issue.project?.name}
-                </Link>
-              </li>
-              <li>
-                <Link to={`/projects/${issue.project?._id}/issues`}>
-                  Issues
-                </Link>
-              </li>
-              <li>{issue.title}</li>
-            </ul>
-          </div>
-          <div className="mx-auto max-w-7xl">
+      <main className="mx-2 mt-4 md:mx-8">
+        <div className="breadcrumbs mx-auto mt-4 max-w-7xl text-base">
+          <ul>
+            <li>
+              <Link to={'/projects'}>Projects</Link>
+            </li>
+            <li>
+              <Link to={`/projects/${issue.project?._id}`}>
+                {issue.project?.name}
+              </Link>
+            </li>
+            <li>
+              <Link to={`/projects/${issue.project?._id}/issues`}>Issues</Link>
+            </li>
+            <li>{issue.title}</li>
+          </ul>
+        </div>
+        <div className="mx-auto flex max-w-7xl">
+          <div className="mx-auto w-full">
             <ul className="flex flex-col gap-4">
               {issue?.messages?.map((message) => (
                 <li key={message._id}>
@@ -152,7 +150,7 @@ export const Issue = (): ReactElement => {
                                 name="intent"
                                 value="edit"
                                 type="submit"
-                                className="btn-primary btn-wide btn ml-auto place-self-end"
+                                className="btn btn-primary btn-wide ml-auto place-self-end"
                               >
                                 Update Comment
                               </button>
@@ -191,7 +189,7 @@ export const Issue = (): ReactElement => {
                         name="intent"
                         value="new"
                         type="submit"
-                        className="btn-primary btn-wide btn ml-auto place-self-end"
+                        className="btn btn-primary btn-wide ml-auto place-self-end"
                       >
                         Comment
                       </button>
@@ -201,8 +199,10 @@ export const Issue = (): ReactElement => {
               </Form>
             </div>
           </div>
+          <div className="ml-8 flex justify-end align-top">
+            <IssueRightColumn />
+          </div>
         </div>
-        <IssueRightColumn />
       </main>
     )
   }
@@ -210,7 +210,7 @@ export const Issue = (): ReactElement => {
   return (
     <>
       <Suspense fallback={renderLoadingElements()}>
-        <Await resolve={issue as TIssue}>{renderIssueElements}</Await>
+        <Await resolve={issue as IssueType}>{renderIssueElements}</Await>
       </Suspense>
     </>
   )

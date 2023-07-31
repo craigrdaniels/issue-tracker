@@ -3,7 +3,7 @@ import { useAlert } from '../hooks/useAlert'
 import { XCircleIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 
-const delay = 10
+const delay = 5
 
 const AlertBar = (): ReactElement => {
   const { alert, removeAlert } = useAlert()

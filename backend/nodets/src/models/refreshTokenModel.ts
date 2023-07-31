@@ -9,7 +9,7 @@ export interface IRefreshToken extends Document {
   created: Date
 }
 
-const refreshTokenSchema = new Schema({
+const refreshTokenSchema = new Schema<IRefreshToken>({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   token: String,
   email: { type: String, unique: true },

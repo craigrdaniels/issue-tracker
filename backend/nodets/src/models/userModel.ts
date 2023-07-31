@@ -1,8 +1,9 @@
-import { Schema, model, type Document } from 'mongoose'
+import { type Types, type Document, Schema, model } from 'mongoose'
 import bcrypt from 'bcrypt'
 import { type IRole } from './roleModel.js'
 
 export interface IUser extends Document {
+  _id: Types.ObjectId
   username: string
   password: string
   email: string
@@ -10,7 +11,7 @@ export interface IUser extends Document {
   created: Date
 }
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, trim: true },
     password: { type: String, required: true, select: false },

@@ -41,7 +41,7 @@ export const getUserIdByEmail = async (
           res.status(400).json({ success: false, message: 'User not found' })
           return
         }
-        req._id = user._id
+        req._id = user._id.toString()
         next()
       })
       .catch((error) => {

@@ -4,7 +4,7 @@ export interface IRole extends Document {
   title: string
 }
 
-const roleSchema = new Schema({
+const roleSchema = new Schema<IRole>({
   title: String
 })
 

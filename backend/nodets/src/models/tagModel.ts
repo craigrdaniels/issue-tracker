@@ -6,7 +6,7 @@ export interface ITag extends Document {
   color: string
 }
 
-const tagSchema = new Schema(
+const tagSchema = new Schema<ITag>(
   {
     tag: { type: String, required: true, trim: true, unique: true },
     color: { type: String, required: true, trim: true, default: getRandomColor }

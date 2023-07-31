@@ -10,7 +10,7 @@ export interface IMessage extends Document {
   content: string
 }
 
-const messageSchema = new Schema(
+const messageSchema = new Schema<IMessage>(
   {
     created_by: { type: Schema.Types.ObjectId, refPath: 'User' },
     issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },

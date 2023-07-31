@@ -9,7 +9,7 @@ export interface IAction extends Document {
   created_at: Date
 }
 
-const actionSchema = new Schema({
+const actionSchema = new Schema<IAction>({
   issue: { type: Schema.Types.ObjectId, refPath: 'Issue' },
   user: { type: Schema.Types.ObjectId, refPath: 'User' },
   action: String,

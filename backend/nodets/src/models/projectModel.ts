@@ -6,7 +6,7 @@ export interface IProject extends Document {
   project_lead: IUser['_id']
 }
 
-const projectSchema = new Schema(
+const projectSchema = new Schema<IProject>(
   {
     name: String,
     project_lead: { type: Schema.Types.ObjectId, refPath: 'User' }

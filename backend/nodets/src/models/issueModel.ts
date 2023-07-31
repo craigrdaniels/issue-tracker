@@ -10,23 +10,29 @@ export interface IIssue extends Document {
   tags: [ITag['_id']]
   created_by: IUser
   project: IProject
-  assigned_users: [IUser['_id']]
+  assigned_users?: [IUser['_id']]
   messages_count?: number
 }
 
-const issueSchema = new Schema(
+const issueSchema = new Schema<IIssue>(
   {
     title: String,
     created_at: { type: Date, default: Date.now },
     created_by: { type: Schema.Types.ObjectId, ref: 'User' },
     project: { type: Schema.Types.ObjectId, ref: 'Project' },
-    assigned_users: {
-      type: [Schema.Types.ObjectId],
-      unique: true,
-      ref: 'User'
-    },
+    assigned_users: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
     is_open: { type: Boolean, default: true },
-    tags: { type: [Schema.Types.ObjectId], unique: true, ref: 'Tag' }
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Tag'
+      }
+    ]
   },
   {
     toJSON: {
